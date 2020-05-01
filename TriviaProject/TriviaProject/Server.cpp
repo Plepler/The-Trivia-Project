@@ -7,6 +7,7 @@
 
 void Server::run()
 {
+
 	// the function that handle the conversation with the client
 	thread t_connector(&Communicator::startHandleRequests, Communicator());
 	t_connector.detach();
