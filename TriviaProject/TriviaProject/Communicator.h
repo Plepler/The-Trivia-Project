@@ -12,7 +12,8 @@
 #include <cmath>
 #include <map>
 
-#define PORT 8826
+#define PORT 42069
+#define MAX_SIZE 100
 
 class Communicator
 {
