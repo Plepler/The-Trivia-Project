@@ -1,13 +1,6 @@
 #pragma once
 #include <string>
-class JsonRequestPacketDeserializer
-{
-public:
-	static LoginRequest deserializeLoginRequest(char* Buffer);
-	static SignUpRequest deserializeSignupRequest(char* Buffer);
 
-
-};
 
 
 struct LoginRequest
@@ -25,3 +18,14 @@ struct SignUpRequest
 	std::string email;
 
 }typedef SignUpRequest;
+
+
+class JsonRequestPacketDeserializer
+{
+public:
+	static LoginRequest deserializeLoginRequest(char* Buffer);
+	static SignUpRequest deserializeSignupRequest(char* Buffer);
+
+
+};
+

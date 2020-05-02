@@ -1,11 +1,16 @@
 #pragma once
 #include <vector>
 
+
+
+
+
 class IRequestHandler
 {
 public:
-	bool isRequestRelevant(RequestInfo);
-	RequestResult handleRequest(RequestInfo);
+	bool isRequestRelevant(struct RequestInfo ri);
+	struct RequestResult handleRequest(struct RequestInfo ri);
+
 };
 
 
@@ -13,13 +18,13 @@ struct RequestResult
 {
 	char* response;
 	IRequestHandler* newHandler;
-}typedef RequestResult;
+};
 
 
 struct RequestInfo
 {
 	int id;
 	char* recievelTime;
-	std::vector<BYTE> buffer;
+	std::vector<char> buffer;
 
-}typedef RequestInfo;
+};
