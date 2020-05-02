@@ -87,8 +87,7 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	char buffer[MAX_SIZE];
-
+	char buffer[MAX_SIZE] = { 0 };
 	//Send hello
 	std::string data("Hello");
 	if (send(clientSocket, data.c_str(), data.size(), 0) == INVALID_SOCKET)
@@ -96,9 +95,9 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 		throw std::exception("Error while sending message to client");
 	}
 
-
 	recv(clientSocket, buffer, MAX_SIZE - 1, 0);
 	std::cout << std::string(buffer) << std::endl;
+	
 }
 
 
