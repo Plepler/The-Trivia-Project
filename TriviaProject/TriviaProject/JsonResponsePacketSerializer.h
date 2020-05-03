@@ -8,13 +8,13 @@ struct ErrorResponse
 
 struct LoginResponse
 {
-	std::string data;
+	unsigned int data;
 
 }typedef LoginResponse;
 
 struct SignupResponse
 {
-	std::string data;
+	unsigned int data;
 
 }typedef SignupResponse;
 
