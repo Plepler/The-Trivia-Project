@@ -1,5 +1,7 @@
 #pragma once
+#include <nlohmann/json.hpp>
 #include <iostream>
+#include <vector>
 struct ErrorResponse
 {
 	std::string data;
@@ -8,20 +10,20 @@ struct ErrorResponse
 
 struct LoginResponse
 {
-	std::string data;
+	unsigned int status;
 
 }typedef LoginResponse;
 
 struct SignupResponse
 {
-	std::string data;
+	unsigned int status;
 
 }typedef SignupResponse;
 
 class JsonResponsePacketSerializer
 {
 	public:
-		static char* serializeResponse(ErrorResponse error);
-		static char* serializeResponse(LoginResponse error);
-		static char* serializeResponse(SignupResponse error);
+		static std::vector<char> serializeResponse(ErrorResponse response);
+		static std::vector<char> serializeResponse(LoginResponse response);
+		static std::vector<char> serializeResponse(SignupResponse response);
 };
