@@ -33,7 +33,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new IRequestHandler));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, nullptr));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);
@@ -87,7 +87,11 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
+	unsigned int length = 0;
 	char buffer[MAX_SIZE] = { 0 };
+	std::string message;
+	RequestInfo newReq;
+
 	//Send hello
 	std::string data("Hello");
 	if (send(clientSocket, data.c_str(), data.size(), 0) == INVALID_SOCKET)
@@ -97,8 +101,28 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	recv(clientSocket, buffer, MAX_SIZE - 1, 0);
 	std::cout << std::string(buffer) << std::endl;
+
+	while (true)
+	{
+		clearBuffer(buffer);
+		recv(clientSocket, buffer, MIN_LENGTH, 0);
+		time(&(newReq.recievelTime));
+		newReq.id = int(buffer[0]);
+		length = (int)(buffer[1] << 24 | buffer[2] << 16 | buffer[3] << 8 | buffer[4]);//Convert 4 Bytes to int
+		clearBuffer(buffer);
+		recv(clientSocket, (char*)&(newReq.buffer[0]), length, 0);
+		m_clients.at(clientSocket)->handleRequest(newReq);
+	}
+
 	
 }
 
 
 
+void Communicator::clearBuffer(char* buffer)
+{
+	for (size_t i = 0; i < MAX_SIZE; i++)
+	{
+		buffer[i] = 0;
+	}
+}

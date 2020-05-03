@@ -1,17 +1,38 @@
 #include "JsonRequestPacketDeserializer.h"
 
+using namespace nlohmann;
 
-
-LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(char* Buffer)
+LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<unsigned char> buffer)
 {
-	LoginRequest x;
-	return x;
+	LoginRequest loginReq;
+	json j;
+
+	json::from_cbor(buffer);
+
+	loginReq = {
+
+			j["username"].get<std::string>(),
+			j["password"].get<std::string>()
+	};
+
+	return loginReq;
 }
 
 
 
-SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(char* Buffer)
+SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vector<unsigned char> buffer)
 {
-	SignUpRequest x;
-	return x;
+	SignUpRequest signUpReq;
+	json j;
+
+	json::from_cbor(buffer);
+	
+	signUpReq = {
+
+			j["username"].get<std::string>(),
+			j["password"].get<std::string>(),
+			j["email"].get<std::string>()
+	};
+
+	return signUpReq;
 }

@@ -1,6 +1,8 @@
 #pragma once
-#include <string>
 
+#include <string>
+#include <vector>
+#include <nlohmann/json.hpp>
 
 
 struct LoginRequest
@@ -23,8 +25,8 @@ struct SignUpRequest
 class JsonRequestPacketDeserializer
 {
 public:
-	static LoginRequest deserializeLoginRequest(char* Buffer);
-	static SignUpRequest deserializeSignupRequest(char* Buffer);
+	static LoginRequest deserializeLoginRequest(std::vector<unsigned char> buffer);
+	static SignUpRequest deserializeSignupRequest(std::vector<unsigned char> buffer);
 
 
 };
