@@ -14,6 +14,7 @@
 
 #define PORT 42069
 #define MAX_SIZE 100
+#define MIN_LENGTH 5
 
 class Communicator
 {
@@ -23,6 +24,7 @@ public:
 
 private:
 	void handleNewClient(SOCKET clientSocket);
+	void clearBuffer(char * buffer);
 
 	SOCKET _serverSocket;
 	std::map<SOCKET, IRequestHandler*> m_clients;

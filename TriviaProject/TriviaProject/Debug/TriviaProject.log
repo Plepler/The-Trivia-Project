@@ -1,5 +1,7 @@
 ﻿  Communicator.cpp
+  JsonRequestPacketDeserializer.cpp
+  JsonResponsePacketSerializer.cpp
   Server.cpp
   Source.cpp
   Generating Code...
-  TriviaProject.vcxproj -> G:\School\Magshimim\C++\TriviaProject\the-trivia-project\TriviaProject\Debug\TriviaProject.exe
+  TriviaProject.vcxproj -> C:\Users\shukr\Desktop\the-trivia-project\TriviaProject\Debug\TriviaProject.exe
