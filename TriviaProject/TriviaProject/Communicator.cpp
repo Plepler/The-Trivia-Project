@@ -88,52 +88,53 @@ void Communicator::bindAndListen()
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
 	unsigned int length = 0;
-	char buffer[MAX_SIZE] = { 0 };
+	std::vector<unsigned char> buffer;
 	std::string message;
 	RequestInfo newReq;
 	RequestResult request_result;
+	message = GREETING;
 
-	//Send hello
-	std::string data("Hello");
-	if (send(clientSocket, data.c_str(), data.size(), 0) == INVALID_SOCKET)
+
+	try
 	{
-		throw std::exception("Error while sending message to client");
-	}
+		buffer.insert(buffer.begin(), message.begin(), message.end());
 
-	recv(clientSocket, buffer, MAX_SIZE - 1, 0);
-	std::cout << std::string(buffer) << std::endl;
-	
-	try{
+		sendData(clientSocket, buffer);
+
+		recieveData(clientSocket, buffer, MIN_LENGTH);
+
+		if (buffer[0] == GREETING[0] && buffer[1] == GREETING[1] && buffer[2] == GREETING[2] && buffer[3] == GREETING[3] && buffer[4] == GREETING[4])
+		{
+			std::cout << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << std::endl;
+		}
+		else
+		{
+			throw std::exception("We begin with 'hello'");
+		}
 		
+	
+	
 		while (true)
 		{
-			clearBuffer(buffer);
-			if (!recv(clientSocket, buffer, MIN_LENGTH, 0))
-			{
-				throw std::exception("connection closed");
-			}
+			recieveData(clientSocket, buffer, MIN_LENGTH);
 			time(&(newReq.recievelTime));
-			newReq.id = int(buffer[0]);
-			length = (int)(buffer[BYTE2] << 24 | buffer[BYTE3] << 16 | buffer[BYTE4] << 8 | buffer[BYTE5]); //Convert 4 Bytes to int
-			clearBuffer(buffer);
-			if (!recv(clientSocket, (char*)&(newReq.buffer[0]), length, 0))
-			{
-				throw std::exception("connection closed");
-			}
-			request_result = m_clients.at(clientSocket)->handleRequest(newReq);
+			newReq.id = int(buffer[0]);//First byte is request id
+			length = int((unsigned char)(buffer[BYTE2]) << LSH24 |
+						 (unsigned char)(buffer[BYTE3]) << LSH16 |
+						 (unsigned char)(buffer[BYTE4]) << LSH8 |
+						 (unsigned char)(buffer[BYTE5]));
 
-			if (send(clientSocket, (char*)&request_result.response, data.size(), 0) == INVALID_SOCKET)
-			{
-				throw std::exception("Error while sending message to client");
-			}
+			recieveData(clientSocket, buffer, length);
+
+			request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
+
+			sendData(clientSocket, buffer);
 		}
 	}
 	catch (std::exception e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	
-
 }
 
 
@@ -143,5 +144,22 @@ void Communicator::clearBuffer(char* buffer)
 	for (size_t i = 0; i < MAX_SIZE; i++)
 	{
 		buffer[i] = 0;
+	}
+}
+
+void Communicator::sendData(SOCKET clientSocket, std::vector<unsigned char>& data)
+{
+	if (send(clientSocket, (char*)&data, data.size(), 0) == INVALID_SOCKET)
+	{
+		throw std::exception("Error while sending message to client");
+	}
+}
+
+void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size)
+{
+	data.clear();
+	if (recv(clientSocket, (char*)&data, size, 0) == INVALID_SOCKET)
+	{
+		throw std::exception("Error while recieving data");
 	}
 }
