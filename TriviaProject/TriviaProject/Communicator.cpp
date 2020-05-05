@@ -91,6 +91,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	char buffer[MAX_SIZE] = { 0 };
 	std::string message;
 	RequestInfo newReq;
+	RequestResult rr;
 
 	//Send hello
 	std::string data("Hello");
@@ -108,10 +109,17 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 		recv(clientSocket, buffer, MIN_LENGTH, 0);
 		time(&(newReq.recievelTime));
 		newReq.id = int(buffer[0]);
-		length = (int)(buffer[1] << 24 | buffer[2] << 16 | buffer[3] << 8 | buffer[4]);//Convert 4 Bytes to int
+		length = (int)(buffer[BYTE2] << 24 | buffer[BYTE3] << 16 | buffer[BYTE4] << 8 | buffer[BYTE5]);//Convert 4 Bytes to int
 		clearBuffer(buffer);
 		recv(clientSocket, (char*)&(newReq.buffer[0]), length, 0);
-		m_clients.at(clientSocket)->handleRequest(newReq);
+		rr = m_clients.at(clientSocket)->handleRequest(newReq);
+
+
+
+		if (send(clientSocket, (char*)&rr.response, data.size(), 0) == INVALID_SOCKET)
+		{
+			throw std::exception("Error while sending message to client");
+		}
 	}
 
 	

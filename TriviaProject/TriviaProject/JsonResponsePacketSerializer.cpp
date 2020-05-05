@@ -1,5 +1,7 @@
 #include "JsonResponsePacketSerializer.h"
+
 using namespace nlohmann;
+
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(ErrorResponse response)
 {
 	json data; std::vector<unsigned char> buffer;

@@ -16,17 +16,29 @@ bool LoginRequestHandler::isRequestRelevant(struct RequestInfo ri)
 struct RequestResult LoginRequestHandler::handleRequest(struct RequestInfo ri)
 {
 	struct RequestResult rr;
-	std::string rsp;
+	
+
+	ErrorResponse errorRsp = {"ERROR"};
+	LoginResponse loginRsp = { 1 };
+	SignupResponse signupRsp = { 1 };
+
 	if (isRequestRelevant(ri))
 	{
-		rsp = "{status: 1}";
-		rr.response = std::vector<unsigned char>(rsp.begin(), rsp.end());
+		//Right now will always send goood response
+		if (ri.id == LOGIN)
+		{
+			rr.response = JsonResponsePacketSerializer::serializeResponse(loginRsp);
+		}
+		else
+		{
+			rr.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
+		}
+		
 		rr.newHandler = nullptr;
 	}
 	else
 	{
-		rsp = "{message: \"ERROR\"}";
-		rr.response = std::vector<unsigned char>(rsp.begin(), rsp.end());
+		rr.response = rr.response = JsonResponsePacketSerializer::serializeResponse(errorRsp);;
 		rr.newHandler = nullptr;
 	}
 

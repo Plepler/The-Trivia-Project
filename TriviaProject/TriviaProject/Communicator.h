@@ -15,6 +15,11 @@
 #define PORT 42069
 #define MAX_SIZE 100
 #define MIN_LENGTH 5
+#define BYTE2 1
+#define BYTE3 2
+#define BYTE4 3
+#define BYTE5 4
+
 
 class Communicator
 {
