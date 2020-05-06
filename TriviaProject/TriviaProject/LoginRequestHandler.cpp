@@ -1,19 +1,19 @@
 #include "LoginRequestHandler.h"
 
 
-bool LoginRequestHandler::isRequestRelevant(struct RequestInfo ri)
+bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 {
 	bool flag = false;
 	if (ri.id == LOGIN || ri.id == SIGNUP)
 	{
 		flag = true;
 	}
-	return false;
+	return flag;
 }
 
 
 
-struct RequestResult LoginRequestHandler::handleRequest(struct RequestInfo ri)
+struct RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
 {
 	struct RequestResult rr;
 	
@@ -24,17 +24,18 @@ struct RequestResult LoginRequestHandler::handleRequest(struct RequestInfo ri)
 
 	if (isRequestRelevant(ri))
 	{
+		rr.newHandler = nullptr;
 		//Right now will always send goood response
 		if (ri.id == LOGIN)
 		{
-			rr.response = JsonResponsePacketSerializer::serializeResponse(loginRsp);
+			parseMsgToBytes(rr.response, OK, loginRsp);
 		}
 		else
 		{
-			rr.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
+			parseMsgToBytes(rr.response, OK, signupRsp);
 		}
+
 		
-		rr.newHandler = nullptr;
 	}
 	else
 	{
@@ -43,4 +44,24 @@ struct RequestResult LoginRequestHandler::handleRequest(struct RequestInfo ri)
 	}
 
 	return rr;
+}
+
+template<typename T>
+void LoginRequestHandler::parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response)
+{
+	int length = 0;
+	buffer = JsonResponsePacketSerializer::serializeResponse(response);
+	length = buffer.size();
+	lengthToBytes(buffer, length);
+	buffer.insert(buffer.begin(), code);
+
+}
+
+
+void LoginRequestHandler::lengthToBytes(std::vector<unsigned char>& buffer, int length)
+{
+	buffer.insert(buffer.begin(), length >> LSH24 & HEX_BYTE);
+	buffer.insert(buffer.begin(), length >> LSH16 & HEX_BYTE);
+	buffer.insert(buffer.begin(), length >> LSH8 & HEX_BYTE);
+	buffer.insert(buffer.begin(), length & HEX_BYTE);
 }

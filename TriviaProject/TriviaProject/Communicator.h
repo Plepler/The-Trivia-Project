@@ -35,7 +35,6 @@ private:
 	void handleNewClient(SOCKET clientSocket);
 
 	//Helper functions
-	void clearBuffer(char * buffer);
 	void sendData(SOCKET clientSocket, std::vector<unsigned char>& data);
 	void recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size);
 

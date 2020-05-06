@@ -33,7 +33,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, nullptr));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);
@@ -97,9 +97,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	try
 	{
-		buffer.insert(buffer.begin(), message.begin(), message.end());
-
-		sendData(clientSocket, buffer);
+		buffer.clear();
+		send(clientSocket, GREETING, MIN_LENGTH, 0);
 
 		recieveData(clientSocket, buffer, MIN_LENGTH);
 
@@ -116,6 +115,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	
 		while (true)
 		{
+			length = 0;
 			recieveData(clientSocket, buffer, MIN_LENGTH);
 			time(&(newReq.recievelTime));
 			newReq.id = int(buffer[0]);//First byte is request id
@@ -133,32 +133,26 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	}
 	catch (std::exception e)
 	{
+		m_clients.erase(clientSocket);
 		std::cerr << e.what() << std::endl;
 	}
 }
 
 
 
-void Communicator::clearBuffer(char* buffer)
-{
-	for (size_t i = 0; i < MAX_SIZE; i++)
-	{
-		buffer[i] = 0;
-	}
-}
-
 void Communicator::sendData(SOCKET clientSocket, std::vector<unsigned char>& data)
 {
-	if (send(clientSocket, (char*)&data, data.size(), 0) == INVALID_SOCKET)
+	if (send(clientSocket, (char*)&data, data.size(), 0) == SOCKET_ERROR)
 	{
-		throw std::exception("Error while sending message to client");
+		throw std::exception("Error while sending message to client, Socket error - " + WSAGetLastError());
 	}
 }
 
 void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size)
 {
 	data.clear();
-	if (recv(clientSocket, (char*)&data, size, 0) == INVALID_SOCKET)
+	data.resize(size);
+	if (!recv(clientSocket, (char*)&data[0], size, 0) || data[0] == 0)
 	{
 		throw std::exception("Error while recieving data");
 	}
