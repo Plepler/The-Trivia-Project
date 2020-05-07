@@ -71,9 +71,12 @@ def get_server_msg(sock):
     """
     # get message from socket, if it failed close socket and program
     try:
-        msg = sock.recv(5)
+        msg = sock.recv(MSG_SIZE)
+
         if msg is bytes:
             msg = msg.decode()
+
+
 
 
     except Exception as e:
