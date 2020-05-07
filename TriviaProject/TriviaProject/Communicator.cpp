@@ -33,7 +33,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new IRequestHandler));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);
@@ -87,18 +87,73 @@ void Communicator::bindAndListen()
 
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
-	char buffer[MAX_SIZE] = { 0 };
-	//Send hello
-	std::string data("Hello");
-	if (send(clientSocket, data.c_str(), data.size(), 0) == INVALID_SOCKET)
-	{
-		throw std::exception("Error while sending message to client");
-	}
+	unsigned int length = 0;
+	std::vector<unsigned char> buffer;
+	std::string message;
+	RequestInfo newReq;
+	RequestResult request_result;
+	message = GREETING;
 
-	recv(clientSocket, buffer, MAX_SIZE - 1, 0);
-	std::cout << std::string(buffer) << std::endl;
+
+	try
+	{
+		buffer.clear();
+		send(clientSocket, GREETING, MIN_LENGTH, 0);
+
+		recieveData(clientSocket, buffer, MIN_LENGTH);
+
+		if (buffer[0] == GREETING[0] && buffer[1] == GREETING[1] && buffer[2] == GREETING[2] && buffer[3] == GREETING[3] && buffer[4] == GREETING[4])
+		{
+			std::cout << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << std::endl;
+		}
+		else
+		{
+			throw std::exception("We begin with 'hello'");
+		}
+		
 	
+	
+		while (true)
+		{
+			length = 0;
+			recieveData(clientSocket, buffer, MIN_LENGTH);
+			time(&(newReq.recievelTime));
+			newReq.id = int(buffer[0]);//First byte is request id
+			length = int((unsigned char)(buffer[BYTE2]) << LSH24 |
+						 (unsigned char)(buffer[BYTE3]) << LSH16 |
+						 (unsigned char)(buffer[BYTE4]) << LSH8 |
+						 (unsigned char)(buffer[BYTE5]));
+
+			recieveData(clientSocket, buffer, length);
+
+			request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
+
+			sendData(clientSocket, buffer);
+		}
+	}
+	catch (std::exception e)
+	{
+		m_clients.erase(clientSocket);
+		std::cerr << e.what() << std::endl;
+	}
 }
 
 
 
+void Communicator::sendData(SOCKET clientSocket, std::vector<unsigned char>& data)
+{
+	if (send(clientSocket, (char*)&data, data.size(), 0) == SOCKET_ERROR)
+	{
+		throw std::exception("Error while sending message to client, Socket error - " + WSAGetLastError());
+	}
+}
+
+void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size)
+{
+	data.clear();
+	data.resize(size);
+	if (!recv(clientSocket, (char*)&data[0], size, 0) || data[0] == 0)
+	{
+		throw std::exception("Error while recieving data");
+	}
+}
