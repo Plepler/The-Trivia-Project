@@ -1,24 +1,30 @@
 #pragma once
 #include "IDataBase.h"
 #include "sqlite3.h"
-#include <io.h>
-#include <vector>
-#include <exception>
+
 
 static std::vector<std::string> dataHolder;
 int callBack(void* data, int argc, char** argv, char** azColName);
 
-class SqliteDataBase : IDataBase {
+
+class SqliteDataBase : public IDataBase
+{
+
 public:
+	virtual bool doseUserExist(std::string name) override;
+	virtual bool doesPasswordMatch(std::string password, std::string username) override;
+	virtual void addNewUser(std::string name, std::string password, std::string email) override;
 
-	virtual bool doseUserExist(std::string name);
-	virtual bool dosePasswordMatch(std::string password, std::string username);
-	virtual void addNewUser(std::string name, std::string password, std::string email);
+	virtual bool open() override;
+	virtual void close() override;
+	virtual void clear() override;
 
-	bool open();
-	void close();
-	void clear();
+
 
 private:
 	sqlite3* dataBase;
+
+	void selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db);
+	void insertTo(std::string toWhere, std::string headers, std::string what, sqlite3* db);
+
 };
