@@ -3,7 +3,10 @@
 
 
 
-
+Communicator::Communicator()
+{
+	_serverSocket = NULL;
+}
 
 void Communicator::startHandleRequests()
 {

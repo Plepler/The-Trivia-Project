@@ -1,5 +1,10 @@
 #include "SqliteDataBase.h"
 
+SqliteDataBase::SqliteDataBase()
+{
+	dataBase = nullptr;
+}
+
 bool SqliteDataBase::open()
 {
 	//try to open the file
@@ -65,7 +70,7 @@ bool SqliteDataBase::doseUserExist(std::string name)
 	return ans;
 
 }
-bool SqliteDataBase::dosePasswordMatch(std::string password, std::string username)
+bool SqliteDataBase::doesPasswordMatch(std::string password, std::string username)
 {
 	bool ans = true;
 	selectBy("USERS", "PASSWORD = \"" + password + "\"", "USERNAME", this->dataBase); // get the username that matchs to the password.
@@ -76,10 +81,6 @@ bool SqliteDataBase::dosePasswordMatch(std::string password, std::string usernam
 
 void SqliteDataBase::addNewUser(std::string name, std::string password, std::string email)
 {
-	if (doseUserExist(name)) // if the user exist then throw exception , else add it
-	{
-		throw std::exception("User allready exit, try again");
-	}
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\"" + "\"" + password + "\"" + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 }
@@ -92,7 +93,7 @@ what - what to get from the data base
 db - the database to get from
 output : NONE
 */
-void selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db)
+void SqliteDataBase::selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db)
 {
 	char* sqlite3_errmsg = nullptr;
 	std::string SQL = "SELECT " + what + " FROM " + src + " WHERE " + byWhat + ";";
@@ -112,7 +113,7 @@ what - what to insert from the data base
 db - the database to insert to
 output : NONE
 */
-void insertTo(std::string toWhere, std::string headers, std::string what, sqlite3* db)
+void SqliteDataBase::insertTo(std::string toWhere, std::string headers, std::string what, sqlite3* db)
 {
 	char* sqlite3_errmsg = nullptr;
 	std::string SQL = "INSERT INTO " + toWhere + " " + headers + " VALUES " + what + ";";

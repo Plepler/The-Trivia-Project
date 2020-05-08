@@ -27,7 +27,9 @@
 
 class Communicator
 {
+
 public:
+	Communicator();
 	void bindAndListen();
 	void startHandleRequests();
 
