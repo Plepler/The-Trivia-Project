@@ -51,33 +51,37 @@ void SqliteDataBase::clear()
 	//send it
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
-
+ /*
+ the function check if user exist in the database
+ input: the name to check
+ output: trur ot false.
+ */
 bool SqliteDataBase::doseUserExist(std::string name)
 {
-	bool ans = true;
-	selectBy("USERS", "USERNAME = \"" + name + "\"", "USERNAME", this->dataBase);
-	if (dataHolder.size() == 0) {ans = false;}
-	dataHolder.clear();
+	bool ans = true; //declaer
+	selectBy("USERS", "USERNAME = \"" + name + "\"", "USERNAME", this->dataBase); // get the username that matchs.
+	if (dataHolder.size() == 0) {ans = false;} //if there is no data, that means there is no such user
+	dataHolder.clear();// clear the dataholder
 	return ans;
 
 }
 bool SqliteDataBase::dosePasswordMatch(std::string password, std::string username)
 {
 	bool ans = true;
-	selectBy("USERS", "PASSWORD = \"" + password + "\"", "USERNAME", this->dataBase);
-	if (dataHolder.size() == 0) { ans = false; }
-	dataHolder.clear();
+	selectBy("USERS", "PASSWORD = \"" + password + "\"", "USERNAME", this->dataBase); // get the username that matchs to the password.
+	if (dataHolder.size() == 0) { ans = false; } //if there is no data, that means there is no such user
+	dataHolder.clear(); // clear the dataholder
 	return ans;
 }
 
 void SqliteDataBase::addNewUser(std::string name, std::string password, std::string email)
 {
-	if (doseUserExist(name))
+	if (doseUserExist(name)) // if the user exist then throw exception , else add it
 	{
 		throw std::exception("User allready exit, try again");
 	}
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\"" + "\"" + password + "\"" + "\"" + email + "\")", this->dataBase);
-	dataHolder.clear();
+	dataHolder.clear(); // clear the dataholder
 }
 
 /*
