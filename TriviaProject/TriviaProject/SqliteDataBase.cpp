@@ -1,5 +1,10 @@
 #include "SqliteDataBase.h"
 
+SqliteDataBase::SqliteDataBase()
+{
+	dataBase = nullptr;
+}
+
 bool SqliteDataBase::open()
 {
 	//try to open the file
