@@ -2,11 +2,23 @@ import socket
 import sys
 import json
 
+DATA_LENGTH_SIZE_TO_GET = 5
 MSG_SIZE = 2048
 SERVER_PORT = 42069
 SERVER_IP = "127.0.0.1"
 LOGIN = 100
 SIGNUP = 101
+
+
+def decoder(msg):
+    new_msg = ""
+    len = 0
+    new_msg = msg.from_bytes(1, byteorder='little')
+    len = msg.from_bytes(4, byteorder='big')
+    msg = sock.recv(len)
+    new_msg += len
+    new_msg += msg.from_bytes(len, byteorder='little')
+    return new_msg
 
 
 def build_msg(type_msg):
@@ -71,13 +83,10 @@ def get_server_msg(sock):
     """
     # get message from socket, if it failed close socket and program
     try:
-        msg = sock.recv(MSG_SIZE)
-
+        msg = sock.recv(DATA_LENGTH_SIZE_TO_GET)
         if msg is bytes:
-            msg = msg.decode()
-
-
-
+            msg = decoder(msg)
+        return msg
 
     except Exception as e:
         print("ERORR:", e)
@@ -119,7 +128,7 @@ def main():
         if send_request(sock) == "exit":
             break
         else:
-            get_server_msg(sock)
+            print(get_server_msg(sock))
 
     # close the socket
     sock.close()
