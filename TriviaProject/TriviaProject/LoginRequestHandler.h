@@ -1,19 +1,25 @@
 #pragma once
 #include "IRequestHandler.h"
+#include "RequestHandlerFactory.h"
 #include <string>
 
-enum CODES{LOGIN = 100, SIGNUP, OK = 200};
+class RequestHandlerFactory;
+
 
 class LoginRequestHandler : public IRequestHandler
 {
+
 public:
-
-	virtual bool isRequestRelevant(struct RequestInfo ri);
-	virtual struct RequestResult handleRequest(struct RequestInfo ri);
-
+	LoginRequestHandler(IDataBase* db);
+	~LoginRequestHandler();
+	virtual bool isRequestRelevant(RequestInfo ri);
+	virtual RequestResult handleRequest(RequestInfo ri);
+	
 
 private:
-	void lengthToBytes(std::vector<unsigned char>& buffer, int length);
-	template<typename T>
-	void parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response);
+	RequestHandlerFactory* m_handlerFactory;
+
+	RequestResult login(LoginRequest loginReq);
+	RequestResult signup(SignUpRequest signupReq);
+
 };

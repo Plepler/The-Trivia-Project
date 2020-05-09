@@ -1,16 +1,15 @@
 #include "LoginManager.h"
 
 //C'Tor
-LoginManager::LoginManager()
+LoginManager::LoginManager(IDataBase * db)
 {
-	m_database = new SqliteDataBase;
-	m_database->open();
+	m_database = db;
 }
+
 //D'Tor
 LoginManager::~LoginManager()
 {
-	m_database->close();
-	delete m_database;
+
 }
 
 
@@ -18,9 +17,14 @@ LoginManager::~LoginManager()
 
 void LoginManager::signup(std::string username, std::string password, std::string email)
 {
+	if (email.find('@') == std::string::npos || email[0] == '@' || email[email.size() - 1] == '@')
+	{
+		throw std::exception("Invalid Email");
+	}
+
 	if (m_database->doseUserExist(username))
 	{
-		throw std::exception("User already exit");
+		throw std::exception("User already exist");
 	}
 
 	m_database->addNewUser(username, password, email);

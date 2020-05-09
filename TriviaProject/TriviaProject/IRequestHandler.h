@@ -6,7 +6,7 @@
 #define LSH24 24
 #define LSH16 16
 #define LSH8 8
-#define HEX_BYTE 0xFF
+
 
 typedef struct RequestResult RequestResult;
 typedef struct RequestInfo RequestInfo;
@@ -15,6 +15,7 @@ class IRequestHandler
 {
 
 public:
+	IRequestHandler() = default;
 	virtual bool isRequestRelevant(RequestInfo ri) = 0;
 	virtual RequestResult handleRequest(RequestInfo ri) = 0;
 
