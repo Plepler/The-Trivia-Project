@@ -2,7 +2,11 @@ import socket
 import sys
 import json
 
-DATA_LENGTH_SIZE_TO_GET = 5
+TYPE_INDEX = 0
+SIZE_OF_DATA_TYPE = 1
+SIZE_OF_DATA_LENGTH = 4
+START_LENGTH_INDEX = 1
+END_LENGTH_INDEX = 5
 MSG_SIZE = 2048
 SERVER_PORT = 42069
 SERVER_IP = "127.0.0.1"
@@ -10,41 +14,67 @@ LOGIN = 100
 SIGNUP = 101
 
 
-def decoder(msg):
-    new_msg = ""
-    len = 0
-    new_msg = msg.from_bytes(1, byteorder='little')
-    len = msg.from_bytes(4, byteorder='big')
+def decoder(sock, msg):
+    """
+    the function decode the binary messeges into dictionary based on the protocol
+    :param sock: the socket of the connection
+    :param msg: the msg to decode
+    :return: dictionary that holds the decoded data
+    """
+    new_msg = {} #declear
+    #decode the type of the msg
+    new_msg["type"] = str(msg[TYPE_INDEX])
+    #decode the len of the msg
+    len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
+    #recive the remaining data and create keys in the dict
     msg = sock.recv(len)
-    new_msg += len
-    new_msg += msg.from_bytes(len, byteorder='little')
+    new_msg["len"] = len
+    new_msg["data"] = str(int.from_bytes(len, byteorder='little'))
     return new_msg
 
 
 def build_msg(type_msg):
-    data = {}
+    """
+    the function builed msg in the protocol format
+    :param type_msg: the type of the msg (login || sign up)
+    :return: the builded packet
+    """
+    data = {} #declear
+
     if type_msg == LOGIN:
-        data["username"] = "user1"
-        data["password"] = "1234"
-        packet = LOGIN.to_bytes(1, byteorder='little')
-        print(len(json.dumps(data)))
-        packet += len(json.dumps(data)).to_bytes(4, byteorder='big')
+        #create keys with values
+        data["username"] = input("enter your username: ")
+        data["password"] = input("enter your password: ")
+
+        #convert it to bytes
+        packet = LOGIN.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
+        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='big')
         packet += json.dumps(data).encode('utf-8')
         return packet
 
     elif type_msg == SIGNUP:
-        data["username"] = "user1"
-        data["password"] = "1234"
-        data["mail"] = "user1@gmail.com"
-        packet = SIGNUP.to_bytes(1, byteorder='little')
-        packet += len(json.dumps(data)).to_bytes(4, byteorder='big')
+        # create keys with values
+        data["username"] = input("enter your username: ")
+        data["password"] = input("enter your password: ")
+        data["mail"] = input("enter your email: ")
+        # convert it to bytes
+        packet = SIGNUP.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
+        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='big')
         packet += json.dumps(data).encode('utf-8')
         return packet
 
 
 def send_request(sock):
+    """
+    the function send the request based on user desition
+    :param sock: the socket
+    :return: the request
+    """
     while True:
+        #get the wanted request from the user
         choice = input("enter request, login / sign up / exit\n")
+
+        #based on user desition, builed the msg and send it
         if choice == "login":
             msg = build_msg(LOGIN)
             send_msg(sock, msg)
@@ -57,6 +87,7 @@ def send_request(sock):
             return choice
             break
 
+        #if the user asked for exit, print msg to the user and return the choice.
         elif choice == "exit":
             print("exit accomplished\n")
             return choice
@@ -67,12 +98,17 @@ def send_request(sock):
 
 def hello_handler(sock):
     # using function to get the answer of the server and print it
-    server_msg = get_server_msg(sock)
+    server_msg = sock.recv(SIZE_OF_DATA_TYPE + SIZE_OF_DATA_LENGTH).decode()
     print(server_msg)
     client_msg = "hello"
 
     # send greeting
-    send_msg(sock, client_msg)
+    try:
+        sock.sendall(client_msg.encode())
+    except Exception as e:
+        print("ERORR:", e)
+        sock.close()
+        sys.exit()
 
 
 def get_server_msg(sock):
@@ -81,11 +117,11 @@ def get_server_msg(sock):
     :param: sock: a socket that the user is useing
     :return: the messege from the server
     """
+
     # get message from socket, if it failed close socket and program
     try:
-        msg = sock.recv(DATA_LENGTH_SIZE_TO_GET)
-        if msg is bytes:
-            msg = decoder(msg)
+        msg = sock.recv(SIZE_OF_DATA_TYPE + SIZE_OF_DATA_LENGTH)
+        msg = decoder(sock, msg)
         return msg
 
     except Exception as e:
@@ -94,16 +130,17 @@ def get_server_msg(sock):
         sys.exit()
 
 
-# the function send msg to the server
-# input: the socket and the request to send to the server
-# output: NONE
+
 def send_msg(sock, request):
+    """
+    the function send msg to the server
+    :param sock: the socket
+    :param request: the request to send to the server
+    :return: NONE
+    """
     try:
-        if type(request) == bytes:
-            sock.sendall(request)
-        else:
-            sock.sendall(request.encode())
-        print(request)
+        sock.sendall(request)
+        print("the request is: " + request.decode())
     except Exception as e:
         # if it failed close the socket and the program
         print("ERORR:", e)
@@ -128,7 +165,7 @@ def main():
         if send_request(sock) == "exit":
             break
         else:
-            print(get_server_msg(sock))
+            print("the answer is: " + get_server_msg(sock))
 
     # close the socket
     sock.close()
