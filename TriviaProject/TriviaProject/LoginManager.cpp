@@ -17,9 +17,14 @@ LoginManager::~LoginManager()
 
 void LoginManager::signup(std::string username, std::string password, std::string email)
 {
+	if (email.find('@') == std::string::npos || email[0] == '@' || email[email.size() - 1] == '@')
+	{
+		throw std::exception("Invalid Email");
+	}
+
 	if (m_database->doseUserExist(username))
 	{
-		throw std::exception("User already exit");
+		throw std::exception("User already exist");
 	}
 
 	m_database->addNewUser(username, password, email);

@@ -6,7 +6,7 @@
 #define LSH24 24
 #define LSH16 16
 #define LSH8 8
-#define HEX_BYTE 0xFF
+
 
 typedef struct RequestResult RequestResult;
 typedef struct RequestInfo RequestInfo;

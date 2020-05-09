@@ -5,10 +5,11 @@
 
 class RequestHandlerFactory;
 
-enum CODES{LOGIN = 100, SIGNUP, OK = 200};
+
 
 class LoginRequestHandler : public IRequestHandler
 {
+
 public:
 	LoginRequestHandler(IDataBase* db);
 	~LoginRequestHandler();
@@ -19,12 +20,7 @@ public:
 private:
 	RequestHandlerFactory* m_handlerFactory;
 
-	RequestResult login(RequestInfo ri);
-	RequestResult signup(RequestInfo ri);
+	RequestResult login(LoginRequest loginReq);
+	RequestResult signup(SignUpRequest signupReq);
 
-	//Helper functions
-	void lengthToBytes(std::vector<unsigned char>& buffer, int length);
-
-	template<typename T>
-	void parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response);
 };

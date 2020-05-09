@@ -125,10 +125,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			recieveData(clientSocket, buffer, MIN_LENGTH);
 			time(&(newReq.recievelTime));
 			newReq.id = int(buffer[0]);//First byte is request id
-			length = int((unsigned char)(buffer[BYTE2]) << LSH24 |
-						 (unsigned char)(buffer[BYTE3]) << LSH16 |
-						 (unsigned char)(buffer[BYTE4]) << LSH8 |
-						 (unsigned char)(buffer[BYTE5]));
+			length = JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char>(buffer.begin() + 1, buffer.end()));
 
 			recieveData(clientSocket, buffer, length);
 
