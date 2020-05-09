@@ -3,9 +3,11 @@
 
 
 
-Communicator::Communicator()
+Communicator::Communicator(IDataBase * db, RequestHandlerFactory* handlerFactory)
 {
+	_db = db;
 	_serverSocket = NULL;
+	m_handlerFactory = handlerFactory;
 }
 
 void Communicator::startHandleRequests()
@@ -22,6 +24,7 @@ void Communicator::startHandleRequests()
 
 	this->bindAndListen();
 
+	IDataBase* db = new SqliteDataBase();
 	while (true)
 	{
 		std::cout << "Waiting for client connection request" << std::endl;
@@ -36,7 +39,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler(db)));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);

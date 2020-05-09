@@ -1,6 +1,6 @@
 #pragma once
 
-#include "LoginRequestHandler.h"
+#include "RequestHandlerFactory.h"
 #include <WinSock2.h>
 #include <Windows.h>
 #include <set>
@@ -29,7 +29,7 @@ class Communicator
 {
 
 public:
-	Communicator();
+	Communicator(IDataBase* db, RequestHandlerFactory* handlerFactory);
 	void bindAndListen();
 	void startHandleRequests();
 
@@ -40,8 +40,10 @@ private:
 	void sendData(SOCKET clientSocket, std::vector<unsigned char>& data);
 	void recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size);
 
+
 	SOCKET _serverSocket;
 	std::map<SOCKET, IRequestHandler*> m_clients;
-
+	RequestHandlerFactory* m_handlerFactory;
+	IDataBase* _db;
 
 };

@@ -1,6 +1,19 @@
 #include "LoginRequestHandler.h"
 
 
+
+
+LoginRequestHandler::LoginRequestHandler(IDataBase * db) : IRequestHandler(), m_handlerFactory(new RequestHandlerFactory(db))
+{
+
+}
+
+LoginRequestHandler::~LoginRequestHandler()
+{
+
+}
+
+
 bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 {
 	bool flag = false;
@@ -13,7 +26,7 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 
 
 
-struct RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
 {
 	struct RequestResult rr;
 	
@@ -45,6 +58,20 @@ struct RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
 
 	return rr;
 }
+
+
+RequestResult LoginRequestHandler::login(RequestInfo ri)
+{
+	return RequestResult{};
+}
+
+RequestResult LoginRequestHandler::signup(RequestInfo ri)
+{
+	return RequestResult{};
+}
+
+
+
 
 template<typename T>
 void LoginRequestHandler::parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response)

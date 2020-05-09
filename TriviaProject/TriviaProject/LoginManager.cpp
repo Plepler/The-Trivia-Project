@@ -1,16 +1,15 @@
 #include "LoginManager.h"
 
 //C'Tor
-LoginManager::LoginManager()
+LoginManager::LoginManager(IDataBase * db)
 {
-	m_database = new SqliteDataBase;
-	m_database->open();
+	m_database = db;
 }
+
 //D'Tor
 LoginManager::~LoginManager()
 {
-	m_database->close();
-	delete m_database;
+
 }
 
 

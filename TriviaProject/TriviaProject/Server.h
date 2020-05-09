@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Communicator.h"
-
+#include "IDataBase.h"
 
 using std::cout;
 using std::cin;
@@ -14,12 +14,17 @@ class Server
 {
 
 public:
+	Server();
+	~Server();
 	void run();
 
 
 
 private:
-	Communicator m_communicator;
+	Communicator* m_communicator;
+	IDataBase* m_database;
+	RequestHandlerFactory* m_handlerFactory;
+	
 
 };
 

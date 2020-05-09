@@ -5,7 +5,7 @@ class LoginManager
 {
 
 public:
-	LoginManager();
+	LoginManager(IDataBase* db);
 	~LoginManager();
 	void signup(std::string username, std::string password, std::string email);
 	void login(std::string username, std::string password);

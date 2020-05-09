@@ -15,6 +15,7 @@ class IRequestHandler
 {
 
 public:
+	IRequestHandler() = default;
 	virtual bool isRequestRelevant(RequestInfo ri) = 0;
 	virtual RequestResult handleRequest(RequestInfo ri) = 0;
 
