@@ -6,5 +6,6 @@ int main()
 	WSAInitializer w;
 	Server s;
 	s.run();
+
 	return 0;
 }

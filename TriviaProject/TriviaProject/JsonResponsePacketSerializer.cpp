@@ -6,6 +6,10 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Error
 {
 	json data; 
 	std::vector<unsigned char> buffer;
+	
+	buffer.push_back(ERROR);
+	lengthToBytes(buffer, response.data.size());
+
 	data["message"] = response.data;
 	buffer = json::to_cbor(data);
 	return buffer;
@@ -15,16 +19,38 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Login
 {
 	json data; 
 	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+
 	data["status"] = response.status;
-	buffer = json::to_cbor(data);
+
+	buffer.push_back(LOGIN);
+	lengthToBytes(buffer, data.size());
+
+	temp = json::to_cbor(data);
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(SignupResponse response)
 {
-	json data; 
+	json data;
 	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+
 	data["status"] = response.status;
-	buffer = json::to_cbor(data);
+
+	buffer.push_back(SIGNUP);
+	lengthToBytes(buffer, data.size());
+
+	temp = json::to_cbor(data);
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
+}
+
+void JsonResponsePacketSerializer::lengthToBytes(std::vector<unsigned char>& buffer, int length)
+{
+	buffer.push_back(length >> LSH24 & HEX_BYTE);
+	buffer.push_back(length >> LSH16 & HEX_BYTE);
+	buffer.push_back(length >> LSH8 & HEX_BYTE);
+	buffer.push_back(length & HEX_BYTE);
 }

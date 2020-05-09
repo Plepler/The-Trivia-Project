@@ -1,6 +1,19 @@
 #include "LoginRequestHandler.h"
 
 
+
+
+LoginRequestHandler::LoginRequestHandler(IDataBase * db) : IRequestHandler(), m_handlerFactory(new RequestHandlerFactory(db))
+{
+
+}
+
+LoginRequestHandler::~LoginRequestHandler()
+{
+
+}
+
+
 bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 {
 	bool flag = false;
@@ -13,55 +26,79 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 
 
 
-struct RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 {
-	struct RequestResult rr;
-	
+	std::vector<unsigned char> buffer;
+	RequestResult requestRes;
+	LoginRequest loginReq;
+	SignUpRequest signupReq;
+	m_handlerFactory->createLoginHandler();
 
-	ErrorResponse errorRsp = {"ERROR"};
-	LoginResponse loginRsp = { 1 };
-	SignupResponse signupRsp = { 1 };
-
-	if (isRequestRelevant(ri))
+	if (isRequestRelevant(reqInfo))
 	{
-		rr.newHandler = nullptr;
-		//Right now will always send goood response
-		if (ri.id == LOGIN)
+		if (reqInfo.id == LOGIN)
 		{
-			parseMsgToBytes(rr.response, OK, loginRsp);
+			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
+			requestRes = login(loginReq);
+
 		}
 		else
 		{
-			parseMsgToBytes(rr.response, OK, signupRsp);
+			signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+			requestRes = signup(signupReq);
+			requestRes.newHandler = nullptr;
 		}
-
-		
 	}
 	else
 	{
-		rr.response = rr.response = JsonResponsePacketSerializer::serializeResponse(errorRsp);;
-		rr.newHandler = nullptr;
+		requestRes.response  = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});;
 	}
 
-	return rr;
+	
+
+	return requestRes;
 }
 
-template<typename T>
-void LoginRequestHandler::parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response)
+
+RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 {
-	int length = 0;
-	buffer = JsonResponsePacketSerializer::serializeResponse(response);
-	length = buffer.size();
-	lengthToBytes(buffer, length);
-	buffer.insert(buffer.begin(), code);
+	RequestResult reqResult;
+	LoginResponse loginRsp;
+	loginRsp.status = 1;
+	try
+	{
+		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
 
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(loginRsp);
+	}
+	catch (std::exception e)
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
-
-void LoginRequestHandler::lengthToBytes(std::vector<unsigned char>& buffer, int length)
+RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 {
-	buffer.insert(buffer.begin(), length >> LSH24 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length >> LSH16 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length >> LSH8 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length & HEX_BYTE);
+	RequestResult reqResult;
+	SignupResponse signupRsp;
+	signupRsp.status = 1;
+
+	try
+	{
+		m_handlerFactory->getLoginManager().signup(signupReq.username, signupReq.password, signupReq.email);
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
+	}
+	catch (std::exception e)
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
+
+
+
+
+

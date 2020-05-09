@@ -25,6 +25,7 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 	SignUpRequest signUpReq;
 	json j;
 
+
 	json::from_cbor(buffer);
 	
 	signUpReq = {
@@ -35,4 +36,10 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 	};
 
 	return signUpReq;
+}
+
+
+int JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char> buffer)
+{
+	return (int)(buffer[BYTE1] << LSH24 | buffer[BYTE2] << LSH16 | buffer[BYTE3] << LSH8 | buffer[BYTE4]);
 }

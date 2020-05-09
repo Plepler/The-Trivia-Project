@@ -3,7 +3,12 @@
 
 
 
-
+Communicator::Communicator(IDataBase * db, RequestHandlerFactory* handlerFactory)
+{
+	_db = db;
+	_serverSocket = NULL;
+	m_handlerFactory = handlerFactory;
+}
 
 void Communicator::startHandleRequests()
 {
@@ -19,6 +24,7 @@ void Communicator::startHandleRequests()
 
 	this->bindAndListen();
 
+	IDataBase* db = new SqliteDataBase();
 	while (true)
 	{
 		std::cout << "Waiting for client connection request" << std::endl;
@@ -33,7 +39,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler(db)));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);
@@ -119,10 +125,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			recieveData(clientSocket, buffer, MIN_LENGTH);
 			time(&(newReq.recievelTime));
 			newReq.id = int(buffer[0]);//First byte is request id
-			length = int((unsigned char)(buffer[BYTE2]) << LSH24 |
-						 (unsigned char)(buffer[BYTE3]) << LSH16 |
-						 (unsigned char)(buffer[BYTE4]) << LSH8 |
-						 (unsigned char)(buffer[BYTE5]));
+			length = JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char>(buffer.begin() + 1, buffer.end()));
 
 			recieveData(clientSocket, buffer, length);
 
