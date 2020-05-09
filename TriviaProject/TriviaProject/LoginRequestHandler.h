@@ -6,7 +6,6 @@
 class RequestHandlerFactory;
 
 
-
 class LoginRequestHandler : public IRequestHandler
 {
 
