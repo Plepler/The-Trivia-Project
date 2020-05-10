@@ -138,6 +138,7 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 	{
 		m_clients.erase(clientSocket);
 		std::cerr << e.what() << std::endl;
+		std::cout << "Client disconnected" << std::endl;
 	}
 }
 

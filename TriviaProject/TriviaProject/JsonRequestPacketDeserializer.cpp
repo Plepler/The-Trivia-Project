@@ -41,5 +41,6 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 int JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char> buffer)
 {
-	return (int)(buffer[BYTE1] << LSH24 | buffer[BYTE2] << LSH16 | buffer[BYTE3] << LSH8 | buffer[BYTE4]);
+	int i;
+	return (int)(buffer[BYTE4] << LSH24 | buffer[BYTE3] << LSH16 | buffer[BYTE2] << LSH8 | buffer[BYTE1]);
 }

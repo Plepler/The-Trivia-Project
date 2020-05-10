@@ -27,7 +27,7 @@ def decoder(sock, msg):
     new_msg["type"] = str(msg[TYPE_INDEX])
 
     #decode the len of the msg
-    len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
+    len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='little')
 
     #recive the remaining data and create keys in the dict
     msg = sock.recv(len)
@@ -51,7 +51,7 @@ def build_msg(type_msg):
 
         #convert it to bytes
         packet = LOGIN.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
-        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='big')
+        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='little')
         packet += json.dumps(data).encode('utf-8')
         return packet
 
