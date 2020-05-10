@@ -146,7 +146,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 void Communicator::sendData(SOCKET clientSocket, std::vector<unsigned char>& data)
 {
-	if (send(clientSocket, (char*)&data, data.size(), 0) == SOCKET_ERROR)
+	char* temp = reinterpret_cast<char *>(data.data());
+	if (send(clientSocket, temp, data.size(), 0) == SOCKET_ERROR)
 	{
 		throw std::exception("Error while sending message to client, Socket error - " + WSAGetLastError());
 	}

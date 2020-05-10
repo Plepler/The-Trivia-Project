@@ -27,12 +27,14 @@ def decoder(sock, msg):
     new_msg["type"] = str(msg[TYPE_INDEX])
 
     #decode the len of the msg
-    len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='little')
 
+    len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
+    print(len)
     #recive the remaining data and create keys in the dict
     msg = sock.recv(len)
+    print(msg[2: ])
     new_msg["len"] = len
-    new_msg["data"] = str(int.from_bytes(len, byteorder='little'))
+    new_msg["data"] = str(int.from_bytes(msg[2: ], byteorder='little'))
     return new_msg
 
 
@@ -62,7 +64,7 @@ def build_msg(type_msg):
         data["mail"] = input("enter your email: ")
         # convert it to bytes
         packet = SIGNUP.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
-        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='big')
+        packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='little')
         packet += json.dumps(data).encode('utf-8')
         return packet
 
@@ -126,7 +128,7 @@ def get_server_msg(sock):
 
         msg = sock.recv(SIZE_OF_DATA_TYPE + SIZE_OF_DATA_LENGTH)
         msg = decoder(sock, msg)
-        return msg
+        return msg["data"]
 
     except Exception as e:
         print("ERORR:", e)

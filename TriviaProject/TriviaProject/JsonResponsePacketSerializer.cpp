@@ -6,12 +6,15 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Error
 {
 	json data; 
 	std::vector<unsigned char> buffer;
-	
+	std::vector<unsigned char> temp;
+
 	buffer.push_back(ERROR);
-	lengthToBytes(buffer, response.data.size());
+	lengthToBytes(buffer, response.data.size() + 10);
 
 	data["message"] = response.data;
-	buffer = json::to_cbor(data);
+
+	temp = json::to_cbor(data);
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
 }
 
@@ -53,4 +56,5 @@ void JsonResponsePacketSerializer::lengthToBytes(std::vector<unsigned char>& buf
 	buffer.push_back(length >> LSH16 & HEX_BYTE);
 	buffer.push_back(length >> LSH8 & HEX_BYTE);
 	buffer.push_back(length & HEX_BYTE);
+	
 }
