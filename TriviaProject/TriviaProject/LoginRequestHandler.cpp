@@ -40,7 +40,6 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 		{
 			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
 			requestRes = login(loginReq);
-
 		}
 		else
 		{

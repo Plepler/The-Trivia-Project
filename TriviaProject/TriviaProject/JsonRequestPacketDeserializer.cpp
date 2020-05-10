@@ -5,10 +5,9 @@ using namespace nlohmann;
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<unsigned char> buffer)
 {
 	LoginRequest loginReq;
-	json j;
 
-	json::from_cbor(buffer);
-
+	json j = json::parse(buffer);
+	
 	loginReq = {
 
 			j["username"].get<std::string>(),
@@ -23,10 +22,7 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<
 SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vector<unsigned char> buffer)
 {
 	SignUpRequest signUpReq;
-	json j;
-
-
-	json::from_cbor(buffer);
+	json j = json::parse(buffer);
 	
 	signUpReq = {
 
@@ -41,6 +37,5 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 int JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char> buffer)
 {
-	int i;
 	return (int)(buffer[BYTE4] << LSH24 | buffer[BYTE3] << LSH16 | buffer[BYTE2] << LSH8 | buffer[BYTE1]);
 }

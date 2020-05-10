@@ -24,7 +24,7 @@ void Communicator::startHandleRequests()
 
 	this->bindAndListen();
 
-	IDataBase* db = new SqliteDataBase();
+
 	while (true)
 	{
 		std::cout << "Waiting for client connection request" << std::endl;
@@ -39,7 +39,7 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
-		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler(db)));
+		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler(this->_db)));
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);
@@ -127,11 +127,11 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			newReq.id = int(buffer[0]);//First byte is request id
 			length = JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char>(buffer.begin() + 1, buffer.end()));
 
-			recieveData(clientSocket, buffer, length);
+			recieveData(clientSocket, newReq.buffer, length);
 
 			request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
 
-			sendData(clientSocket, buffer);
+			sendData(clientSocket, request_result.response);
 		}
 	}
 	catch (std::exception e)
