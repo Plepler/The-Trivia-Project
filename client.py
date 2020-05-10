@@ -22,10 +22,13 @@ def decoder(sock, msg):
     :return: dictionary that holds the decoded data
     """
     new_msg = {} #declear
+
     #decode the type of the msg
     new_msg["type"] = str(msg[TYPE_INDEX])
+
     #decode the len of the msg
     len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
+
     #recive the remaining data and create keys in the dict
     msg = sock.recv(len)
     new_msg["len"] = len
@@ -120,16 +123,10 @@ def get_server_msg(sock):
 
     # get message from socket, if it failed close socket and program
     try:
-<<<<<<< HEAD
+
         msg = sock.recv(SIZE_OF_DATA_TYPE + SIZE_OF_DATA_LENGTH)
         msg = decoder(sock, msg)
         return msg
-=======
-        msg = sock.recv(MSG_SIZE)
-        if msg is bytes:
-            msg = msg.decode()
-
->>>>>>> d369e8b5f772f1bc99962526e6798ff60bf7da28
 
     except Exception as e:
         print("ERORR:", e)
@@ -147,7 +144,7 @@ def send_msg(sock, request):
     """
     try:
         sock.sendall(request)
-        print("the request is: " + request.decode())
+        print(request)
     except Exception as e:
         # if it failed close the socket and the program
         print("ERORR:", e)
