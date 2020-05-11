@@ -13,12 +13,12 @@ RequestHandlerFactory::~RequestHandlerFactory()
 
 LoginRequestHandler RequestHandlerFactory::createLoginHandler()
 {
-	return LoginRequestHandler(nullptr);
+	return LoginRequestHandler(m_database);
 }
 
 
 LoginManager& RequestHandlerFactory::getLoginManager()
 {
-	LoginManager temp(nullptr);
-	return temp;
+	
+	return *m_loginManager;
 }

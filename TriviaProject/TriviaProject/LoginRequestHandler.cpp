@@ -40,7 +40,6 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 		{
 			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
 			requestRes = login(loginReq);
-
 		}
 		else
 		{
@@ -69,11 +68,11 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 	{
 		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
 
-		reqResult.response = JsonResponsePacketSerializer::serializeResponse(loginRsp);
+		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(loginRsp);
 	}
 	catch (std::exception e)
 	{
-		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
 	}
 
 	return reqResult;
