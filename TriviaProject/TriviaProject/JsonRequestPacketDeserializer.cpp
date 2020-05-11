@@ -5,7 +5,6 @@ using namespace nlohmann;
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<unsigned char> buffer)
 {
 	LoginRequest loginReq;
-
 	json j = json::parse(buffer);
 	
 	loginReq = {

@@ -60,7 +60,7 @@ def build_msg(type_msg):
         # create keys with values
         data["username"] = input("enter your username: ")
         data["password"] = input("enter your password: ")
-        data["mail"] = input("enter your email: ")
+        data["email"] = input("enter your email: ")
         # convert it to bytes
         packet = SIGNUP.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
         packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='little')
