@@ -7,29 +7,35 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Error
 	json data; 
 	std::vector<unsigned char> buffer;
 	std::vector<unsigned char> temp;
+	std::string tempStr;
 
 	buffer.push_back(ERROR);
-	lengthToBytes(buffer, response.data.size() + 10);
-
 	data["message"] = response.data;
+	tempStr = data.dump();
 
-	temp = json::to_cbor(data);
+	//Length of data
+	lengthToBytes(buffer, tempStr.size());
+
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
 	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LoginResponse response)
 {
-	json data; 
+	json data;
 	std::vector<unsigned char> buffer;
 	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	buffer.push_back(ERROR);
 
 	data["status"] = response.status;
+	tempStr = data.dump();
 
-	buffer.push_back(LOGIN);
-	lengthToBytes(buffer, data.size());
+	lengthToBytes(buffer, tempStr.size());
 
-	temp = json::to_cbor(data);
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
 	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
 }
@@ -39,13 +45,17 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Signu
 	json data;
 	std::vector<unsigned char> buffer;
 	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	buffer.push_back(ERROR);
+
 
 	data["status"] = response.status;
+	tempStr = data.dump();
 
-	buffer.push_back(SIGNUP);
-	lengthToBytes(buffer, data.size());
+	lengthToBytes(buffer, tempStr.size());
 
-	temp = json::to_cbor(data);
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
 	buffer.insert(buffer.end(), temp.begin(), temp.end());
 	return buffer;
 }
