@@ -70,7 +70,7 @@ bool SqliteDataBase::doseUserExist(std::string name)
 	return ans;
 
 }
-bool SqliteDataBase::doesPasswordMatch(std::string password, std::string username)
+bool SqliteDataBase::doesPasswordMatch(std::string username, std::string password)
 {
 	bool ans = true;
 	selectBy("USERS", "PASSWORD = \"" + password + "\"", "USERNAME", this->dataBase); // get the username that matchs to the password.
@@ -81,7 +81,7 @@ bool SqliteDataBase::doesPasswordMatch(std::string password, std::string usernam
 
 void SqliteDataBase::addNewUser(std::string name, std::string password, std::string email)
 {
-	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\"" + "\"" + password + "\"" + "\"" + email + "\")", this->dataBase);
+	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\", " + "\"" + password + "\", " + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 }
 
