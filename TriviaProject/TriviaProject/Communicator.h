@@ -18,7 +18,7 @@
 #define MIN_LENGTH 5
 #define GREETING "hello"
 
-std::mutex clients_mutex;
+
 
 class Communicator
 {

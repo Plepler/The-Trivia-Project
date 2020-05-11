@@ -3,11 +3,14 @@
 #include "Server.h"
 
 
+//C'Tor, Only here will the database will be created / opened
 Server::Server() : m_database(new SqliteDataBase()), m_communicator(new Communicator(m_database, m_handlerFactory)), m_handlerFactory(new RequestHandlerFactory(m_database))
 {
 	m_database->open();
 }
 
+
+//D'Tor
 Server::~Server()
 {
 	m_database->close();
@@ -15,6 +18,11 @@ Server::~Server()
 }
 
 
+
+/*
+This function will create the communicator thread
+It will wait for 'EXIT' input and will close the server then.
+*/
 void Server::run()
 {
 	

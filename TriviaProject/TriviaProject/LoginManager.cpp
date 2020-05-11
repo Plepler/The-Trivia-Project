@@ -13,6 +13,14 @@ LoginManager::~LoginManager()
 }
 
 
+/*FOR ALL FUNCTION BELOW
+
+The function contant the database to insert / get information.
+In case of failure or incorrect parametes, exceptions will be thrown
+
+In: parameters neccessery for query.
+*/
+
 
 
 void LoginManager::signup(std::string username, std::string password, std::string email)
