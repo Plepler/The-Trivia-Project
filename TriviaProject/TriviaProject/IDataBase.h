@@ -4,6 +4,9 @@
 #include <io.h>
 #include <vector>
 #include <exception>
+#include <mutex>
+
+std::mutex database_mutex;
 
 class IDataBase 
 {

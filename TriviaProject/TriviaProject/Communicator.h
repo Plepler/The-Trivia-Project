@@ -11,12 +11,14 @@
 #include <Mutex>
 #include <cmath>
 #include <map>
+#include <mutex>
 
 #define PORT 42069
 #define MAX_SIZE 100
 #define MIN_LENGTH 5
 #define GREETING "hello"
 
+std::mutex clients_mutex;
 
 class Communicator
 {

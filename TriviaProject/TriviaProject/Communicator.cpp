@@ -39,7 +39,9 @@ void Communicator::startHandleRequests()
 		std::cout << "Client accepted. Server and client can speak" << std::endl;
 
 		//Add socket to client map
+		std::unique_lock<std::mutex> lck(clients_mutex);
 		m_clients.insert(std::pair<SOCKET, IRequestHandler*>(client_socket, new LoginRequestHandler(this->_db)));
+		lck.unlock();
 
 		// the function that handle the conversation with the client
 		std::thread t(&Communicator::handleNewClient, this, client_socket);

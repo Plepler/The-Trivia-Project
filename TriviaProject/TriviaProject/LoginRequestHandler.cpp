@@ -33,27 +33,29 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 	LoginRequest loginReq;
 	SignUpRequest signupReq;
 	m_handlerFactory->createLoginHandler();
+	requestRes.newHandler = nullptr;
 
 	if (isRequestRelevant(reqInfo))
 	{
 		if (reqInfo.id == LOGIN)
 		{
 			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
+			database_mutex.lock();
 			requestRes = login(loginReq);
+			database_mutex.unlock();
 		}
 		else
 		{
 			signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+			database_mutex.lock();
 			requestRes = signup(signupReq);
-			requestRes.newHandler = nullptr;
+			database_mutex.unlock();
 		}
 	}
 	else
 	{
-		requestRes.response  = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});;
+		requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});;
 	}
-
-	
 
 	return requestRes;
 }
