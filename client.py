@@ -13,7 +13,6 @@ SERVER_IP = "127.0.0.1"
 LOGIN = 100
 SIGNUP = 101
 
-
 def decoder(sock, msg):
     """
     the function decode the binary messeges into dictionary based on the protocol
@@ -21,21 +20,21 @@ def decoder(sock, msg):
     :param msg: the msg to decode
     :return: dictionary that holds the decoded data
     """
-    new_msg = {} #declear
-
+    data_dict = {} #declear
     #decode the type of the msg
-    new_msg["type"] = str(msg[TYPE_INDEX])
+    data_dict["type"] = str(msg[TYPE_INDEX])
 
     #decode the len of the msg
-
     len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
-    print(len)
+
     #recive the remaining data and create keys in the dict
     msg = sock.recv(len)
-    print(msg[2: ])
-    new_msg["len"] = len
-    new_msg["data"] = str(int.from_bytes(msg[2: ], byteorder='little'))
-    return new_msg
+    data_dict["len"] = len
+    data_dict["data"] = msg.decode()
+
+    #format the msg in a string
+    server_msg = data_dict["type"] + str(data_dict["len"]) + data_dict["data"]
+    return server_msg
 
 
 def build_msg(type_msg):
@@ -128,7 +127,7 @@ def get_server_msg(sock):
 
         msg = sock.recv(SIZE_OF_DATA_TYPE + SIZE_OF_DATA_LENGTH)
         msg = decoder(sock, msg)
-        return msg["data"]
+        return msg
 
     except Exception as e:
         print("ERORR:", e)
