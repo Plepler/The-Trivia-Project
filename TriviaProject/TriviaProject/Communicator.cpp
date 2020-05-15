@@ -123,9 +123,8 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	try
 	{
-		/*
-		We begin with a greeting ('hello')
-		*/
+		
+		//We begin with a greeting ('hello')
 		buffer.clear();
 		send(clientSocket, GREETING, MIN_LENGTH, 0);
 
