@@ -11,6 +11,7 @@
 #include <Mutex>
 #include <cmath>
 #include <map>
+#include <mutex>
 
 #define PORT 42069
 #define MAX_SIZE 100
@@ -32,6 +33,7 @@ private:
 	//Helper functions
 	void sendData(SOCKET clientSocket, std::vector<unsigned char>& data);
 	void recieveData(SOCKET clientSocket, std::vector<unsigned char>& data, unsigned int size);
+	bool isLogged(int newReqID, int request_result_ID);
 
 
 	SOCKET _serverSocket;

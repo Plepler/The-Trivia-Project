@@ -1,5 +1,6 @@
 #include "SqliteDataBase.h"
 
+//C'Tor
 SqliteDataBase::SqliteDataBase()
 {
 	dataBase = nullptr;

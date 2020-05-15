@@ -13,6 +13,14 @@ LoginManager::~LoginManager()
 }
 
 
+/*FOR ALL FUNCTION BELOW
+
+The function contant the database to insert / get information.
+In case of failure or incorrect parametes, exceptions will be thrown
+
+In: parameters neccessery for query.
+*/
+
 
 
 void LoginManager::signup(std::string username, std::string password, std::string email)
@@ -34,6 +42,7 @@ void LoginManager::signup(std::string username, std::string password, std::strin
 
 void LoginManager::login(std::string username, std::string password)
 {
+	
 	if (!m_database->doseUserExist(username))
 	{
 		throw std::exception("Username doesn't exists");
@@ -43,6 +52,7 @@ void LoginManager::login(std::string username, std::string password)
 	{
 		throw std::exception("Incorrect password or username");
 	}
+
 
 	m_loggedUsers.push_back(LoggedUser(username));
 }
