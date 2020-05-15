@@ -42,6 +42,7 @@ void LoginManager::signup(std::string username, std::string password, std::strin
 
 void LoginManager::login(std::string username, std::string password)
 {
+	
 	if (!m_database->doseUserExist(username))
 	{
 		throw std::exception("Username doesn't exists");
@@ -51,6 +52,7 @@ void LoginManager::login(std::string username, std::string password)
 	{
 		throw std::exception("Incorrect password or username");
 	}
+
 
 	m_loggedUsers.push_back(LoggedUser(username));
 }

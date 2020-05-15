@@ -113,6 +113,7 @@ In: The socket of the thread's client
 */
 void Communicator::handleNewClient(SOCKET clientSocket)
 {
+	bool logged = false;
 	unsigned int length = 0;
 	std::vector<unsigned char> buffer;
 	std::string message;
@@ -123,7 +124,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	try
 	{
-		
 		//We begin with a greeting ('hello')
 		buffer.clear();
 		send(clientSocket, GREETING, MIN_LENGTH, 0);
@@ -156,7 +156,18 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			recieveData(clientSocket, newReq.buffer, length);
 
 			//Calls a function to handle the request and return a respose
-			request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
+			if (!(newReq.id == LOGIN && logged))
+			{
+				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
+			}
+			else
+			{
+				newReq.id = ERROR;
+				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Build error message
+			}
+			
+			logged = isLogged(newReq.id, request_result.response[0]);
+			
 
 			//Send the response
 			sendData(clientSocket, request_result.response);
@@ -201,4 +212,11 @@ void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& 
 	{
 		throw std::exception("Error while recieving data");
 	}
+}
+
+
+
+bool Communicator::isLogged(int newReqID, int request_result_ID)
+{
+	return (newReqID == LOGIN && request_result_ID == LOGIN);
 }

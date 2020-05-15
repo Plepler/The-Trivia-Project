@@ -12,7 +12,7 @@
 #define LSH8 8
 #define HEX_BYTE 0xFF
 
-enum CODES { ERROR=50, LOGIN = 100, SIGNUP, OK = 200 };
+enum CODES { ERROR=0, LOGIN = 100, SIGNUP, OK = 200 };
 
 struct ErrorResponse
 {

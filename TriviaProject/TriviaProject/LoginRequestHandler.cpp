@@ -22,10 +22,10 @@ Check if data type is of login /sign up requests
 In: the request info
 Out: true if relevant
 */
-bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
+bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
 	bool flag = false;
-	if (ri.id == LOGIN || ri.id == SIGNUP)
+	if (reqInfo.id == LOGIN || reqInfo.id == SIGNUP || reqInfo.id == ERROR)
 	{
 		flag = true;
 	}
@@ -60,18 +60,22 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 			requestRes = login(loginReq);//Contact database
 			database_mutex.unlock();
 		}
-		else
+		else if(reqInfo.id == SIGNUP)
 		{
 			signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
 			database_mutex.lock();
 			requestRes = signup(signupReq);//Contact database
 			database_mutex.unlock();
 		}
+		else
+		{
+			requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ "Already logged in" });
+		}
 	}
 	else
 	{
 		//If excpetions are thrown about the request type they will be caught here
-		requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});;
+		requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});
 	}
 
 	return requestRes;

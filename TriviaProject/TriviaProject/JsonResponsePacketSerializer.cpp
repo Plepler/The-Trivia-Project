@@ -43,7 +43,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Login
 	std::string tempStr;
 
 	//add data type
-	buffer.push_back(ERROR);
+	buffer.push_back(LOGIN);
 	data["status"] = response.status;
 	tempStr = data.dump();
 
@@ -66,7 +66,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Signu
 	std::string tempStr;
 
 	//add data type
-	buffer.push_back(ERROR);
+	buffer.push_back(SIGNUP);
 	data["status"] = response.status;
 	tempStr = data.dump();
 
