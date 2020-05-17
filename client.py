@@ -13,6 +13,7 @@ SERVER_IP = "127.0.0.1"
 LOGIN = 100
 SIGNUP = 101
 
+
 def decoder(sock, msg):
     """
     the function decode the binary messeges into dictionary based on the protocol
@@ -20,19 +21,18 @@ def decoder(sock, msg):
     :param msg: the msg to decode
     :return: dictionary that holds the decoded data
     """
-    data_dict = {} #declear
-    #decode the type of the msg
-    data_dict["type"] = str(msg[TYPE_INDEX])
+    # decode the type of the msg
+    data_dict = {"type": str(msg[TYPE_INDEX])}
 
-    #decode the len of the msg
+    # decode the len of the msg
     len = int.from_bytes(msg[START_LENGTH_INDEX: END_LENGTH_INDEX], byteorder='big')
 
-    #recive the remaining data and create keys in the dict
+    # receive the remaining data and create keys in the dict
     msg = sock.recv(len)
     data_dict["len"] = len
     data_dict["data"] = msg.decode()
 
-    #format the msg in a string
+    # format the msg in a string
     server_msg = data_dict["type"] + str(data_dict["len"]) + data_dict["data"]
     return server_msg
 
@@ -43,14 +43,14 @@ def build_msg(type_msg):
     :param type_msg: the type of the msg (login || sign up)
     :return: the builded packet
     """
-    data = {} #declear
+    data = {}  # declear
 
     if type_msg == LOGIN:
-        #create keys with values
+        # create keys with values
         data["username"] = input("enter your username: ")
         data["password"] = input("enter your password: ")
 
-        #convert it to bytes
+        # convert it to bytes
         packet = LOGIN.to_bytes(SIZE_OF_DATA_TYPE, byteorder='little')
         packet += len(json.dumps(data)).to_bytes(SIZE_OF_DATA_LENGTH, byteorder='little')
         packet += json.dumps(data).encode('utf-8')
@@ -75,10 +75,10 @@ def send_request(sock):
     :return: the request
     """
     while True:
-        #get the wanted request from the user
+        # get the wanted request from the user
         choice = input("enter request, login / sign up / exit\n")
 
-        #based on user desition, builed the msg and send it
+        # based on user desition, builed the msg and send it
         if choice == "login":
             msg = build_msg(LOGIN)
             send_msg(sock, msg)
@@ -91,7 +91,7 @@ def send_request(sock):
             return choice
             break
 
-        #if the user asked for exit, print msg to the user and return the choice.
+        # if the user asked for exit, print msg to the user and return the choice.
         elif choice == "exit":
             print("exit accomplished\n")
             return choice
@@ -134,7 +134,6 @@ def get_server_msg(sock):
         sys.exit()
 
 
-
 def send_msg(sock, request):
     """
     the function send msg to the server
@@ -144,7 +143,6 @@ def send_msg(sock, request):
     """
     try:
         sock.sendall(request)
-        print(request)
     except Exception as e:
         # if it failed close the socket and the program
         print("ERORR:", e)
