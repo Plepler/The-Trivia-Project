@@ -1,10 +1,31 @@
 #include "LoginRequestHandler.h"
 
 
-bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
+std::mutex database_mutex;
+
+//C'Tor. doesn't create database just passes him forward.
+LoginRequestHandler::LoginRequestHandler(IDataBase * db) : IRequestHandler(), m_handlerFactory(new RequestHandlerFactory(db))
+{
+
+}
+
+//D'Tor
+LoginRequestHandler::~LoginRequestHandler()
+{
+
+}
+
+
+
+/*
+Check if data type is of login /sign up requests
+In: the request info
+Out: true if relevant
+*/
+bool LoginRequestHandler::isRequestRelevant(RequestInfo reqInfo)
 {
 	bool flag = false;
-	if (ri.id == LOGIN || ri.id == SIGNUP)
+	if (reqInfo.id == LOGIN || reqInfo.id == SIGNUP || reqInfo.id == ERROR)
 	{
 		flag = true;
 	}
@@ -13,55 +34,101 @@ bool LoginRequestHandler::isRequestRelevant(RequestInfo ri)
 
 
 
-struct RequestResult LoginRequestHandler::handleRequest(RequestInfo ri)
+/*
+This function handles the login / signup requests. 
+it will desirelize the data, contact the database
+and finally serlieze an apropriate response
+
+In: The request info
+Out: The results of the request
+*/
+RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 {
-	struct RequestResult rr;
-	
+	std::vector<unsigned char> buffer;
+	RequestResult requestRes;
+	LoginRequest loginReq;
+	SignUpRequest signupReq;
+	m_handlerFactory->createLoginHandler();
+	requestRes.newHandler = nullptr;
 
-	ErrorResponse errorRsp = {"ERROR"};
-	LoginResponse loginRsp = { 1 };
-	SignupResponse signupRsp = { 1 };
-
-	if (isRequestRelevant(ri))
+	if (isRequestRelevant(reqInfo))
 	{
-		rr.newHandler = nullptr;
-		//Right now will always send goood response
-		if (ri.id == LOGIN)
+		if (reqInfo.id == LOGIN)
 		{
-			parseMsgToBytes(rr.response, OK, loginRsp);
+			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
+			database_mutex.lock();
+			requestRes = login(loginReq);//Contact database
+			database_mutex.unlock();
+		}
+		else if(reqInfo.id == SIGNUP)
+		{
+			signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
+			database_mutex.lock();
+			requestRes = signup(signupReq);//Contact database
+			database_mutex.unlock();
 		}
 		else
 		{
-			parseMsgToBytes(rr.response, OK, signupRsp);
+			requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ "Already logged in" });
 		}
-
-		
 	}
 	else
 	{
-		rr.response = rr.response = JsonResponsePacketSerializer::serializeResponse(errorRsp);;
-		rr.newHandler = nullptr;
+		//If excpetions are thrown about the request type they will be caught here
+		requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Request doesnt Exist"});
 	}
 
-	return rr;
+	return requestRes;
 }
 
-template<typename T>
-void LoginRequestHandler::parseMsgToBytes(std::vector<unsigned char>& buffer, int code, T response)
+
+
+/*
+This function will deserialze an login request and serialize an answer
+In: the login request struct
+*/
+RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 {
-	int length = 0;
-	buffer = JsonResponsePacketSerializer::serializeResponse(response);
-	length = buffer.size();
-	lengthToBytes(buffer, length);
-	buffer.insert(buffer.begin(), code);
+	RequestResult reqResult;
+	LoginResponse loginRsp;
+	loginRsp.status = 1;
+	try
+	{
+		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
+		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(loginRsp);
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
 
+	return reqResult;
 }
 
-
-void LoginRequestHandler::lengthToBytes(std::vector<unsigned char>& buffer, int length)
+/*
+This function will deserialze an sign up request and serialize an answer
+In: the sign up request struct
+*/
+RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 {
-	buffer.insert(buffer.begin(), length >> LSH24 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length >> LSH16 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length >> LSH8 & HEX_BYTE);
-	buffer.insert(buffer.begin(), length & HEX_BYTE);
+	RequestResult reqResult;
+	SignupResponse signupRsp;
+	signupRsp.status = 1;
+
+	try
+	{
+		m_handlerFactory->getLoginManager().signup(signupReq.username, signupReq.password, signupReq.email);
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
+
+
+
+
+
