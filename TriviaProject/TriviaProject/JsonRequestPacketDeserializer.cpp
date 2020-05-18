@@ -52,7 +52,7 @@ GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequ
 	json j = json::parse(buffer);//Firsly rescue the json format from the bytes
 
 	//Create a struct from the json
-	getPlayerReq = { j["roomId"].get<int>()};
+	getPlayerReq = { j["roomId"].get<unsigned int>()};
 
 	return getPlayerReq;
 }
@@ -63,7 +63,7 @@ JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(std::v
 	json j = json::parse(buffer);//Firsly rescue the json format from the bytes
 
 	//Create a struct from the json
-	joinReq = { j["roomId"].get<int>() };
+	joinReq = { j["roomId"].get<unsigned int>() };
 
 	return joinReq;
 }

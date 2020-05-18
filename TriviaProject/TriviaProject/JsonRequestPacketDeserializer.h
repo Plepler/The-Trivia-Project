@@ -30,7 +30,6 @@ struct SignUpRequest
 
 }typedef SignUpRequest;
 
-
 struct GetPlayersInRoomRequest
 {
 	unsigned int roomId;
