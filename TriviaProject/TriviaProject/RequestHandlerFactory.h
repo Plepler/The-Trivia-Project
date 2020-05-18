@@ -1,5 +1,6 @@
 #pragma once
 #include "LoginManager.h"
+#include "RoomManager.h"
 #include "LoginRequestHandler.h"
 
 class LoginRequestHandler;
@@ -20,5 +21,9 @@ public:
 private:
 	LoginManager* m_loginManager;
 	IDataBase* m_database;
+	RoomManager m_roomManager;
+	//StatisticsManager m_StatisticsManager; Doesnt exist for now
+
+
 
 };
