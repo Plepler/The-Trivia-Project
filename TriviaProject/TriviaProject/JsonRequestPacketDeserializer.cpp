@@ -48,6 +48,30 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 
 
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(std::vector<unsigned char> buffer)
+{
+
+}
+
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(std::vector<unsigned char> buffer)
+{
+
+}
+
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(std::vector<unsigned char> buffer)
+{
+
+}
+
+
+
+
+
+
+
+
+
+
 /*
 Turn 4 bytes into a number
 In: buffer (We use the first 4 bytes)

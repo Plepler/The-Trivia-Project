@@ -31,12 +31,44 @@ struct SignUpRequest
 }typedef SignUpRequest;
 
 
+struct GetPlayersInRoomRequest
+{
+	unsigned int roomId;
+
+}typedef GetPlayersInRoomRequest;
+
+
+struct JoinRoomRequest
+{
+	unsigned int roomId;
+
+}typedef JoinRoomRequest;
+
+
+struct CreateRoomRequest
+{
+	std::string roomName;
+	unsigned int maxUsers;
+	unsigned int questionCount;
+	unsigned int answerTimeout;
+
+}typedef CreateRoomRequest;
+
+
+
+
+
 class JsonRequestPacketDeserializer
 {
 public:
+	//Login requests
 	static LoginRequest deserializeLoginRequest(std::vector<unsigned char> buffer);
 	static SignUpRequest deserializeSignupRequest(std::vector<unsigned char> buffer);
 
+	//Room requests
+	GetPlayersInRoomRequest deserializeGetPlayersRequest(std::vector<unsigned char> buffer);
+	JoinRoomRequest deserializeJoinRoomRequest(std::vector<unsigned char> buffer);
+	CreateRoomRequest deserializeCreateRoomRequest(std::vector<unsigned char> buffer); 
 
 	static int bytesToLength(std::vector<unsigned char> buffer);
 
