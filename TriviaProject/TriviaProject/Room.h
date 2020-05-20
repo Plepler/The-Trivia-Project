@@ -1,8 +1,8 @@
 #pragma once
-
+#include "LoggedUser.h"
 struct RoomData
 {
-	unsigned intid;
+	unsigned int id;
 	std::string name;
 	std::string maxPlayers;
 	unsigned int timePerQuestion;
