@@ -1,5 +1,7 @@
 #pragma once
 #include "LoggedUser.h"
+
+
 struct RoomData
 {
 	unsigned int id;
@@ -16,11 +18,11 @@ class Room
 public:
 	void addUser();
 	void removeUser();
-	void getAllUsers();
+	std::vector<LoggedUser> getAllUsers();
+	RoomData getRoomData();
 
 
 private:
-
 	RoomData m_metadata;
 	std::vector<LoggedUser> m_users;
 
