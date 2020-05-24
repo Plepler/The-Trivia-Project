@@ -2,8 +2,10 @@
 #include "LoginManager.h"
 #include "RoomManager.h"
 #include "LoginRequestHandler.h"
+#include "MenuRequestHandler.h"
 
 class LoginRequestHandler;
+class MenuRequestHandler;
 
 
 
