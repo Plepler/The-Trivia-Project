@@ -27,6 +27,5 @@ LoginRequestHandler RequestHandlerFactory::createLoginHandler()
 //Getter
 LoginManager& RequestHandlerFactory::getLoginManager()
 {
-	
 	return *m_loginManager;
 }
