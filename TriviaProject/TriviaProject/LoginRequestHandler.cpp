@@ -99,7 +99,7 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 	{
 		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
 		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(loginRsp);
-		reqResult.newHandler = new MenuRequestHandler(LoggedUser("1"), m_handlerFactory);
+		reqResult.newHandler = new MenuRequestHandler(LoggedUser(loginReq.username), m_handlerFactory);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
@@ -108,6 +108,8 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 
 	return reqResult;
 }
+
+
 
 /*
 This function will deserialze an sign up request and serialize an answer
@@ -123,7 +125,7 @@ RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 	{
 		m_handlerFactory->getLoginManager().signup(signupReq.username, signupReq.password, signupReq.email);
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
-		reqResult.newHandler = new MenuRequestHandler(LoggedUser("1"), m_handlerFactory);
+		reqResult.newHandler = new MenuRequestHandler(LoggedUser(signupReq.username), m_handlerFactory);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{

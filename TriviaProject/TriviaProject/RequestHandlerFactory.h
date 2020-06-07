@@ -19,11 +19,16 @@ public:
 	LoginRequestHandler createLoginHandler();
 	LoginManager& getLoginManager();
 
+	MenuRequestHandler createMenuRequestHandler(LoggedUser usr);
+	//StatisticsManager& getStatisticsManager();
+	RoomManager& getRoomManager();
+
+
 
 private:
 	LoginManager* m_loginManager;
 	IDataBase* m_database;
-	RoomManager m_roomManager;
+	RoomManager* m_roomManager;
 	//StatisticsManager m_StatisticsManager; Doesnt exist for now
 
 

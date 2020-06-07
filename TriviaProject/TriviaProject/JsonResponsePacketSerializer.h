@@ -53,7 +53,7 @@ struct GetRoomsResponse
 
 struct GetPlayersInRoomResponse
 {
-	std::vector<RoomData> rooms;
+	std::vector<std::string> players;
 
 }typedef GetPlayersInRoomResponse;
 
@@ -88,12 +88,12 @@ public:
 	static std::vector<unsigned char> serializeResponse(SignupResponse response);
 
 	//Room response serialization
-	static std::vector<unsigned char> serializeResponse(LogoutResponse);
-	static std::vector<unsigned char> serializeResponse(GetRoomsResponse);
-	static std::vector<unsigned char> serializerResponse(GetPlayersInRoomResponse);
-	static std::vector<unsigned char> serializeResponse(JoinRoomResponse);
-	static std::vector<unsigned char> serializeResponse(CreateRoomResponse);
-	static std::vector<unsigned char> serializeResponse(GetStatisticsResponse);
+	static std::vector<unsigned char> serializeResponse(LogoutResponse response);
+	static std::vector<unsigned char> serializeResponse(GetRoomsResponse response);
+	static std::vector<unsigned char> serializeResponse(GetPlayersInRoomResponse response);
+	static std::vector<unsigned char> serializeResponse(JoinRoomResponse response);
+	static std::vector<unsigned char> serializeResponse(CreateRoomResponse response);
+	static std::vector<unsigned char> serializeResponse(GetStatisticsResponse response);
 
 private:
 	static void lengthToBytes(std::vector<unsigned char>& buffer, int length);

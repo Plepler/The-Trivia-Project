@@ -16,8 +16,9 @@ struct RoomData
 class Room
 {
 public:
-	void addUser();
-	void removeUser();
+	Room(int id, std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout);
+	void addUser(LoggedUser user);
+	void removeUser(LoggedUser user);
 	std::vector<LoggedUser> getAllUsers();
 	RoomData getRoomData();
 

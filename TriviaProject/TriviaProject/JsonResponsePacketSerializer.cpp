@@ -147,7 +147,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRo
 
 
 
-std::vector<unsigned char> JsonResponsePacketSerializer::serializerResponse(GetPlayersInRoomResponse response)
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse response)
 {
 	json data;
 	std::vector<unsigned char> buffer;
@@ -156,7 +156,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializerResponse(GetP
 
 	//add data type
 	buffer.push_back(GET_PLAYER);
-	data["status"] = response.rooms;
+	data["players"] = response.players;
 	tempStr = data.dump();
 
 	//add length of data

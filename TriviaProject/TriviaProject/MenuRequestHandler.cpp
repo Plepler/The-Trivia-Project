@@ -25,7 +25,7 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo request)
 }
 
 
-//TO DO
+
 RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 {
 	std::vector<unsigned char> buffer;
@@ -35,7 +35,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 	GetPlayersInRoomRequest getPlayersReq;
 	JoinRoomRequest joinReq;
 	CreateRoomRequest createReq;
-
+	m_handlerFactory->createMenuRequestHandler(m_user);
 	requestRes.newHandler = nullptr;
 
 	if (isRequestRelevant(reqInfo))
@@ -83,19 +83,58 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 	return requestRes;
 }
 
+
+
 RequestResult MenuRequestHandler::signout()
 {
 	return RequestResult();
 }
 
+
+
 RequestResult MenuRequestHandler::getRooms()
 {
-	return RequestResult();
+	RequestResult reqResult;
+	GetRoomsResponse getRoomsRes;
+	getRoomsRes.status = 1;
+	try
+	{
+		getRoomsRes.rooms = m_handlerFactory->getRoomManager().getRooms();
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(getRoomsRes);
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
 RequestResult MenuRequestHandler::getPlayersInRoom(GetPlayersInRoomRequest getPLayerReq)
 {
-	return RequestResult();
+	RequestResult reqResult;
+	GetPlayersInRoomResponse getPlayersInRoomRes;
+
+	try
+	{
+		//Get all users
+		std::vector<LoggedUser> usersInRoom = m_handlerFactory->getRoomManager().getRoom(getPLayerReq.roomId).getAllUsers();
+		//Get all usernames
+		for (auto vecIter = usersInRoom.begin(); vecIter != usersInRoom.end(); vecIter++)
+		{
+			getPlayersInRoomRes.players.push_back((*vecIter).getUsername());
+		}
+		//Serialize answer
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(getPlayersInRoomRes);
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
 RequestResult MenuRequestHandler::getStatistics()
@@ -105,12 +144,43 @@ RequestResult MenuRequestHandler::getStatistics()
 
 RequestResult MenuRequestHandler::joinRoom(JoinRoomRequest joinRoomReq)
 {
-	return RequestResult();
+	RequestResult reqResult;
+	JoinRoomResponse joinRoomRes;
+	
+	try
+	{
+		joinRoomRes.status = 1;
+		m_handlerFactory->getRoomManager().getRoom(joinRoomReq.roomId).addUser(m_user);
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(joinRoomRes);
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
 RequestResult MenuRequestHandler::createRoom(CreateRoomRequest createRoomReq)
 {
-	return RequestResult();
+	RequestResult reqResult;
+	JoinRoomResponse joinRoomRes;
+	
+	try
+	{
+		joinRoomRes.status = 1;
+		//Call function to create room
+		m_handlerFactory->getRoomManager().createRoom(createRoomReq.roomName, createRoomReq.maxUsers, createRoomReq.questionCount, createRoomReq.answerTimeout);
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(joinRoomRes);
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
 
