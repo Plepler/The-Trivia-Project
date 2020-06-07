@@ -24,7 +24,7 @@ bool SqliteDataBase::open()
 	if (doesFileExist != 0) {
 
 		std::string sql = "CREATE TABLE \"USERS\" (\"USERNAME\"	TEXT NOT NULL,\"PASSWORD\"	TEXT NOT NULL,\"EMAIL\"	TEXT NOT NULL,PRIMARY KEY(\"USERNAME\"));"
-			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"ans1\"	TEXT NOT NULL,\"asn2\"	TEXT NOT NULL,\"ans3\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);";
+			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"asn1\"	TEXT NOT NULL,\"ans2\"	TEXT NOT NULL,\"asn3\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);";
 		res = sqlite3_exec(dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 		this->addQuestions();
 
@@ -93,7 +93,7 @@ std::list<Questions> SqliteDataBase::getQuestions(int amount)
 {
 	std::list<Questions> questions = std::list<Questions>();
 	int i = 1;
-	for (i = 1; i < amount; i++)
+	for (i = 1; i <= amount; i++)
 	{
 		selectBy("questions", "data AND correct", "ID = " + i, this->dataBase); 
 		questions.push_back(Questions{ dataHolder[0], dataHolder[1]});
@@ -102,19 +102,23 @@ std::list<Questions> SqliteDataBase::getQuestions(int amount)
 	return questions;
 }
 
-
+/*
+the function add all the questions to the database
+input: NONE
+output: NONE
+*/
 void SqliteDataBase::addQuestions()
 {
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION1) + "\" AND \"" + ANS1 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION2) + "\" AND \"" + ANS2 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION3) + "\" AND \"" + ANS3 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION4) + "\" AND \"" + ANS4 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION5) + "\" AND \"" + ANS5 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION6) + "\" AND \"" + ANS6 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION7) + "\" AND \"" + ANS7 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION8) + "\" AND \"" + ANS8 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION9) + "\" AND \"" + ANS9 + "\"", this->dataBase);
-	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION10) + "\" AND \"" + ANS10 + "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION1) + "\" AND \"" + ANS1 + "\" AND \"" + ANS5 + "\" AND \"" + ANS2 + "\" AND \"" + ANS9 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION2) + "\" AND \"" + ANS2 + "\" AND \"" + ANS6 + "\" AND \"" + ANS1 + "\" AND \"" + ANS10 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION3) + "\" AND \"" + ANS3 + "\" AND \"" + ANS2 + "\" AND \"" + ANS9 + "\" AND \"" + ANS5 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION4) + "\" AND \"" + ANS4 + "\" AND \"" + ANS3 + "\" AND \"" + ANS6 + "\" AND \"" + ANS8 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION5) + "\" AND \"" + ANS5 + "\" AND \"" + ANS4 + "\" AND \"" + ANS2 + "\" AND \"" + ANS10 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION6) + "\" AND \"" + ANS6 + "\" AND \"" + ANS5 + "\" AND \"" + ANS1 + "\" AND \"" + ANS3 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION7) + "\" AND \"" + ANS7 + "\" AND \"" + ANS9 + "\" AND \"" + ANS8 + "\" AND \"" + ANS4 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION8) + "\" AND \"" + ANS8 + "\" AND \"" + ANS7 + "\" AND \"" + ANS5 + "\" AND \"" + ANS1 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION9) + "\" AND \"" + ANS9 + "\" AND \"" + ANS8 + "\" AND \"" + ANS10 + "\" AND \"" + ANS3 "\"", this->dataBase);
+	insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + std::string(QUESTION10) + "\" AND \"" + ANS10 + "\" AND \"" + ANS5 + "\" AND \"" + ANS7 + "\" AND \"" + ANS9 "\"", this->dataBase);
 }
 
 /*
