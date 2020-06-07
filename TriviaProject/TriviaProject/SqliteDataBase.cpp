@@ -60,6 +60,22 @@ void SqliteDataBase::clear()
 	//send it
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
+float SqliteDataBase::getPlayerAvarageAnswerTime(std::string)
+{
+	return 0.0f;
+}
+int SqliteDataBase::getNumOfCorrectAnswers(std::string)
+{
+	return 0;
+}
+int SqliteDataBase::getNumOfTotalAnswers(std::string)
+{
+	return 0;
+}
+int SqliteDataBase::getNumOfPlayerGames(std::string)
+{
+	return 0;
+}
  /*
  the function check if user exist in the database
  input: the name to check

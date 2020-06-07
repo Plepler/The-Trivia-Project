@@ -44,9 +44,11 @@ public:
 	virtual void close() override;
 	virtual void clear() override;
 
-
-
-private:
+	virtual float getPlayerAvarageAnswerTime(std::string) override;
+	virtual int getNumOfCorrectAnswers(std::string) override;
+	virtual int getNumOfTotalAnswers(std::string) override;
+	virtual int getNumOfPlayerGames(std::string) override;
+private:										
 	sqlite3* dataBase;
 	void addQuestions();
 	void selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db);
