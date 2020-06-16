@@ -26,6 +26,12 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo request)
 
 
 
+/*
+This handles the request by passing it to the correct function according
+to its id. and returns the result of the request.
+In: info about the request
+Out: the result to the requestInfo
+*/
 RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 {
 	std::vector<unsigned char> buffer;
@@ -84,13 +90,33 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 }
 
 
+/*
+To all the function below:
+
+	They get the needed info about the request (If info is needed)
+	then they analyze the request and prepare an proper response
+
+	In: Request info (only if needed)
+	Out Request result the answer converted to a byte buffer in a the struct
+*/
 
 RequestResult MenuRequestHandler::signout()
 {
-	return RequestResult();
+	RequestResult reqResult;
+	SignupResponse signupRes{ 1 };
+	
+	try
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRes);
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
-
-
 
 RequestResult MenuRequestHandler::getRooms()
 {
@@ -137,6 +163,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(GetPlayersInRoomRequest getPL
 	return reqResult;
 }
 
+//TO DO: finish this with statistics
 RequestResult MenuRequestHandler::getStatistics()
 {
 	return RequestResult();
