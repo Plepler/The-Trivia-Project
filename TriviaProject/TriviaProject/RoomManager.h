@@ -12,11 +12,11 @@ public:
 	RoomManager(IDataBase * db);
 	void createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout);
 	void deleteRoom(int ID);
-	unsigned int getRoomState(int ID);
+	unsigned int getRoomState(unsigned int ID);
 	std::vector<RoomData> getRooms();
 	Room& getRoom(int id);
 
 private:
-	std::map<int, Room> m_rooms;
+	std::map<unsigned int, Room*> m_rooms;
 	IDataBase* m_database;
 };

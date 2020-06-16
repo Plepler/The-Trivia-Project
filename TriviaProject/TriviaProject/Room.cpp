@@ -1,18 +1,22 @@
 #include "Room.h"
 
-Room::Room(int id, std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
+
+
+//C'Tor
+Room::Room(unsigned int id, std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout) : m_metadata(RoomData{ id,roomName,maxUsers,answerTimeout,0 })
 {
-	m_metadata.id = id;
-	m_metadata.isActive = true;
-	m_metadata.maxPlayers = maxUsers;
-	m_metadata.timePerQuestion = answerTimeout;
-	m_metadata.name = roomName;
+
 }
 
+
+
+//Adds a user to the m_users vector
 void Room::addUser(LoggedUser user)
 {
 	m_users.push_back(user);
 }
+
+
 
 /*
 This function removes the user it gets as parameter
