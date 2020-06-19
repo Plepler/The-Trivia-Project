@@ -3,7 +3,7 @@
 
 
 //C'Tor
-Room::Room(unsigned int id, std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout) : m_metadata(RoomData{ id,roomName,maxUsers,answerTimeout,0 })
+Room::Room(unsigned int id, std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout) : m_metadata(RoomData{ id,roomName,maxUsers,answerTimeout,0,questionCount})
 {
 
 }
