@@ -53,23 +53,26 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 
 	if (isRequestRelevant(reqInfo))
 	{
-		if (reqInfo.id == LOGIN)
+		
+		switch (reqInfo.id)
 		{
+		case LOGIN:
 			loginReq = JsonRequestPacketDeserializer::deserializeLoginRequest(reqInfo.buffer);
 			database_mutex.lock();
 			requestRes = login(loginReq);//Contact database
 			database_mutex.unlock();
-		}
-		else if(reqInfo.id == SIGNUP)
-		{
+			break;
+
+		case SIGNUP:
 			signupReq = JsonRequestPacketDeserializer::deserializeSignupRequest(reqInfo.buffer);
 			database_mutex.lock();
 			requestRes = signup(signupReq);//Contact database
 			database_mutex.unlock();
-		}
-		else
-		{
+			break;
+
+		default:
 			requestRes.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ "Already logged in" });
+			break;
 		}
 	}
 	else
@@ -96,6 +99,7 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 	{
 		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
 		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(loginRsp);
+		reqResult.newHandler = new MenuRequestHandler(LoggedUser(loginReq.username), m_handlerFactory);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
@@ -104,6 +108,8 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 
 	return reqResult;
 }
+
+
 
 /*
 This function will deserialze an sign up request and serialize an answer
@@ -119,6 +125,7 @@ RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 	{
 		m_handlerFactory->getLoginManager().signup(signupReq.username, signupReq.password, signupReq.email);
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
+		reqResult.newHandler = new MenuRequestHandler(LoggedUser(signupReq.username), m_handlerFactory);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
