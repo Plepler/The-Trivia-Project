@@ -7,7 +7,7 @@
 #define QUESTION1 "Back to the 50', how much of the cornflakes indrustry was owend by kellogs?"
 #define QUESTION2 "How ben gurion's rice was called?"
 #define QUESTION3 "Who is sponsering 'peppsi'?"
-#define QUESTION4 "How many pepole died during the coronavirus pandemic (part 1)?"
+#define QUESTION4 "How many pepole got sick during the coronavirus pandemic (part 1)?"
 #define QUESTION5 "Because of what band the word 'heavy' was added to heavy metal"
 #define QUESTION6 "What year was the very first model of the iPhone released?"
 #define QUESTION7 "What percentage of the oxygen we breath is produced by plancton?"
