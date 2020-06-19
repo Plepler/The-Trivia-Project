@@ -4,11 +4,17 @@ using namespace nlohmann;
 
 //bytes == unsigned char
 
-/*
-This function turn a bytes buffer of a login request to a struct
+
+/*ALL DESERIALIZER FUNCTIONS
+
+These functions get a buffer of bytes
+they turn the bytes into JSON type object
+lastly they build the request struct with the JSON object.
+
 In: The bytes buffer
-Out: The login response
+Out: The same type request
 */
+
 LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<unsigned char> buffer)
 {
 	LoginRequest loginReq;
@@ -24,12 +30,6 @@ LoginRequest JsonRequestPacketDeserializer::deserializeLoginRequest(std::vector<
 	return loginReq;
 }
 
-
-/*
-This function turn a bytes buffer of a sign up request to a struct
-In: The bytes buffer
-Out: The sign up response
-*/
 SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vector<unsigned char> buffer)
 {
 	SignUpRequest signUpReq;
@@ -45,6 +45,49 @@ SignUpRequest JsonRequestPacketDeserializer::deserializeSignupRequest(std::vecto
 
 	return signUpReq;
 }
+
+GetPlayersInRoomRequest JsonRequestPacketDeserializer::deserializeGetPlayersRequest(std::vector<unsigned char> buffer)
+{
+	GetPlayersInRoomRequest getPlayerReq;
+	json j = json::parse(buffer);//Firsly rescue the json format from the bytes
+
+	//Create a struct from the json
+	getPlayerReq = { j["roomId"].get<unsigned int>()};
+
+	return getPlayerReq;
+}
+
+JoinRoomRequest JsonRequestPacketDeserializer::deserializeJoinRoomRequest(std::vector<unsigned char> buffer)
+{
+	JoinRoomRequest joinReq;
+	json j = json::parse(buffer);//Firsly rescue the json format from the bytes
+
+	//Create a struct from the json
+	joinReq = { j["roomId"].get<unsigned int>() };
+
+	return joinReq;
+}
+
+CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(std::vector<unsigned char> buffer)
+{
+	CreateRoomRequest createRoomReq;
+	json j = json::parse(buffer);//Firsly rescue the json format from the bytes
+
+	//Create a struct from the json
+	createRoomReq = {
+
+			j["roomName"].get<std::string>(),
+			j["maxUsers"].get<unsigned int>(),
+			j["questionCount"].get<unsigned int>(),
+			j["answerTimeout"].get<unsigned int>()
+	};
+
+	return createRoomReq;
+}
+
+
+
+
 
 
 
