@@ -95,6 +95,7 @@ public:
 	static std::vector<unsigned char> serializeResponse(CreateRoomResponse response);
 	static std::vector<unsigned char> serializeResponse(GetStatisticsResponse response);
 
+
 private:
 	static void lengthToBytes(std::vector<unsigned char>& buffer, int length);
 

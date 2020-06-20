@@ -241,7 +241,6 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetSt
 
 
 
-
 /*
 This funtion turn a number into a 4 bytes vector
 In: buffer that will contain the number, the number

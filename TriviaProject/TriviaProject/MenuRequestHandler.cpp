@@ -35,12 +35,12 @@ Out: the result to the requestInfo
 RequestResult MenuRequestHandler::handleRequest(RequestInfo reqInfo)
 {
 	std::vector<unsigned char> buffer;
-	RequestResult requestRes;
+	RequestResult requestRes{ std::vector<unsigned char>(), nullptr };
 
 	//Requests structs - Signout, getRooms and getStatistics dont require structs
-	GetPlayersInRoomRequest getPlayersReq;
-	JoinRoomRequest joinReq;
-	CreateRoomRequest createReq;
+	GetPlayersInRoomRequest getPlayersReq{0};
+	JoinRoomRequest joinReq{0};
+	CreateRoomRequest createReq{ "", 0, 0, 0 };
 	m_handlerFactory->createMenuRequestHandler(m_user);
 	requestRes.newHandler = nullptr;
 
@@ -121,7 +121,7 @@ RequestResult MenuRequestHandler::signout()
 RequestResult MenuRequestHandler::getRooms()
 {
 	RequestResult reqResult;
-	GetRoomsResponse getRoomsRes;
+	GetRoomsResponse getRoomsRes{1, std::vector<RoomData>() };
 	getRoomsRes.status = 1;
 	try
 	{
@@ -140,7 +140,7 @@ RequestResult MenuRequestHandler::getRooms()
 RequestResult MenuRequestHandler::getPlayersInRoom(GetPlayersInRoomRequest getPLayerReq)
 {
 	RequestResult reqResult;
-	GetPlayersInRoomResponse getPlayersInRoomRes;
+	GetPlayersInRoomResponse getPlayersInRoomRes{ std::vector<std::string>() };
 
 	try
 	{
@@ -163,16 +163,27 @@ RequestResult MenuRequestHandler::getPlayersInRoom(GetPlayersInRoomRequest getPL
 	return reqResult;
 }
 
-//TO DO: finish this with statistics
 RequestResult MenuRequestHandler::getStatistics()
 {
-	return RequestResult();
+	RequestResult reqResult;
+
+	try
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(GetStatisticsResponse{ 1, m_handlerFactory->getStatisticsManager().getStatistics(m_user.getUsername()) });
+		reqResult.newHandler = nullptr;
+	}
+	catch (std::exception e)//If parameters failed the error will be serialized instead
+	{
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return reqResult;
 }
 
 RequestResult MenuRequestHandler::joinRoom(JoinRoomRequest joinRoomReq)
 {
 	RequestResult reqResult;
-	JoinRoomResponse joinRoomRes;
+	JoinRoomResponse joinRoomRes{0};
 	
 	try
 	{
@@ -192,7 +203,7 @@ RequestResult MenuRequestHandler::joinRoom(JoinRoomRequest joinRoomReq)
 RequestResult MenuRequestHandler::createRoom(CreateRoomRequest createRoomReq)
 {
 	RequestResult reqResult;
-	JoinRoomResponse joinRoomRes;
+	JoinRoomResponse joinRoomRes{0};
 	
 	try
 	{
