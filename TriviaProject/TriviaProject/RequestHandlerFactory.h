@@ -24,7 +24,6 @@ public:
 	RoomManager& getRoomManager();
 
 
-
 private:
 	LoginManager* m_loginManager;
 	IDataBase* m_database;
