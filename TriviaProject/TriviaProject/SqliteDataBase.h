@@ -4,7 +4,7 @@
 #include <cstdlib>
 
 #define QUESTION_TABLE "questions"
-#define QUESTION_HEADERS "(\"data\", \"ans1\", \"ans2\", \"ans3\", \"correct\")"
+#define QUESTION_HEADERS "(\"data\", \"correct\", \"ans1\", \"ans2\", \"ans3\")"
 #define AMOUND_OF_QUESTIONS 10
 #define AMOUND_OF_WRONG_ANS 3
 #define Q1 "Back to the 50', how much of the cornflakes indrustry was owend by kellogs?"
@@ -87,10 +87,10 @@ public:
 	virtual void close() override;
 	virtual void clear() override;
 
-	virtual float getPlayerAvarageAnswerTime(std::string) override;
-	virtual int getNumOfCorrectAnswers(std::string) override;
-	virtual int getNumOfTotalAnswers(std::string) override;
-	virtual int getNumOfPlayerGames(std::string) override;
+	virtual float getPlayerAvarageAnswerTime(std::string username) override;
+	virtual int getNumOfCorrectAnswers(std::string username) override;
+	virtual int getNumOfTotalAnswers(std::string username) override;
+	virtual int getNumOfPlayerGames(std::string username) override;
 private:										
 	sqlite3* dataBase;
 	void addQuestions();

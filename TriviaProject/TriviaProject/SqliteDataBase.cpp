@@ -24,7 +24,7 @@ bool SqliteDataBase::open()
 	if (doesFileExist != 0) {
 
 		std::string sql = "CREATE TABLE \"USERS\" (\"USERNAME\"	TEXT NOT NULL,\"PASSWORD\"	TEXT NOT NULL,\"EMAIL\"	TEXT NOT NULL,PRIMARY KEY(\"USERNAME\"));"
-			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"asn1\"	TEXT NOT NULL,\"ans2\"	TEXT NOT NULL,\"asn3\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);"
+			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"ans1\"	TEXT NOT NULL,\"ans2\"	TEXT NOT NULL,\"ans3\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);"
 			"CREATE TABLE \"Statistics\" (\"UserName\"	TEXT NOT NULL,\"AvarageAnswerTime\"	REAL NOT NULL,\"CorrectAnswers\"	INTEGER NOT NULL,\"Answers\"	INTEGER NOT NULL,\"Games\"	INTEGER NOT NULL,PRIMARY KEY(\"USERNAME\"));";
 		res = sqlite3_exec(dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 		this->addQuestions();
@@ -62,24 +62,40 @@ void SqliteDataBase::clear()
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
 
-float SqliteDataBase::getPlayerAvarageAnswerTime(std::string)
+float SqliteDataBase::getPlayerAvarageAnswerTime(std::string username)
 {
-	return 0.0f;
+	float ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "AvarageAnswerTime", this->dataBase);
+	ans = stof(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
 }
 
-int SqliteDataBase::getNumOfCorrectAnswers(std::string)
+int SqliteDataBase::getNumOfCorrectAnswers(std::string username)
 {
-	return 0;
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "CorrectAnswers", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
 }
 
-int SqliteDataBase::getNumOfTotalAnswers(std::string)
+int SqliteDataBase::getNumOfTotalAnswers(std::string username)
 {
-	return 0;
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "Answers", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
 }
 
-int SqliteDataBase::getNumOfPlayerGames(std::string)
+int SqliteDataBase::getNumOfPlayerGames(std::string username)
 {
-	return 0;
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "Games", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
 }
  /*
  the function check if user exist in the database
@@ -109,7 +125,6 @@ void SqliteDataBase::addNewUser(std::string name, std::string password, std::str
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\", " + "\"" + password + "\", " + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 	selectBy("USERS","USERNAME " "= \""+ name +"\"", "USERNAME", this->dataBase);
-	std::cout << dataHolder[0] << std::endl;
 	insertTo("STATISTICS", "(UserName, AvarageAnswerTime, CorrectAnswers, Answers, Games)", "(\"" + dataHolder[0] + "\"" + ",0,0,0,0)", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 }
@@ -140,7 +155,7 @@ void SqliteDataBase::addQuestions()
 	const std::string falseAnswers[AMOUND_OF_QUESTIONS][AMOUND_OF_WRONG_ANS] = { {F1, F2, F3}, {F4, F5, F6}, {F7, F8, F9}, {F10, F11, F12}, {F13, F14, F15}, {F16, F17, F18}, {F19, F20, F21}, {F22, F23, F24}, {F25, F26, F27}, {F28, F29, F30} };
 	for (size_t i = 0; i < AMOUND_OF_QUESTIONS; i++)
 	{	
-		insertTo(QUESTION_TABLE, QUESTION_HEADERS, "\"" + questions[i] + "\" AND \"" + answers[i] + "\" AND \"" + falseAnswers[i][0] + "\" AND \"" + falseAnswers[i][1] + "\" AND \"" + "\"" + falseAnswers[i][2] + "\"", this->dataBase);
+		insertTo(QUESTION_TABLE, QUESTION_HEADERS, "(\"" + questions[i] + "\", \"" + answers[i] + "\", \"" + falseAnswers[i][0] + "\", \"" + falseAnswers[i][1] + "\", \"" + falseAnswers[i][2] + "\")", this->dataBase);
 	}
 	
 }
