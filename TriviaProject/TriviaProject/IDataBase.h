@@ -25,10 +25,10 @@ public:
 
 
 	//statistics
-	//virtual float getPlayerAvarageAnswerTime(std::string) = 0;
-	//virtual int getNumOfCorrectAnswers(std::string) = 0;
-	//virtual int getNumOfTotalAnswers(std::string) = 0;
-	//virtual int getNumOfPlayerGames(std::string) = 0;
+	virtual float getPlayerAvarageAnswerTime(std::string) = 0;
+	virtual int getNumOfCorrectAnswers(std::string) = 0;
+	virtual int getNumOfTotalAnswers(std::string) = 0;
+	virtual int getNumOfPlayerGames(std::string) = 0;
 
 	//operations on database
 	virtual bool open()  = 0;
