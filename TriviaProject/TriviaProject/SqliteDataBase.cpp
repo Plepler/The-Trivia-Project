@@ -25,7 +25,7 @@ bool SqliteDataBase::open()
 
 		std::string sql = "CREATE TABLE \"USERS\" (\"USERNAME\"	TEXT NOT NULL,\"PASSWORD\"	TEXT NOT NULL,\"EMAIL\"	TEXT NOT NULL,PRIMARY KEY(\"USERNAME\"));"
 			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"ans1\"	TEXT NOT NULL,\"ans2\"	TEXT NOT NULL,\"ans3\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);"
-			"CREATE TABLE \"Statistics\" (\"UserName\"	TEXT NOT NULL,\"AvarageAnswerTime\"	REAL NOT NULL,\"CorrectAnswers\"	INTEGER NOT NULL,\"Answers\"	INTEGER NOT NULL,\"Games\"	INTEGER NOT NULL,PRIMARY KEY(\"USERNAME\"));";
+			"CREATE TABLE \"Statistics\" (\"UserName\"	TEXT NOT NULL,\"AvarageAnswerTime\"	REAL NOT NULL,\"CorrectAnswers\"	INTEGER NOT NULL,\"Answers\"	INTEGER NOT NULL,\"Games\"	INTEGER NOT NULL,\"Score\"	INTEGER NOT NULL, PRIMARY KEY(\"USERNAME\"));";
 		res = sqlite3_exec(dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 		this->addQuestions();
 
@@ -125,7 +125,7 @@ void SqliteDataBase::addNewUser(std::string name, std::string password, std::str
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\", " + "\"" + password + "\", " + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 	selectBy("USERS","USERNAME " "= \""+ name +"\"", "USERNAME", this->dataBase);
-	insertTo("STATISTICS", "(UserName, AvarageAnswerTime, CorrectAnswers, Answers, Games)", "(\"" + dataHolder[0] + "\"" + ",0,0,0,0)", this->dataBase);
+	insertTo("STATISTICS", "(UserName, AvarageAnswerTime, CorrectAnswers, Answers, Games, Score)", "(\"" + dataHolder[0] + "\"" + ",0,0,0,0,0)", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 }
 
@@ -140,6 +140,21 @@ std::list<Questions> SqliteDataBase::getQuestions(int amount)
 		dataHolder.clear();
 	}
 	return questions;
+}
+
+void SqliteDataBase::updateScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
+{
+	int Score = calcScore(username, timeToAnswer, timePerQuestion);
+	updateBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score" , std::to_string(Score), this->dataBase);
+}
+
+int SqliteDataBase::calcScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
+{
+	int addedScore = std::ceil(SCORE_PER_ANS * (1 - (timeToAnswer / (float)timePerQuestion)));
+	selectBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score", this->dataBase);
+	int originScore = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return addedScore + originScore;
 }
 
 /*
@@ -192,6 +207,18 @@ void SqliteDataBase::insertTo(std::string toWhere, std::string headers, std::str
 {
 	char* sqlite3_errmsg = nullptr;
 	std::string SQL = "INSERT INTO " + toWhere + " " + headers + " VALUES " + what + ";";
+
+	int res = sqlite3_exec(db, SQL.c_str(), nullptr, nullptr, &sqlite3_errmsg);
+	if (sqlite3_errmsg != nullptr)
+	{
+		std::cout << std::string(sqlite3_errmsg) << std::endl;
+	}
+}
+
+void SqliteDataBase::updateBy(std::string src, std::string byWhat, std::string whatCulomn, std::string newValue, sqlite3* db)
+{
+	char* sqlite3_errmsg = nullptr;
+	std::string SQL = "UPDATE "+ src + " SET " + whatCulomn + " = \"" + newValue + "\" WHERE " + byWhat + ";";
 
 	int res = sqlite3_exec(db, SQL.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 	if (sqlite3_errmsg != nullptr)

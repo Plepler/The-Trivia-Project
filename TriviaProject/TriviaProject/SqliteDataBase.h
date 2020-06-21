@@ -2,11 +2,12 @@
 #include "IDataBase.h"
 #include "sqlite3.h"
 #include <cstdlib>
-
+#include <cmath>
 #define QUESTION_TABLE "questions"
 #define QUESTION_HEADERS "(\"data\", \"correct\", \"ans1\", \"ans2\", \"ans3\")"
 #define AMOUND_OF_QUESTIONS 10
 #define AMOUND_OF_WRONG_ANS 3
+#define SCORE_PER_ANS 100
 #define Q1 "Back to the 50', how much of the cornflakes indrustry was owend by kellogs?"
 #define Q2 "How ben gurion's rice was called?"
 #define Q3 "Who is sponsering 'peppsi'?"
@@ -93,7 +94,11 @@ public:
 	virtual int getNumOfPlayerGames(std::string username) override;
 private:										
 	sqlite3* dataBase;
+	void updateScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion);
+	int calcScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion);
 	void addQuestions();
+	
+	void updateBy(std::string src, std::string byWhat, std::string whatCulomn ,std::string newValue , sqlite3* db);
 	void selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db);
 	void insertTo(std::string toWhere, std::string headers, std::string what, sqlite3* db);
 
