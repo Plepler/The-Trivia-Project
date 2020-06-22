@@ -22,7 +22,6 @@ In: parameters neccessery for query.
 */
 
 
-
 void LoginManager::signup(std::string username, std::string password, std::string email)
 {
 	if (email.find('@') == std::string::npos || email[0] == '@' || email[email.size() - 1] == '@')
@@ -42,7 +41,6 @@ void LoginManager::signup(std::string username, std::string password, std::strin
 
 void LoginManager::login(std::string username, std::string password)
 {
-	
 	if (!m_database->doseUserExist(username))
 	{
 		throw std::exception("Username doesn't exists");
@@ -52,7 +50,6 @@ void LoginManager::login(std::string username, std::string password)
 	{
 		throw std::exception("Incorrect password or username");
 	}
-
 
 	m_loggedUsers.push_back(LoggedUser(username));
 }

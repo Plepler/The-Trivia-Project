@@ -23,8 +23,12 @@ bool SqliteDataBase::open()
 	//if it dosent exist, create one
 	if (doesFileExist != 0) {
 
-		std::string sql = "CREATE TABLE \"USERS\" (\"USERNAME\"	TEXT NOT NULL,\"PASSWORD\"	TEXT NOT NULL,\"EMAIL\"	TEXT NOT NULL,PRIMARY KEY(\"USERNAME\")); ";
+		std::string sql = "CREATE TABLE \"USERS\" (\"USERNAME\"	TEXT NOT NULL,\"PASSWORD\"	TEXT NOT NULL,\"EMAIL\"	TEXT NOT NULL,PRIMARY KEY(\"USERNAME\"));"
+			"CREATE TABLE \"questions\" (\"data\"	TEXT NOT NULL,\"correct\"	TEXT NOT NULL,\"ans1\"	TEXT NOT NULL,\"ans2\"	TEXT NOT NULL,\"ans3\"	TEXT NOT NULL,\"id\"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT);"
+			"CREATE TABLE \"Statistics\" (\"UserName\"	TEXT NOT NULL,\"AvarageAnswerTime\"	REAL NOT NULL,\"CorrectAnswers\"	INTEGER NOT NULL,\"Answers\"	INTEGER NOT NULL,\"Games\"	INTEGER NOT NULL,\"Score\"	INTEGER NOT NULL, PRIMARY KEY(\"USERNAME\"));";
 		res = sqlite3_exec(dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
+		this->addQuestions();
+
 	}
 	dataHolder.clear();
 	return true;
@@ -57,6 +61,42 @@ void SqliteDataBase::clear()
 	//send it
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
+
+float SqliteDataBase::getPlayerAvarageAnswerTime(std::string username)
+{
+	float ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "AvarageAnswerTime", this->dataBase);
+	ans = stof(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
+}
+
+int SqliteDataBase::getNumOfCorrectAnswers(std::string username)
+{
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "CorrectAnswers", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
+}
+
+int SqliteDataBase::getNumOfTotalAnswers(std::string username)
+{
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "Answers", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
+}
+
+int SqliteDataBase::getNumOfPlayerGames(std::string username)
+{
+	int ans = 0;
+	selectBy("STATISTICS", "USERNAME " "= \"" + username + "\"", "Games", this->dataBase);
+	ans = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return ans;
+}
  /*
  the function check if user exist in the database
  input: the name to check
@@ -84,6 +124,55 @@ void SqliteDataBase::addNewUser(std::string name, std::string password, std::str
 {
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\", " + "\"" + password + "\", " + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
+	selectBy("USERS","USERNAME " "= \""+ name +"\"", "USERNAME", this->dataBase);
+	insertTo("STATISTICS", "(UserName, AvarageAnswerTime, CorrectAnswers, Answers, Games, Score)", "(\"" + dataHolder[0] + "\"" + ",0,0,0,0,0)", this->dataBase);
+	dataHolder.clear(); // clear the dataholder
+}
+
+std::list<Questions> SqliteDataBase::getQuestions(int amount)
+{
+	std::list<Questions> questions = std::list<Questions>();
+	int i = 1;
+	for (i = 1; i <= amount; i++)
+	{
+		selectBy("questions", "data AND correct", "ID = " + i, this->dataBase); 
+		questions.push_back(Questions{ dataHolder[0], dataHolder[1]});
+		dataHolder.clear();
+	}
+	return questions;
+}
+
+void SqliteDataBase::updateScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
+{
+	int Score = calcScore(username, timeToAnswer, timePerQuestion);
+	updateBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score" , std::to_string(Score), this->dataBase);
+}
+
+int SqliteDataBase::calcScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
+{
+	int addedScore = std::ceil(SCORE_PER_ANS * (1 - (timeToAnswer / (float)timePerQuestion)));
+	selectBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score", this->dataBase);
+	int originScore = stoi(dataHolder[0]);
+	dataHolder.clear();
+	return addedScore + originScore;
+}
+
+/*
+the function add all the questions to the database
+input: NONE
+output: NONE
+*/
+void SqliteDataBase::addQuestions()
+{
+	int option1 = 0, option2 = 0, option3 = 0;
+	const std::string questions[AMOUND_OF_QUESTIONS] = {Q1 ,Q2 ,Q3 ,Q4 ,Q5 ,Q6 ,Q7 ,Q8 ,Q9 ,Q10};
+	const std::string answers[AMOUND_OF_QUESTIONS] = {ANS1, ANS2, ANS3, ANS4, ANS5, ANS6, ANS7, ANS8, ANS9, ANS10};
+	const std::string falseAnswers[AMOUND_OF_QUESTIONS][AMOUND_OF_WRONG_ANS] = { {F1, F2, F3}, {F4, F5, F6}, {F7, F8, F9}, {F10, F11, F12}, {F13, F14, F15}, {F16, F17, F18}, {F19, F20, F21}, {F22, F23, F24}, {F25, F26, F27}, {F28, F29, F30} };
+	for (size_t i = 0; i < AMOUND_OF_QUESTIONS; i++)
+	{	
+		insertTo(QUESTION_TABLE, QUESTION_HEADERS, "(\"" + questions[i] + "\", \"" + answers[i] + "\", \"" + falseAnswers[i][0] + "\", \"" + falseAnswers[i][1] + "\", \"" + falseAnswers[i][2] + "\")", this->dataBase);
+	}
+	
 }
 
 /*
@@ -118,6 +207,18 @@ void SqliteDataBase::insertTo(std::string toWhere, std::string headers, std::str
 {
 	char* sqlite3_errmsg = nullptr;
 	std::string SQL = "INSERT INTO " + toWhere + " " + headers + " VALUES " + what + ";";
+
+	int res = sqlite3_exec(db, SQL.c_str(), nullptr, nullptr, &sqlite3_errmsg);
+	if (sqlite3_errmsg != nullptr)
+	{
+		std::cout << std::string(sqlite3_errmsg) << std::endl;
+	}
+}
+
+void SqliteDataBase::updateBy(std::string src, std::string byWhat, std::string whatCulomn, std::string newValue, sqlite3* db)
+{
+	char* sqlite3_errmsg = nullptr;
+	std::string SQL = "UPDATE "+ src + " SET " + whatCulomn + " = \"" + newValue + "\" WHERE " + byWhat + ";";
 
 	int res = sqlite3_exec(db, SQL.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 	if (sqlite3_errmsg != nullptr)
