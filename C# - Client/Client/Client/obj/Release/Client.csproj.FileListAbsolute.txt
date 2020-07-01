@@ -1,0 +1,22 @@
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\bin\Release\Client.exe.config
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\bin\Release\Client.exe
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\bin\Release\Client.pdb
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\bin\Release\Newtonsoft.Json.dll
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\bin\Release\Newtonsoft.Json.xml
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.csprojAssemblyReference.cache
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Login.baml
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Registration.baml
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Simple Styles.baml
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Welcome.baml
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Login.g.cs
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Registration.g.cs
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Welcome.g.cs
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\App.g.cs
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client_MarkupCompile.cache
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.g.resources
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.Properties.Resources.resources
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.csproj.GenerateResource.cache
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.csproj.CoreCompileInputs.cache
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.csproj.CopyComplete
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.exe
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.pdb
