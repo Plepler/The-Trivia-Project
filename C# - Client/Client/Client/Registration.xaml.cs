@@ -37,8 +37,7 @@ namespace Client
         }
         public void Reset()
         {
-            textBoxFirstName.Text = "";
-            textBoxLastName.Text = "";
+            textBoxUsername.Text = "";
             textBoxEmail.Text = "";
             textBoxAddress.Text = "";
             passwordBox1.Password = "";
@@ -63,8 +62,7 @@ namespace Client
             }
             else
             {
-                string firstname = textBoxFirstName.Text;
-                string lastname = textBoxLastName.Text;
+                string username = textBoxUsername.Text;
                 string email = textBoxEmail.Text;
                 string password = passwordBox1.Password;
                 if (passwordBox1.Password.Length == 0)
@@ -87,7 +85,7 @@ namespace Client
                     errormessage.Text = "";
                     string address = textBoxAddress.Text;
                     //To Do: build register message and send it
-                    byte[] request = Serializer.SerializeResponse(new SignupRequest(firstname, password, email));
+                    byte[] request = Serializer.SerializeResponse(new SignupRequest(username, password, email));
 
                     errormessage.Text = "You have Registered successfully.";
                     Reset();
