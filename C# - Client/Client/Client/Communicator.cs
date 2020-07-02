@@ -12,6 +12,11 @@ namespace Client
     {
         private static Socket socket;
         
+        /// <summary>
+        /// C'Tor for the class.
+        /// Also creates the connection
+        /// to the server.
+        /// </summary>
         static Communicator()
         {
             int port = 24069;
@@ -43,6 +48,11 @@ namespace Client
 
         }
 
+        /// <summary>
+        /// This function send a message to the server
+        /// through the socket
+        /// </summary>
+        /// <param name="message"> The message that will be sent</param>
         public static void SendMessage(byte[] message)
         {
             int byteSent = socket.Send(message);
@@ -52,6 +62,11 @@ namespace Client
             }
             
         }
+
+        /// <summary>
+        /// This function recieves a message from the server
+        /// </summary>
+        /// <returns> byte buffer(array) of the message </returns>
         public static byte[] recieveMessage()
         {
             byte[] message = new byte[1024];//Create buffer for message
