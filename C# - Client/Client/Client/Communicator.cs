@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Client
 {
-    public static class Communicator
+    //A static class for communicating with the server
+    public class Communicator
     {
         private static Socket socket;
         
@@ -19,33 +21,38 @@ namespace Client
         /// </summary>
         static Communicator()
         {
-            int port = 24069;
+            const int port = 42069;
+            const string adress = "127.0.0.1";
             try
             {
                 //Establish the remote endpoint
                 //for the socket.
-                IPHostEntry ipHost = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress ipAddr = ipHost.AddressList[0];
+                IPAddress ipAddr = IPAddress.Parse(adress);
                 IPEndPoint localEndPoint = new IPEndPoint(ipAddr, port);
 
                 //Creation TCP/IP Socket using
                 //Socket class C'Tor
                 socket = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-                //Connect socket to remote endpoint
+                //Connect socket to endpoint
                 socket.Connect(localEndPoint);
             }
-
             catch(SocketException se)
             {
                 //Show pop message with error
                 Error errPopup = new Error();
                 errPopup.updateMessage("Socket Exception : " + se.ToString());
+                
                 errPopup.Show();
-                System.Windows.Application.Current.Shutdown();//Close Application
             }
+            catch(Exception e)
+            {
+                //Show pop message with error
+                Error errPopup = new Error();
+                errPopup.updateMessage("Socket Exception : " + e.ToString());
 
-
+                errPopup.Show();
+            }
         }
 
         /// <summary>

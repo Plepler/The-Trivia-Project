@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Error" Height="450" Width="800">
     <Grid>
-        <TextBlock x:Name="ErrorPopUp" HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="Something went wrong while trying to connect to the server..." VerticalAlignment="Top" Height="399" Width="782" FontSize="36"/>
+        <TextBlock x:Name="ErrorPopUp" HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="242.814" Width="782" FontSize="36"><Run Text="Something went wrong while trying to connect to the server..."/></TextBlock>
+        <Button x:Name="Close_button" Content="OK" Margin="279.2475,297.141,279.2475,46.086" FontSize="36" Click="CloseProgram"/>
 
     </Grid>
 </Window>

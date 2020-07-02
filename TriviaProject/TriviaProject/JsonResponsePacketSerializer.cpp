@@ -247,8 +247,8 @@ In: buffer that will contain the number, the number
 */
 void JsonResponsePacketSerializer::lengthToBytes(std::vector<unsigned char>& buffer, int length)
 {
-	buffer.push_back(length >> LSH24 & HEX_BYTE);
-	buffer.push_back(length >> LSH16 & HEX_BYTE);
-	buffer.push_back(length >> LSH8 & HEX_BYTE);
 	buffer.push_back(length & HEX_BYTE);
+	buffer.push_back(length >> LSH8 & HEX_BYTE);
+	buffer.push_back(length >> LSH16 & HEX_BYTE);
+	buffer.push_back(length >> LSH24 & HEX_BYTE);
 }

@@ -99,10 +99,11 @@ namespace Client
             //Serialize
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
-            byte[] result = new byte[4 + requestSize];
-            //Add code and serialized request
-            System.Buffer.BlockCopy(itob((int)CODES.SIGNUP), 0, result, 0, 4);//Copy serialized code
-            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+            byte[] result = new byte[5 + requestSize];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.SIGNUP;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+            System.Buffer.BlockCopy(serializedReq, 0, result, 5, requestSize);//Copy serialized code
 
             return result;
         }
@@ -111,10 +112,11 @@ namespace Client
             //Serialize
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
-            byte[] result = new byte[4 + requestSize];
-            //Add code and serialized request
-            System.Buffer.BlockCopy(itob((int)CODES.LOGIN), 0, result, 0, 4);//Copy serialized code
-            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+            byte[] result = new byte[5 + requestSize];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.LOGIN;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+            System.Buffer.BlockCopy(serializedReq, 0, result, 5, requestSize);//Copy serialized code
 
             return result;
         }
@@ -123,10 +125,11 @@ namespace Client
             //Serialize
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
-            byte[] result = new byte[4 + requestSize];
-            //Add code and serialized request
-            System.Buffer.BlockCopy(itob((int)CODES.GET_PLAYER), 0, result, 0, 4);//Copy serialized code
-            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+            byte[] result = new byte[5 + requestSize];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.GET_PLAYER;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+            System.Buffer.BlockCopy(serializedReq, 0, result, 5, requestSize);//Copy serialized code
 
             return result;
         }
@@ -135,10 +138,11 @@ namespace Client
             //Serialize
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
-            byte[] result = new byte[4 + requestSize];
-            //Add code and serialized request
-            System.Buffer.BlockCopy(itob((int)CODES.JOIN), 0, result, 0, 4);//Copy serialized code
-            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+            byte[] result = new byte[5 + requestSize];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.JOIN;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+            System.Buffer.BlockCopy(serializedReq, 0, result, 5, requestSize);//Copy serialized code
 
             return result;
         }
@@ -147,10 +151,11 @@ namespace Client
             //Serialize
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
-            byte[] result = new byte[4 + requestSize];
-            //Add code and serialized request
-            System.Buffer.BlockCopy(itob((int)CODES.CREATE), 0, result, 0, 4);//Copy serialized code
-            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+            byte[] result = new byte[5 + requestSize];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.CREATE;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+            System.Buffer.BlockCopy(serializedReq, 0, result, 5, requestSize);//Copy serialized code
 
             return result;
         }

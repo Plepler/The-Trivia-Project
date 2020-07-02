@@ -124,22 +124,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	try
 	{
-		//We begin with a greeting ('hello')
-		buffer.clear();
-		send(clientSocket, GREETING, MIN_LENGTH, 0);
-
-		recieveData(clientSocket, buffer, MIN_LENGTH);
-
-		if (buffer[0] == GREETING[0] && buffer[1] == GREETING[1] && buffer[2] == GREETING[2] && buffer[3] == GREETING[3] && buffer[4] == GREETING[4])
-		{
-			std::cout << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << std::endl;
-		}
-		else
-		{
-			throw std::exception("We begin with 'hello'");
-		}
-		
-	
 		//Main communication loop with the client
 		while (true)
 		{

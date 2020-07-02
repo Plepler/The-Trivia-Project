@@ -15,7 +15,7 @@ namespace Client
     {
         public App()
         {
-            //Registration registration  = new Registration();
+            Registration registration  = new Registration();
         }
     }
 }

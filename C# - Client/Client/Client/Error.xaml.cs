@@ -27,5 +27,10 @@ namespace Client
         {
             ErrorPopUp.Text = errorMessage;
         }
+
+        private void CloseProgram(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();//Close Application
+        }
     }
 }

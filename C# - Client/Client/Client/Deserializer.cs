@@ -158,5 +158,11 @@ namespace Client
 		{
             return JsonConvert.DeserializeObject<CreateRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
+
+        //4 bytes into int
+        public static int btoi(byte[] buffer)
+        {
+            return BitConverter.ToInt32(buffer, 0);
+        }
     }
 }
