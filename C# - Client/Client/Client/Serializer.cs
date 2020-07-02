@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,7 @@ using System.Threading.Tasks;
 /// 
 /// </summary>
 
+enum CODES { ERROR = 0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYER, STATS, JOIN, CREATE };
 
 public class SignupRequest
 {
@@ -82,25 +84,87 @@ namespace Client
 {
     public static class Serializer
     {
-        public static byte[] SerializeResponse(SignupRequest request)
+        /// <summary> To all serialize functions
+        /// This function get a request
+        /// serialize it: from struct to json format
+        /// and from json to byte array
+        /// then add a appropriate code
+        /// </summary>
+        /// <param name="request"> The request that will be serialized </param>
+        /// <returns> the serialized code + request in a byte array </returns>
+        /// 
+
+        public static byte[] SerializeRequest(SignupRequest request)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            //Serialize
+            byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            int requestSize = serializedReq.Length;
+            byte[] result = new byte[4 + requestSize];
+            //Add code and serialized request
+            System.Buffer.BlockCopy(itob((int)CODES.SIGNUP), 0, result, 0, 4);//Copy serialized code
+            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+
+            return result;
         }
-        public static byte[] SerializeResponse(LoginRequest request)
+        public static byte[] SerializeRequest(LoginRequest request)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            //Serialize
+            byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            int requestSize = serializedReq.Length;
+            byte[] result = new byte[4 + requestSize];
+            //Add code and serialized request
+            System.Buffer.BlockCopy(itob((int)CODES.LOGIN), 0, result, 0, 4);//Copy serialized code
+            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+
+            return result;
         }
-        public static byte[] SerializeResponse(GetPlayersInRoomRequest request)
+        public static byte[] SerializeRequest(GetPlayersInRoomRequest request)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            //Serialize
+            byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            int requestSize = serializedReq.Length;
+            byte[] result = new byte[4 + requestSize];
+            //Add code and serialized request
+            System.Buffer.BlockCopy(itob((int)CODES.GET_PLAYER), 0, result, 0, 4);//Copy serialized code
+            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+
+            return result;
         }
-        public static byte[] SerializeResponse(JoinRoomRequest request)
+        public static byte[] SerializeRequest(JoinRoomRequest request)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            //Serialize
+            byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            int requestSize = serializedReq.Length;
+            byte[] result = new byte[4 + requestSize];
+            //Add code and serialized request
+            System.Buffer.BlockCopy(itob((int)CODES.JOIN), 0, result, 0, 4);//Copy serialized code
+            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+
+            return result;
         }
-        public static byte[] SerializeResponse(CreateRoomRequest request)
+        public static byte[] SerializeRequest(CreateRoomRequest request)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            //Serialize
+            byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
+            int requestSize = serializedReq.Length;
+            byte[] result = new byte[4 + requestSize];
+            //Add code and serialized request
+            System.Buffer.BlockCopy(itob((int)CODES.CREATE), 0, result, 0, 4);//Copy serialized code
+            System.Buffer.BlockCopy(serializedReq, 0, result, 4, requestSize);//Copy serialized code
+
+            return result;
+        }
+
+        //Int to 4 bytes
+        public static byte[] itob(int n)
+        {
+            byte[] res = new byte[4];
+            res[0] = (byte)(n >> 24);
+            res[0] = (byte)(n >> 16);
+            res[0] = (byte)(n >> 8);
+            res[0] = (byte)(n);
+
+            return res;
         }
     }
 }

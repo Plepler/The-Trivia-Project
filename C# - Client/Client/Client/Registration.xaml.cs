@@ -85,7 +85,7 @@ namespace Client
                     errormessage.Text = "";
                     string address = textBoxAddress.Text;
                     //To Do: build register message and send it
-                    byte[] request = Serializer.SerializeResponse(new SignupRequest(username, password, email));
+                    byte[] request = Serializer.SerializeRequest(new SignupRequest(username, password, email));
 
                     errormessage.Text = "You have Registered successfully.";
                     Reset();
