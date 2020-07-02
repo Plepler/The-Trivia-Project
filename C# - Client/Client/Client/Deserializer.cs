@@ -117,44 +117,44 @@ public class CreateRoomResponse
 
 namespace Client
 {
-    class Deserializer
+    public static class Deserializer
     {
         //Deserialize, Deserialize, Deserialize.....
         //From byte array to json...
         //and from json to a response class...
-        public ErrorResponse DeserializeErrorResponse(byte[] buffer)
+        public static ErrorResponse DeserializeErrorResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<ErrorResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public LoginResponse DeserializeLoginResponse(byte[] buffer)
+        public static LoginResponse DeserializeLoginResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<LoginResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public SignupResponse DeserializeSignupResponse(byte[] buffer)
+        public static SignupResponse DeserializeSignupResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<SignupResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public LogoutResponse DeserializeLogoutResponse(byte[] buffer)
+        public static LogoutResponse DeserializeLogoutResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<LogoutResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public GetRoomsResponse DeserializeGetRoomResponse(byte[] buffer)
+        public static GetRoomsResponse DeserializeGetRoomResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<GetRoomsResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public GetPlayersInRoomResponse DeserializeGetPlayersResponse(byte[] buffer)
+        public static GetPlayersInRoomResponse DeserializeGetPlayersResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public GetStatisticsResponse DeserializeResponse(byte[] buffer)
+        public static GetStatisticsResponse DeserializeResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<GetStatisticsResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public JoinRoomResponse DeserializeJoinRoomResponse(byte[] buffer)
+        public static JoinRoomResponse DeserializeJoinRoomResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<JoinRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
-		public CreateRoomResponse DeserializeCreateRoomResponse(byte[] buffer)
+        public static CreateRoomResponse DeserializeCreateRoomResponse(byte[] buffer)
 		{
             return JsonConvert.DeserializeObject<CreateRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }

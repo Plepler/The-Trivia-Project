@@ -20,3 +20,6 @@ G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Clie
 G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.csproj.CopyComplete
 G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.exe
 G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client.pdb
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Error.g.cs
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Client_MarkupCompile.lref
+G:\School\Magshimim\C++\TriviaProject\the-trivia-project\C# - Client\Client\Client\obj\Release\Error.baml
