@@ -95,12 +95,16 @@ namespace Client
                     if ((int)serializedResponse[0] == (int)CODES.ERROR)
                     {
                         ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
-                        errormessage.Text = errRes.data;//Show error message
+                        errormessage.Text = errRes.message;//Show error message
                     }
-                    else if((int)serializedResponse[0] == (int)CODES.OK)
+                    else if((int)serializedResponse[0] == (int)CODES.SIGNUP)
                     {
                         SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
                         errormessage.Text = "You have Registered successfully.";
+                    }
+                    else
+                    {
+                        errormessage.Text = "Unexpected error";
                     }
                     
                     Reset();

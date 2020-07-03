@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 public class RoomData
 {
 
@@ -28,11 +27,11 @@ public class RoomData
 }
 public class ErrorResponse
 {
-	public string data;
+	public string message;
 
-    public ErrorResponse(string data)
+    public ErrorResponse(string message)
     {
-        this.data = data;
+        this.message = message;
     }
 }
 //Login responses
