@@ -29,23 +29,39 @@ namespace Client
         public Welcome welcome = new Welcome();
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            if (textBoxEmail.Text.Length == 0)
+            
+
+            if (textBoxUsername.Text.Length == 0)
             {
-                errormessage.Text = "Enter an email.";
-                textBoxEmail.Focus();
-            }
-            else if (!Regex.IsMatch(textBoxEmail.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
-            {
-                errormessage.Text = "Enter a valid email.";
-                textBoxEmail.Select(0, textBoxEmail.Text.Length);
-                textBoxEmail.Focus();
+                errormessage.Text = "Enter an username.";
+                textBoxUsername.Focus();
             }
             else
             {
-                string email = textBoxEmail.Text;
+                string username = textBoxUsername.Text;
                 string password = passwordBox1.Password;
-                //To Do: build and send message
+
+                // build register message and send it
+                byte[] request = Serializer.SerializeRequest(new LoginRequest(username, password));
+                Communicator.SendMessage(request);
                 
+                //Recieve message
+                byte[] serializedResponse = Communicator.recieveMessage();
+                byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+
+                //Deserialize response according to CODE (first byte)
+                if ((int)serializedResponse[0] == (int)CODES.ERROR)
+                {
+                    ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                    errormessage.Text = errRes.data;//Show error message
+                }
+                else if ((int)serializedResponse[0] == (int)CODES.OK)
+                {
+                    SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
+                    errormessage.Text = "You have Logged in successfully.";
+                }
+
             }
         }
         private void buttonRegister_Click(object sender, RoutedEventArgs e)

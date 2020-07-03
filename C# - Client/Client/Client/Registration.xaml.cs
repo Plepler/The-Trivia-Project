@@ -40,7 +40,6 @@ namespace Client
         {
             textBoxUsername.Text = "";
             textBoxEmail.Text = "";
-            textBoxAddress.Text = "";
             passwordBox1.Password = "";
             passwordBoxConfirm.Password = "";
         }
@@ -50,10 +49,6 @@ namespace Client
         }
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
-            byte[] result;
-            int length = 0;
-            byte[] serializedLength = new byte[4];
-
             if (textBoxEmail.Text.Length == 0)
             {
                 errormessage.Text = "Enter an email.";
@@ -89,22 +84,18 @@ namespace Client
                 {
                     errormessage.Text = "";
 
-                    //To Do: build register message and send it
+                    // build register message and send it
                     byte[] request = Serializer.SerializeRequest(new SignupRequest(username, password, email));
                     Communicator.SendMessage(request);
+                    // recieve response and Deserialize it
                     byte[] serializedResponse = Communicator.recieveMessage();
-
-                    // Get length and deserialize it
-                    System.Buffer.BlockCopy(serializedResponse, 1, serializedLength, 0, 4);
-                    length = Deserializer.btoi(serializedLength);
-                    result = new byte[length];
-                    System.Buffer.BlockCopy(serializedResponse, 5, result, 0, length);
+                    byte[] result = Helper.DisassembleResponse(serializedResponse);
 
                     //Deserialize response according to CODE (first byte)
                     if ((int)serializedResponse[0] == (int)CODES.ERROR)
                     {
                         ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
-                        errormessage.Text = errRes.data;
+                        errormessage.Text = errRes.data;//Show error message
                     }
                     else if((int)serializedResponse[0] == (int)CODES.OK)
                     {
