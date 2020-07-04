@@ -86,5 +86,14 @@ namespace Client
             return null;
 
         }
+
+        private void Highscores(object sender, RoutedEventArgs e)
+        {
+            GetStatisticsResponse stats = GetAllStatistics();
+            if (stats != null)
+            {
+                //To Do: show leaderboard
+            }
+        }
     }
 }
