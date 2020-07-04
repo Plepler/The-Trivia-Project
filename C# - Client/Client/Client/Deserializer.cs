@@ -24,6 +24,8 @@ public class RoomData
         this.isActive = isActive;
         this.numOfQuestions = numOfQuestions;
     }
+    
+
 }
 public class ErrorResponse
 {
