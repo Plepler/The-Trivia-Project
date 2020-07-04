@@ -48,8 +48,7 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo reqInfo)
 	RequestResult requestRes;
 	LoginRequest loginReq;
 	SignUpRequest signupReq;
-	m_handlerFactory->createLoginHandler();
-	requestRes.newHandler = nullptr;
+
 
 	if (isRequestRelevant(reqInfo))
 	{
@@ -99,7 +98,7 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 	{
 		m_handlerFactory->getLoginManager().login(loginReq.username, loginReq.password);
 		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(loginRsp);
-		reqResult.newHandler = new MenuRequestHandler(LoggedUser(loginReq.username), m_handlerFactory);
+		reqResult.newHandler = m_handlerFactory->createMenuRequestHandler(LoggedUser(loginReq.username));
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
@@ -125,7 +124,7 @@ RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 	{
 		m_handlerFactory->getLoginManager().signup(signupReq.username, signupReq.password, signupReq.email);
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRsp);
-		reqResult.newHandler = new MenuRequestHandler(LoggedUser(signupReq.username), m_handlerFactory);
+		reqResult.newHandler = m_handlerFactory->createMenuRequestHandler(LoggedUser(signupReq.username));
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{

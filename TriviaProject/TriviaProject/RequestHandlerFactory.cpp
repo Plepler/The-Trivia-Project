@@ -1,7 +1,7 @@
 #include "RequestHandlerFactory.h"
 
 //C'Tor, doesnt create database, passes it forward instead
-RequestHandlerFactory::RequestHandlerFactory(IDataBase * db) :  m_loginManager(new LoginManager(db)), m_database(db), m_roomManager(nullptr), m_StatisticsManager(nullptr)
+RequestHandlerFactory::RequestHandlerFactory(IDataBase * db) :  m_loginManager(new LoginManager(db)), m_database(db), m_roomManager(new RoomManager(m_database)), m_StatisticsManager(nullptr)
 {
 
 }
@@ -47,10 +47,10 @@ LoginManager& RequestHandlerFactory::getLoginManager()
 	return *m_loginManager;
 }
 
-MenuRequestHandler RequestHandlerFactory::createMenuRequestHandler(LoggedUser usr)
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser usr)
 {
 	m_StatisticsManager = new StatisticsManager(m_database);
-	return MenuRequestHandler(usr, this);
+	return new MenuRequestHandler(usr, this);
 }
 
 StatisticsManager& RequestHandlerFactory::getStatisticsManager()

@@ -52,7 +52,6 @@ namespace Client
                 }
             }
 
-
             ic.ItemsSource = buttons;
         }
 

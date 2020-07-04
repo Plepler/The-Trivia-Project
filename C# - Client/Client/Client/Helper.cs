@@ -25,10 +25,14 @@ namespace Client
             // Get length and deserialize it
             System.Buffer.BlockCopy(serializedResponse, 1, serializedLength, 0, 4);// Get serialized length
             length = Deserializer.btoi(serializedLength);// Deserialize length
-            // Get response itself
-            result = new byte[length];
-            System.Buffer.BlockCopy(serializedResponse, 5, result, 0, length);
-            return result;
+            if (length > 0)
+            {
+                // Get response itself
+                result = new byte[length];
+                System.Buffer.BlockCopy(serializedResponse, 5, result, 0, length);
+                return result;
+            }
+            return null;
         }
 
     }

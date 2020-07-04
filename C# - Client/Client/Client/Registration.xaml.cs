@@ -100,7 +100,9 @@ namespace Client
                     else if((int)serializedResponse[0] == (int)CODES.SIGNUP)
                     {
                         SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
-                        errormessage.Text = "You have Registered successfully.";
+                        Menu menu = new Menu();
+                        Close();
+                        menu.Show();
                     }
                     else
                     {

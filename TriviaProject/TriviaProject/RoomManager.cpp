@@ -19,18 +19,9 @@ In: all the neccessery parameters for creating a room:
 */
 void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
 {
-	
-	unsigned int id = 0;
-	try 
-	{
-		id = (*(--m_rooms.end())).first + 1;//create new id to room
-	}
-	catch(std::exception e)
-	{
-		//First room id is 0
-	}
-	Room newRoom = Room(id, roomName, maxUsers, questionCount, answerTimeout);
-	m_rooms.insert(std::pair<unsigned int, Room*>(id, &newRoom));
+	Room newRoom = Room(counter, roomName, maxUsers, questionCount, answerTimeout);
+	m_rooms.insert(std::pair<unsigned int, Room*>(counter, &newRoom));
+	counter++;
 }
 
 

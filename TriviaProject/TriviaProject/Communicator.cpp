@@ -136,21 +136,23 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			newReq.id = int(buffer[0]);//First byte is request id
 			//Deserialize the length of the data
 			length = JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char>(buffer.begin() + 1, buffer.end()));
-			//Recieve data by the length
-			recieveData(clientSocket, newReq.buffer, length);
-
-			//Calls a function to handle the request and return a respose
-			if (!(newReq.id == LOGIN && logged))
+			//Recieve data by the length (if there is any)
+			if (length > 0)
 			{
-				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
-			}
-			else
-			{
-				newReq.id = ERROR;
-				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Build error message
+				recieveData(clientSocket, newReq.buffer, length);
 			}
 			
-			logged = isLogged(newReq.id, request_result.response[0]);
+
+			//Calls a function to handle the request and return a respose
+			
+			if (m_clients[clientSocket] != nullptr)
+			{
+				request_result = m_clients[clientSocket]->handleRequest(newReq);//Handle request and get appropiate response
+				delete m_clients[clientSocket];
+				m_clients[clientSocket] = request_result.newHandler;
+			}
+			
+			
 			
 
 			//Send the response
@@ -199,8 +201,3 @@ void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& 
 }
 
 
-
-bool Communicator::isLogged(int newReqID, int request_result_ID)
-{
-	return (newReqID == LOGIN && request_result_ID == LOGIN);
-}
