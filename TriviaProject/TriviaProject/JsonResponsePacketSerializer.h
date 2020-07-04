@@ -20,7 +20,7 @@ enum CODES { ERROR=0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYE
 //Error response
 struct ErrorResponse
 {
-	std::string data;
+	std::string message;
 
 }typedef ErrorResponse;
 

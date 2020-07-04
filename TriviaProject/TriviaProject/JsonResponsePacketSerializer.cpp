@@ -40,7 +40,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Error
 	std::string tempStr;
 
 	buffer.push_back(ERROR);//add data type
-	data["message"] = response.data;
+	data["message"] = response.message;
 	tempStr = data.dump();
 
 	//add length of data
