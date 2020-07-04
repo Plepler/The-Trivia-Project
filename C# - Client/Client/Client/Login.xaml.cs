@@ -72,5 +72,12 @@ namespace Client
             registration.Show();
             Close();
         }
+
+        private void WelcomeBack(object sender, RoutedEventArgs e)
+        {
+            Welcome welcome = new Welcome();
+            welcome.Show();
+            Close();
+        }
     }
 }
