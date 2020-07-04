@@ -169,7 +169,7 @@ RequestResult MenuRequestHandler::getStatistics()
 
 	try
 	{
-		reqResult.response = JsonResponsePacketSerializer::serializeResponse(GetStatisticsResponse{ 1, m_handlerFactory->getStatisticsManager().getStatistics(m_user.getUsername()) });
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(GetStatisticsResponse{ 1, m_handlerFactory->getStatisticsManager().getStatistics() });
 		reqResult.newHandler = nullptr;
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead

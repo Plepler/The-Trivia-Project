@@ -62,6 +62,22 @@ void SqliteDataBase::clear()
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
 
+std::vector<std::string> SqliteDataBase::GetStatistics()
+{
+	std::vector<std::string> stats;
+	selectBy("USERS", "", "USERNAME", this->dataBase);
+	for (int i = 0; i < dataHolder.size(); i++)
+	{
+		stats.push_back(dataHolder[i]);
+		stats.push_back(std::to_string(this->getPlayerAvarageAnswerTime(dataHolder[i])));
+		stats.push_back(std::to_string(this->getNumOfCorrectAnswers(dataHolder[i])));
+		stats.push_back(std::to_string(this->getNumOfTotalAnswers(dataHolder[i])));
+		stats.push_back(std::to_string(this->getNumOfPlayerGames(dataHolder[i])));
+	}
+	dataHolder.clear();
+	return stats;
+}
+
 float SqliteDataBase::getPlayerAvarageAnswerTime(std::string username)
 {
 	float ans = 0;
@@ -186,7 +202,11 @@ output : NONE
 void SqliteDataBase::selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db)
 {
 	char* sqlite3_errmsg = nullptr;
-	std::string SQL = "SELECT " + what + " FROM " + src + " WHERE " + byWhat + ";";
+	std::string SQL;
+	if (byWhat == "")
+		SQL = "SELECT " + what + " FROM " + src + ";";
+	else
+		SQL = "SELECT " + what + " FROM " + src + " WHERE " + byWhat + ";";
 	int res = sqlite3_exec(db, SQL.c_str(), callBack, nullptr, &sqlite3_errmsg);
 	if (sqlite3_errmsg != nullptr)
 	{
