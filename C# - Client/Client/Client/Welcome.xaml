@@ -2,7 +2,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
         Title="Welcome" Height="250" Width="400">
     <Grid>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" x:Name="WelcomeHeading" Text="Welcome:" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed"/>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" x:Name="WelcomeHeading" Text="Shalom" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed"/>
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="90,10,0,0" x:Name="TextBlockName"  VerticalAlignment="Top" FontSize="15" FontStretch="ExtraCondensed" />
+        <Button x:Name="LoginButton_Copy" Content="Login" HorizontalAlignment="Left" Height="54.237" Margin="105,116.22,0,0" VerticalAlignment="Top" Width="184.745" Click="Login"/>
+        <Button x:Name="RegistrationButton" Content="Register" HorizontalAlignment="Left" Height="54.237" Margin="105,49.271,0,0" VerticalAlignment="Top" Width="184.745" Click="Register"/>
     </Grid>
 </Window>  

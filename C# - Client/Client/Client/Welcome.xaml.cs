@@ -24,5 +24,20 @@ namespace Client
         {
             InitializeComponent();
         }
+
+        private void Register(object sender, RoutedEventArgs e)
+        {
+            Registration register = new Registration();
+            register.Show();
+            Close();
+        }
+
+        private void Login(object sender, RoutedEventArgs e)
+        {
+            Login login = new Login();
+            login.Show();
+            Close();
+        }
+
     }
 }

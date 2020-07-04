@@ -59,7 +59,10 @@ namespace Client
                 else if ((int)serializedResponse[0] == (int)CODES.LOGIN)
                 {
                     SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
-                    errormessage.Text = "You have Logged in successfully.";
+
+                    Menu menu = new Menu();
+                    menu.Show();
+                    Close();
                 }
 
             }
