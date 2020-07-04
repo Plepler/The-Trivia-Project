@@ -24,6 +24,11 @@ namespace Client
             InitializeComponent();
         }
 
+        private void CloseProgram(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
         private void CreateRoom(object sender, RoutedEventArgs e)
         {
             NewRoom newRoom = new NewRoom();
@@ -33,17 +38,53 @@ namespace Client
 
         private void JoinRoom(object sender, RoutedEventArgs e)
         {
-
+            JoinRoom join = new JoinRoom();
+            Close();
+            join.Show();
         }
 
         private void Statistics(object sender, RoutedEventArgs e)
         {
-
+            GetStatisticsResponse stats = GetAllStatistics();
+            if (stats != null)
+            {
+                //To Do: show personal stats
+            }
         }
 
-        private void CloseProgram(object sender, RoutedEventArgs e)
+        private void Leaderboard(object sender, RoutedEventArgs e)
         {
-            Close();
+            GetStatisticsResponse stats = GetAllStatistics();
+            if (stats != null)
+            {
+                //To Do: show leaderboard
+            }
+        }
+
+        private GetStatisticsResponse GetAllStatistics()
+        {
+            //Build and send message
+            byte[] request = Serializer.SerializeStatsRequest();
+            Communicator.SendMessage(request);
+
+            //Recieve message
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+            //Deserialize response according to CODE (first byte)
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            {
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+            }
+            else if ((int)serializedResponse[0] == (int)CODES.STATS)
+            {
+                return Deserializer.DeserializeStatisticsResponse(result);
+            }
+
+            return null;
+
         }
     }
 }

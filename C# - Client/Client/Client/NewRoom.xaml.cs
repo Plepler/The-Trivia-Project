@@ -35,6 +35,13 @@ namespace Client
             textBoxTimer.Text = "";
         }
 
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Menu menu = new Menu();
+            Close();
+            menu.Show();
+        }
+
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
             if (IsValid())
@@ -61,18 +68,11 @@ namespace Client
                 }
                 else if ((int)serializedResponse[0] == (int)CODES.CREATE)
                 {
-                    SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
+                    CreateRoomResponse createRoomRes = Deserializer.DeserializeCreateRoomResponse(result);
                     errormessage.Text = "You have successfully created a room.";
                 }
 
             }
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            Menu menu = new Menu();
-            Close();
-            menu.Show();
         }
 
         /// <summary>

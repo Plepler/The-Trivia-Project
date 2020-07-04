@@ -11,6 +11,7 @@
         <Button x:Name="JoinRoomButton" Content="JOIN ROOM" HorizontalAlignment="Left" Height="61.017" Margin="280,153.39,0,0" VerticalAlignment="Top" Width="230.339" FontSize="24" Click="JoinRoom"/>
         <Button x:Name="StatisticsButton" Content="STATISTICS" HorizontalAlignment="Left" Height="61.017" Margin="280,228.39,0,0" VerticalAlignment="Top" Width="230.339" FontSize="24" Click="Statistics"/>
         <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="33.56" Margin="690.068,358.932,0,0" VerticalAlignment="Top" Width="79.322" FontSize="16" Click="CloseProgram"/>
+        <Button x:Name="LeaderboardButton" Content="LEADERBOARD" HorizontalAlignment="Left" Height="61.017" Margin="280,303.39,0,0" VerticalAlignment="Top" Width="230.339" FontSize="24" Click="Leaderboard"/>
 
     </Grid>
 </Window>

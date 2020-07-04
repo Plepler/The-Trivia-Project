@@ -159,6 +159,17 @@ namespace Client
 
             return result;
         }
+        public static byte[] SerializeStatsRequest()
+        {
+            //Serialize
+            int requestSize = 0;
+            byte[] result = new byte[5];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.STATS;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+
+            return result;
+        }
 
         //Int to 4 bytes
         public static byte[] itob(int n)
