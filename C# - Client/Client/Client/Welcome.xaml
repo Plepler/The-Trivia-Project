@@ -2,9 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
         Title="Welcome" Height="250" Width="400">
     <Grid>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" x:Name="WelcomeHeading" Text="Shalom" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed"/>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF0C0101" Offset="0.109"/>
+                <GradientStop Color="#FFBB3535" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="0,10,0,0" x:Name="WelcomeHeading" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed" Width="392" FontFamily="Showcard Gothic" Foreground="#FFA04646" TextAlignment="Center"><Run FlowDirection="RightToLeft" FontSize="12" Text="WELCOM"/><Run FontSize="12" Text="E "/><Run FlowDirection="RightToLeft" FontSize="12" Text=" TO OUR TRIVIA PROJECT"/><Run FontSize="12" Text="!!!"/><Run FlowDirection="RightToLeft" FontSize="12" Text=" "/></TextBlock>
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="90,10,0,0" x:Name="TextBlockName"  VerticalAlignment="Top" FontSize="15" FontStretch="ExtraCondensed" />
-        <Button x:Name="LoginButton_Copy" Content="Login" HorizontalAlignment="Left" Height="54.237" Margin="105,116.22,0,0" VerticalAlignment="Top" Width="184.745" Click="Login"/>
-        <Button x:Name="RegistrationButton" Content="Register" HorizontalAlignment="Left" Height="54.237" Margin="105,49.271,0,0" VerticalAlignment="Top" Width="184.745" Click="Register"/>
+        <Button x:Name="LoginButton_Copy" Content="Login" HorizontalAlignment="Left" Height="31.815" Margin="112.516,95.189,0,91.996" VerticalAlignment="Center" Width="164.005" Click="Login" FontFamily="Showcard Gothic"/>
+        <Button x:Name="RegistrationButton" Content="Register" HorizontalAlignment="Left" Height="32.376" Margin="112.516,38,0,148.624" VerticalAlignment="Center" Width="164.005" Click="Register" FontFamily="Showcard Gothic"/>
+        <Button x:Name="LoginButton_Copy1" Content="Exit" HorizontalAlignment="Left" Height="31.815" Margin="112.516,148.443,0,0" VerticalAlignment="Top" Width="164.005" Click="Exit_Click" FontFamily="Showcard Gothic"/>
     </Grid>
 </Window>  

@@ -34,17 +34,23 @@ namespace Client
         {
             if (username == "ALL")
             {
-
+                while (response.statistics.Count() != 0)//Iterate over all rooms
+                {
+                    statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
+                }
             }
-            else if(username == "LEADERS")
+            else if (username == "LEADERS")
             {
-
+                for (int i = 0; i < 3 && response.statistics.Count() != 0; i ++)
+                {
+                    statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
+                }
             }
             else
             {
                 foreach (string i in response.statistics)//Iterate over all rooms
                 {
-                    if(i == username)
+                    if (i == username)
                     {
                         statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
                         break;
@@ -53,7 +59,7 @@ namespace Client
                     {
                         response.statistics.Dequeue();
                     }
-                    
+
                 }
             }
 
@@ -67,4 +73,6 @@ namespace Client
             Close();
         }
     }
-}
+
+
+    }
