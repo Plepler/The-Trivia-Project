@@ -8,7 +8,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             <GradientStop Color="#FF2D65DE" Offset="1"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Grid Margin="10,10,2,34.5">
+    <Grid Margin="10,10,2,34.5" Width="792" Height="419">
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="Black"/>
@@ -24,7 +24,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             </TextBlock.Foreground><Run Text="Create "/><Run Text="Room:"/></TextBlock>
         <!--Button as a Link button using style-->
         <!--end Button as a Link button using style-->
-        <Grid Margin="31,0,24.5,0" Height="292.5" VerticalAlignment="Bottom" Background="#FF061025">
+        <Grid Margin="28,0,40,-16.5" Height="355" VerticalAlignment="Bottom" Background="#FF061025">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="375*"/>
                 <ColumnDefinition Width="229*"/>
@@ -74,7 +74,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             <Button Content="Reset" Height="39.5" Margin="0,120.427,25.725,0" x:Name="ResetButton" VerticalAlignment="Top" Click="Reset_Click" Foreground="Black" FontFamily="Showcard Gothic" Grid.RowSpan="2" Grid.Column="2" />
             <Button Content="Cancel" Height="39.5" HorizontalAlignment="Right" Margin="0,214.093,25.725,0" Name="button3" VerticalAlignment="Top" Width="91" Click="Cancel_Click" Foreground="Black" FontFamily="Showcard Gothic" Grid.Column="2" Grid.RowSpan="2" RenderTransformOrigin="0.421,2.348" />
             <TextBox x:Name="textBoxTimer" Height="35" HorizontalAlignment="Left" Margin="304,214,0,0" VerticalAlignment="Top" Width="262" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <TextBox x:Name="textBoxQuestions" Height="35" HorizontalAlignment="Left" Margin="304,145.167,0,0" VerticalAlignment="Top" Width="259" Grid.ColumnSpan="2" Grid.RowSpan="2" />
         </Grid>
-        <TextBox x:Name="textBoxQuestions" Height="35" HorizontalAlignment="Left" Margin="336,204,0,0" VerticalAlignment="Top" Width="259" />
     </Grid>
 </Window>  
