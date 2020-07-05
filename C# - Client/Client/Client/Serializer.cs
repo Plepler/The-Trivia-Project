@@ -100,6 +100,7 @@ namespace Client
             byte[] serializedReq = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(request));
             int requestSize = serializedReq.Length;
             byte[] result = new byte[5 + requestSize];
+
             //Add code, length and serialized request
             result[0] = (int)CODES.SIGNUP;//Add code
             System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length

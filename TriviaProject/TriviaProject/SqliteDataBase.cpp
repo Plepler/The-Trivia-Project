@@ -66,15 +66,16 @@ std::vector<std::string> SqliteDataBase::GetStatistics()
 {
 	std::vector<std::string> stats;
 	selectBy("USERS", "", "USERNAME", this->dataBase);
-	for (int i = 0; i < dataHolder.size(); i++)
-	{
-		stats.push_back(dataHolder[i]);
-		stats.push_back(std::to_string(this->getPlayerAvarageAnswerTime(dataHolder[i])));
-		stats.push_back(std::to_string(this->getNumOfCorrectAnswers(dataHolder[i])));
-		stats.push_back(std::to_string(this->getNumOfTotalAnswers(dataHolder[i])));
-		stats.push_back(std::to_string(this->getNumOfPlayerGames(dataHolder[i])));
-	}
+	std::vector<std::string> names(dataHolder);
 	dataHolder.clear();
+	for (int i = 0; i < names.size(); i++)
+	{
+		stats.push_back(names[i]);
+		stats.push_back(std::to_string(this->getPlayerAvarageAnswerTime(names[i])));
+		stats.push_back(std::to_string(this->getNumOfCorrectAnswers(names[i])));
+		stats.push_back(std::to_string(this->getNumOfTotalAnswers(names[i])));
+		stats.push_back(std::to_string(this->getNumOfPlayerGames(names[i])));
+	}
 	return stats;
 }
 

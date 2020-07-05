@@ -61,6 +61,7 @@ namespace Client
                     SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
 
                     Menu menu = new Menu();
+                    menu.SetUsername(username);
                     menu.Show();
                     Close();
                 }
@@ -71,6 +72,7 @@ namespace Client
         {
             registration.Show();
             Close();
+            
         }
 
         private void WelcomeBack(object sender, RoutedEventArgs e)

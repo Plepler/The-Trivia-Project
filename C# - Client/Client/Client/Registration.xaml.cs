@@ -101,6 +101,7 @@ namespace Client
                     {
                         SignupResponse signupRes = Deserializer.DeserializeSignupResponse(result);
                         Menu menu = new Menu();
+                        menu.SetUsername(username);
                         Close();
                         menu.Show();
                     }

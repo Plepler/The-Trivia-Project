@@ -19,9 +19,16 @@ namespace Client
     /// </summary>
     public partial class Menu : Window
     {
+        private string username;
+
         public Menu()
         {
             InitializeComponent();
+        }
+
+        public void SetUsername(string username)
+        {
+            this.username = username;
         }
 
         private void CloseProgram(object sender, RoutedEventArgs e)
@@ -48,7 +55,8 @@ namespace Client
             GetStatisticsResponse stats = GetAllStatistics();
             if (stats != null)
             {
-                //To Do: show personal stats
+                Statistics personalStats = new Statistics();
+                personalStats.showStatistics(stats, username);
             }
         }
 
@@ -77,6 +85,8 @@ namespace Client
                 ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
                 Error error = new Error();
                 error.updateMessage(errRes.message);
+                error.Show();
+                Close();
             }
             else if ((int)serializedResponse[0] == (int)CODES.STATS)
             {
