@@ -6,7 +6,7 @@
         <ItemsControl x:Name="ic">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding ButtonContent}"/>
+                    <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

@@ -65,7 +65,18 @@ namespace Client
             GetStatisticsResponse stats = GetAllStatistics();
             if (stats != null)
             {
-                //To Do: show leaderboard
+                Statistics personalStats = new Statistics();
+                personalStats.showStatistics(stats, "ALL");
+            }
+        }
+
+        private void Highscores(object sender, RoutedEventArgs e)
+        {
+            GetStatisticsResponse stats = GetAllStatistics();
+            if (stats != null)
+            {
+                Statistics personalStats = new Statistics();
+                personalStats.showStatistics(stats, "LEADERS");
             }
         }
 
@@ -97,13 +108,6 @@ namespace Client
 
         }
 
-        private void Highscores(object sender, RoutedEventArgs e)
-        {
-            GetStatisticsResponse stats = GetAllStatistics();
-            if (stats != null)
-            {
-                //To Do: show leaderboard
-            }
-        }
+
     }
 }

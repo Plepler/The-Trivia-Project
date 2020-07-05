@@ -48,13 +48,43 @@ namespace Client
 
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
-                    buttons.Add(new Button { ButtonContent = room.ToString(), ButtonID = (room.id).ToString() });
+                    buttons.Add(new Button { ButtonContent = room.ToString(), ButtonID = (room.id).ToString(), Data = room });
                 }
             }
 
             ic.ItemsSource = buttons;
         }
 
+        public void JoinRoom_Click(object sender, RoutedEventArgs e)
+        {
+            RoomData data = (sender as Button).Data;
+            Room room = new Room();
+            room.Show();
+
+            byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
+            Communicator.SendMessage(request);
+
+            //Recieve message
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+
+            //Deserialize response according to CODE (first byte)
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            {
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+
+            }
+            else if ((int)serializedResponse[0] == (int)CODES.GET_PLAYER)
+            {
+                GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
+                room.refresh(data, playersRes.players);
+                room.Show();
+                Close();
+            }
+
+            
+        }
 
 
     }
@@ -63,5 +93,6 @@ namespace Client
     {
         public string ButtonContent { get; set; }
         public string ButtonID { get; set; }
+        public RoomData Data { get; set; }
     }
 }

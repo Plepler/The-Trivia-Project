@@ -39,5 +39,9 @@ namespace Client
             Close();
         }
 
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
