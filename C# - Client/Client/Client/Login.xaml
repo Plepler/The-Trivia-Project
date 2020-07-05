@@ -2,23 +2,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
         Title="Login" Height="350" Width="525">
     <Grid>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" Name="LoginHeading" Text="Login:" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed"/>
-        <TextBlock Height="50" HorizontalAlignment="Left" Margin="24,48,0,0" Name="textBlockHeading" VerticalAlignment="Top" FontSize="12" FontStyle="Italic" Padding="5">  
-            Note: Please login here to view the features of this site. If you are new on this site then <LineBreak /><!--line break-->  
-            please click on  
-           <!--textblock as a Hyperlink.-->  
-            <TextBlock>  
-                 <Hyperlink Click="buttonRegister_Click" FontSize="14" FontStyle="Normal">Register</Hyperlink>  
-            </TextBlock>  
-            <!--end textblock as a hyperlink-->  
-            button  
-        </TextBlock>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="58,115,0,0" Name="textBlock1" Text="Username" VerticalAlignment="Top" Width="67" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="58,168,0,0" Name="textBlock2" Text="Password" VerticalAlignment="Top" Width="77" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="118,115,0,0" x:Name="textBoxUsername" VerticalAlignment="Top" Width="250" />
-        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="118,168,0,0" Name="passwordBox1" VerticalAlignment="Top" Width="250" />
-        <Button Content="Login" Height="23" HorizontalAlignment="Left" Margin="118,211,0,0" Name="button1" VerticalAlignment="Top" Width="120" Click="button1_Click" />
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF254DD8" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" Name="LoginHeading" Text="Login:" VerticalAlignment="Top" FontSize="17" FontStretch="ExtraCondensed" FontFamily="Showcard Gothic" Foreground="#FFD44848"/>
+        <TextBlock Height="50" HorizontalAlignment="Left" Margin="58,50.354,0,0" x:Name="textBlockHeading" VerticalAlignment="Top" FontSize="12" FontStyle="Italic" Padding="5" FontFamily="Showcard Gothic" Foreground="#FFD44848"><!--line break--><!--end textblock as a hyperlink--><Run Text="dont have username?    "/><InlineUIContainer>
+<!--textblock as a Hyperlink.-->  
+                <TextBlock><Hyperlink Click="buttonRegister_Click" FontSize="14" FontStyle="Normal"><Run Text="Register"/></Hyperlink></TextBlock>  
+            </InlineUIContainer><Run Text="  here! "/></TextBlock>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="58,115,0,0" Name="textBlock1" Text="Username" VerticalAlignment="Top" Width="67" FontFamily="Showcard Gothic" Foreground="#FFD44848" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="58,168,0,0" Name="textBlock2" Text="Password" VerticalAlignment="Top" Width="77" FontFamily="Showcard Gothic" Foreground="#FFD44848" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="140.758,115,0,0" x:Name="textBoxUsername" VerticalAlignment="Top" Width="250" />
+        <PasswordBox Height="23" HorizontalAlignment="Left" Margin="140.758,168,0,0" Name="passwordBox1" VerticalAlignment="Top" Width="250" />
+        <Button Content="Login" Height="23" HorizontalAlignment="Left" Margin="118,211,0,0" Name="button1" VerticalAlignment="Top" Width="120" Click="button1_Click" FontFamily="Showcard Gothic" />
         <TextBlock Height="23" HorizontalAlignment="Left" x:Name ="errormessage" VerticalAlignment="Top" Width="247" Margin="118,253,0,0"  OpacityMask="Crimson" Foreground="#FFE5572C"  />
-        <Button Content="Go back" HorizontalAlignment="Left" Height="23" Margin="248,211,0,0" VerticalAlignment="Top" Width="120" Click="WelcomeBack"/>
+        <Button Content="Go back" HorizontalAlignment="Left" Height="23" Margin="248,211,0,0" VerticalAlignment="Top" Width="120" Click="WelcomeBack" FontFamily="Showcard Gothic"/>
     </Grid>
 </Window>
