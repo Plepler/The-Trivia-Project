@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="Statistics" Height="450" Width="800">
     <Grid>
-        <ScrollViewer Margin="10,0,-10,0" Foreground="#FF2D65DE">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="187*"/>
+            <RowDefinition Height="23*"/>
+        </Grid.RowDefinitions>
+        <ScrollViewer Margin="10,0,-10,0" Foreground="#FF2D65DE" Grid.RowSpan="2">
             <TextBlock x:Name="statsBlock" HorizontalAlignment="Center" Height="272.088" TextWrapping="Wrap" Width="752" FontSize="36" VerticalAlignment="Center" Margin="50,0,20,0" FontFamily="Showcard Gothic">
                 <TextBlock.Foreground>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -19,7 +23,7 @@
         TextWrapping="Wrap"/>
                 </InlineUIContainer></TextBlock>
         </ScrollViewer>
-        <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="40.793" Margin="666.551,368.207,0,0" VerticalAlignment="Top" Width="115.449" FontSize="22" Click="CloseWindow" FontFamily="Showcard Gothic" Foreground="Black"/>
+        <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="40.793" Margin="666.551,368.207,0,0" VerticalAlignment="Top" Width="115.449" FontSize="22" Click="CloseWindow" FontFamily="Showcard Gothic" Foreground="Black" Grid.RowSpan="2"/>
 
     </Grid>
 </Window>

@@ -1,9 +1,9 @@
 ﻿<Window x:Class="Client.JoinRoom"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="JoinRoom" Height="350" Width="525">
-    <Grid>
-        <ItemsControl x:Name="ic">
+        Title="JoinRoom" Height="450" Width="800">
+    <Grid Margin="0,0,-19.244,123.883">
+        <ItemsControl x:Name="ic" Height="450" Margin="10,0,-293,-131" VerticalAlignment="Top" HorizontalAlignment="Left" Width="800">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click"/>
