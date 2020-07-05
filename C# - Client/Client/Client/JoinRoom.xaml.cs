@@ -19,14 +19,11 @@ namespace Client
     /// </summary>
     public partial class JoinRoom : Window
     {
+        private List<Button> buttons;
         public JoinRoom()
         {
             InitializeComponent();
-
-            List<Button> buttons = new List<Button>();
-
-            //We are gonna create a button for each room
-
+            buttons = new List<Button>();
             // build register message and send it
             byte[] request = Serializer.SerializeRoomsRequest();
             Communicator.SendMessage(request);
@@ -63,6 +60,17 @@ namespace Client
             Close();      
         }
 
+        public void AutomaticJoin(string name)
+        {
+            foreach (Button button in buttons)//Iterate over all rooms
+            {
+                if(button.Data.name == name)
+                {
+                    Room room = new Room(button.Data);
+                    Close();
+                }
+            }
+        }
 
     }
 

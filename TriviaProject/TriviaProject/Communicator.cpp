@@ -152,9 +152,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 				m_clients[clientSocket] = request_result.newHandler;
 			}
 			
-			
-			
-
 			//Send the response
 			sendData(clientSocket, request_result.response);
 		}

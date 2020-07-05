@@ -69,7 +69,8 @@ namespace Client
                 else if ((int)serializedResponse[0] == (int)CODES.CREATE)
                 {
                     CreateRoomResponse createRoomRes = Deserializer.DeserializeCreateRoomResponse(result);
-                    errormessage.Text = "You have successfully created a room.";
+                    JoinRoom joinRoom = new JoinRoom();
+                    joinRoom.AutomaticJoin(name);
                 }
 
             }

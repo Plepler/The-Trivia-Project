@@ -21,9 +21,9 @@ namespace Client
     {
         public Room(RoomData data)
         {
+            InitializeComponent();
             this.data = data;
             refresh();
-            InitializeComponent();   
         }
 
         public void refresh()
@@ -53,7 +53,7 @@ namespace Client
                     players_list.Items.Add(player);
                 }
             }
-           
+            Show();
         }
 
         private void exit_room_Click(object sender, RoutedEventArgs e)
