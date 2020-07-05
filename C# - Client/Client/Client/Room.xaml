@@ -7,6 +7,74 @@
         mc:Ignorable="d"
         Title="Room" Height="450" Width="800">
     <Grid>
-        
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF2D65DE" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <ListView x:Name="players_list" HorizontalAlignment="Left" Height="338.66" Margin="10,30.217,0,0" VerticalAlignment="Top" Width="320.103" FontFamily="Showcard Gothic" Background="{x:Null}" FontSize="18">
+            <ListView.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                </LinearGradientBrush>
+            </ListView.Foreground>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button x:Name="exit_room" Content="exit room" HorizontalAlignment="Left" Height="40.123" Margin="639.299,368.877,0,0" VerticalAlignment="Top" Width="142.701" FontFamily="Showcard Gothic" Background="White" FontSize="18" BorderBrush="White" Click="exit_room_Click">
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+        </Button>
+        <TextBlock x:Name="admin" HorizontalAlignment="Left" Height="106.701" Margin="359.402,175.577,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontFamily="Showcard Gothic" FontSize="36">
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="1"/>
+                    <GradientStop Color="#FFF9F9F9" Offset="0.527"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground><Run Text="admin">
+                <Run.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                        <GradientStop Color="#FFF9F9F9" Offset="0.51"/>
+                    </LinearGradientBrush>
+                </Run.Foreground>
+            </Run><Run Text=":&#x9;"/></TextBlock>
+        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+        <TextBlock x:Name="room_name" HorizontalAlignment="Left" Height="140.36" Margin="359.402,30.217,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300" FontSize="36" FontFamily="Showcard Gothic">
+            <TextBlock.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="White" Offset="0.715"/>
+                    <GradientStop Color="#FF888888" Offset="0.594"/>
+                </LinearGradientBrush>
+            </TextBlock.Foreground><Run Text="room name:">
+                <Run.Foreground>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="White" Offset="0.715"/>
+                        <GradientStop Color="#FF888888" Offset="0.238"/>
+                    </LinearGradientBrush>
+                </Run.Foreground>
+            </Run></TextBlock>
+        <Button x:Name="refresh_button" Content="REFRESH" HorizontalAlignment="Left" Height="40.123" Margin="472.288,368.877,0,0" VerticalAlignment="Top" Width="142.701" FontFamily="Showcard Gothic" Background="White" FontSize="18" BorderBrush="White" Click="refresh">
+            <Button.Foreground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="Black" Offset="1"/>
+                </LinearGradientBrush>
+            </Button.Foreground>
+        </Button>
+
     </Grid>
 </Window>

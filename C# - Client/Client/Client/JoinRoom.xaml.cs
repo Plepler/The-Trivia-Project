@@ -58,32 +58,9 @@ namespace Client
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
             RoomData data = (sender as Button).Data;
-            Room room = new Room();
+            Room room = new Room(data);
             room.Show();
-
-            byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
-            Communicator.SendMessage(request);
-
-            //Recieve message
-            byte[] serializedResponse = Communicator.recieveMessage();
-            byte[] result = Helper.DisassembleResponse(serializedResponse);
-
-
-            //Deserialize response according to CODE (first byte)
-            if ((int)serializedResponse[0] == (int)CODES.ERROR)
-            {
-                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
-
-            }
-            else if ((int)serializedResponse[0] == (int)CODES.GET_PLAYER)
-            {
-                GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
-                room.refresh(data, playersRes.players);
-                room.Show();
-                Close();
-            }
-
-            
+            Close();      
         }
 
 

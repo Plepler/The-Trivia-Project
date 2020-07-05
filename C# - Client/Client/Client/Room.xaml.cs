@@ -19,16 +19,55 @@ namespace Client
     /// </summary>
     public partial class Room : Window
     {
-        public Room()
+        public Room(RoomData data)
         {
-            InitializeComponent();
-
-            
+            this.data = data;
+            refresh();
+            InitializeComponent();   
         }
 
-        public void refresh(RoomData data, Queue<string> players)
+        public void refresh()
         {
-            
+            byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
+            Communicator.SendMessage(request);
+
+            //Recieve message
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+
+            //Deserialize response according to CODE (first byte)
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            {
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+
+            }
+            else if ((int)serializedResponse[0] == (int)CODES.GET_PLAYER)
+            {
+                GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
+                Queue<string> players = playersRes.players;
+                admin.Text = "ADMIN: " + players.Peek();
+                room_name.Text = "ROOM NAME: " + data.name;
+                foreach (var player in players)
+                {
+                    players_list.Items.Add(player);
+                }
+            }
+           
         }
+
+        private void exit_room_Click(object sender, RoutedEventArgs e)
+        {
+            Menu menu = new Menu();
+            menu.Show();
+            Close();
+        }
+
+        private void refresh(object sender, RoutedEventArgs e)
+        {
+            refresh();
+        }
+
+        private RoomData data;
     }
 }
