@@ -48,6 +48,7 @@ namespace Client
                 Queue<string> players = playersRes.players;
                 admin.Text = "ADMIN: " + players.Peek();
                 room_name.Text = "ROOM NAME: " + data.name;
+                players_list.Items.Clear();
                 foreach (var player in players)
                 {
                     players_list.Items.Add(player);

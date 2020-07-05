@@ -36,14 +36,14 @@ namespace Client
             {
                 while (response.statistics.Count() != 0)//Iterate over all rooms
                 {
-                    statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
+                    statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
                 }
             }
             else if (username == "LEADERS")
             {
                 for (int i = 0; i < 3 && response.statistics.Count() != 0; i ++)
                 {
-                    statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
+                    statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
                 }
             }
             else
@@ -52,7 +52,7 @@ namespace Client
                 {
                     if (i == username)
                     {
-                        statsBlock.Text = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue();
+                        statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
                         break;
                     }
                     else

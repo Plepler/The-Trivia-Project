@@ -23,6 +23,7 @@ namespace Client
         public JoinRoom()
         {
             InitializeComponent();
+
             buttons = new List<Button>();
             // build register message and send it
             byte[] request = Serializer.SerializeRoomsRequest();
@@ -45,7 +46,7 @@ namespace Client
 
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
-                    buttons.Add(new Button { ButtonContent = room.ToString(), ButtonID = (room.id).ToString(), Data = room });
+                    buttons.Add(new Button { ButtonContent = room, ButtonID = (room.id).ToString()});
                 }
             }
 
@@ -54,20 +55,21 @@ namespace Client
 
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
-            RoomData data = (sender as Button).Data;
+            
+            Button button = (Button)sender;
+            RoomData data = button.ButtonContent;
             Room room = new Room(data);
             room.Show();
-            Close();      
+            Close();
         }
 
         public void AutomaticJoin(string name)
         {
             foreach (Button button in buttons)//Iterate over all rooms
             {
-                if(button.Data.name == name)
+                if(button.ButtonContent.name == name)
                 {
-                    Room room = new Room(button.Data);
-                    Close();
+                    Room room = new Room(button.ButtonContent);
                 }
             }
         }
@@ -76,8 +78,7 @@ namespace Client
 
     class Button
     {
-        public string ButtonContent { get; set; }
+        public RoomData ButtonContent { get; set; }
         public string ButtonID { get; set; }
-        public RoomData Data { get; set; }
     }
 }

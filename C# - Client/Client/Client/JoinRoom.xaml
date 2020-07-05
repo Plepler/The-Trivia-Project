@@ -6,7 +6,7 @@
         <ItemsControl x:Name="ic" Height="419" Margin="10,0,-293,-131" VerticalAlignment="Top" HorizontalAlignment="Left" Width="792">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click"/>
+                    <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

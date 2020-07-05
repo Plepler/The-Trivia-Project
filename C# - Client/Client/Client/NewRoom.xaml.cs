@@ -71,6 +71,7 @@ namespace Client
                     CreateRoomResponse createRoomRes = Deserializer.DeserializeCreateRoomResponse(result);
                     JoinRoom joinRoom = new JoinRoom();
                     joinRoom.AutomaticJoin(name);
+                    Close();
                 }
 
             }

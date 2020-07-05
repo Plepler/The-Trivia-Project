@@ -103,6 +103,7 @@ RequestResult LoginRequestHandler::login(LoginRequest loginReq)
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
 		reqResult.response =  JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+		reqResult.newHandler = m_handlerFactory->createLoginHandler();
 	}
 
 	return reqResult;
@@ -129,6 +130,7 @@ RequestResult LoginRequestHandler::signup(SignUpRequest signupReq)
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+		reqResult.newHandler = m_handlerFactory->createLoginHandler();
 	}
 
 	return reqResult;
