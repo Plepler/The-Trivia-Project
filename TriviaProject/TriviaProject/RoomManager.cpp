@@ -19,9 +19,11 @@ In: all the neccessery parameters for creating a room:
 		questionCount - amount of question in the trivia.
 		answerTimeout - number of second to answer each question.
 */
-void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
+void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout, LoggedUser user)
 {
-	m_rooms.insert(std::pair<unsigned int, Room*>(counter, new Room(counter, roomName, maxUsers, questionCount, answerTimeout)));
+	Room* room = new Room(counter, roomName, maxUsers, questionCount, answerTimeout);
+	room->addUser(user);
+	m_rooms.insert(std::pair<unsigned int, Room*>(counter, room));
 	counter++;
 }
 

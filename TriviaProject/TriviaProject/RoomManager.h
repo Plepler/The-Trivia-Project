@@ -10,7 +10,7 @@ class RoomManager
 {
 public:
 	RoomManager(IDataBase * db);
-	void createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout);
+	void createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout, LoggedUser user);
 	void deleteRoom(int ID);
 	unsigned int getRoomState(unsigned int ID);
 	std::vector<RoomData> getRooms();

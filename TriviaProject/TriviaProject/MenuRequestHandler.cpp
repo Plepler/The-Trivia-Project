@@ -203,7 +203,7 @@ RequestResult MenuRequestHandler::createRoom(CreateRoomRequest createRoomReq)
 	{
 		createRoomRes.status = 1;
 		//Call function to create room
-		m_handlerFactory->getRoomManager().createRoom(createRoomReq.roomName, createRoomReq.maxUsers, createRoomReq.questionCount, createRoomReq.answerTimeout);
+		m_handlerFactory->getRoomManager().createRoom(createRoomReq.roomName, createRoomReq.maxUsers, createRoomReq.questionCount, createRoomReq.answerTimeout, m_user);
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(createRoomRes);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
