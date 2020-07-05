@@ -1,5 +1,7 @@
 #include "RoomManager.h"
 
+std::map<unsigned int, Room*> RoomManager::m_rooms;
+
 //C'Tor, pass pointer to Database, don't create new one.
 RoomManager::RoomManager(IDataBase* db)
 {
@@ -19,8 +21,7 @@ In: all the neccessery parameters for creating a room:
 */
 void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
 {
-	Room newRoom = Room(counter, roomName, maxUsers, questionCount, answerTimeout);
-	m_rooms.insert(std::pair<unsigned int, Room*>(counter, &newRoom));
+	m_rooms.insert(std::pair<unsigned int, Room*>(counter, new Room(counter, roomName, maxUsers, questionCount, answerTimeout)));
 	counter++;
 }
 

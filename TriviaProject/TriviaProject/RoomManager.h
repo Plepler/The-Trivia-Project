@@ -18,6 +18,6 @@ public:
 
 private:
 	unsigned int counter = 0;
-	std::map<unsigned int, Room*> m_rooms;
+	static std::map<unsigned int, Room*> m_rooms;
 	IDataBase* m_database;
 };

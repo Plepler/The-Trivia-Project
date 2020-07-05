@@ -24,7 +24,10 @@ public class RoomData
         this.isActive = isActive;
         this.numOfQuestions = numOfQuestions;
     }
-    
+    public override string ToString()
+    {
+        return id + ". " + name + "\nCapacity: " + maxPlayers;
+    }
 
 }
 public class ErrorResponse

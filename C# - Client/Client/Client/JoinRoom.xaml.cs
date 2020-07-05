@@ -42,13 +42,13 @@ namespace Client
                 ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
                 //To Do: show error
             }
-            else if ((int)serializedResponse[0] == (int)CODES.STATS)
+            else if ((int)serializedResponse[0] == (int)CODES.GET_ROOM)
             {
                 GetRoomsResponse getRoomsRes = Deserializer.DeserializeGetRoomResponse(result);
 
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
-                    buttons.Add(new Button { ButtonContent = room.ToString(), ButtonID = (room.id).ToString(), data = room });
+                    buttons.Add(new Button { ButtonContent = room.ToString(), ButtonID = (room.id).ToString() });
                 }
             }
 
@@ -63,6 +63,5 @@ namespace Client
     {
         public string ButtonContent { get; set; }
         public string ButtonID { get; set; }
-        public RoomData data;
     }
 }
