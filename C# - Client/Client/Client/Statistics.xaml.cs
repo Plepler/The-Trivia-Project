@@ -32,32 +32,38 @@ namespace Client
         /// <param name="flag"></param>
         public void showStatistics(GetStatisticsResponse response, string username)
         {
+            statistcis_list.Items.Clear();
             if (username == "ALL")
             {
                 while (response.statistics.Count() != 0)//Iterate over all rooms
                 {
-                    statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
+                    string player = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
+                    statistcis_list.Items.Add(player);
                 }
             }
             else if (username == "LEADERS")
             {
-                for (int i = 0; i < 3 && response.statistics.Count() != 0; i ++)
+                for (int i = 0; i < 3 && response.statistics.Count() != 0; i++)
                 {
-                    statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
+                    string player = response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
+                    statistcis_list.Items.Add(player);
                 }
+
             }
             else
             {
+                Queue<string> relevent_player = new Queue<string>(response.statistics);
                 foreach (string i in response.statistics)//Iterate over all rooms
                 {
                     if (i == username)
                     {
-                        statsBlock.Text += response.statistics.Dequeue() + "\nAvergage time: " + response.statistics.Dequeue() + "\nCorrect answers: " + response.statistics.Dequeue() + "\nTotal answers: " + response.statistics.Dequeue() + "\nTotal games: " + response.statistics.Dequeue() + "\n";
+                        string player = relevent_player.Dequeue() + "\nAvergage time: " + relevent_player.Dequeue() + "\nCorrect answers: " + relevent_player.Dequeue() + "\nTotal answers: " + relevent_player.Dequeue() + "\nTotal games: " + relevent_player.Dequeue() + "\n";
+                        statistcis_list.Items.Add(player);
                         break;
                     }
                     else
                     {
-                        response.statistics.Dequeue();
+                        relevent_player.Dequeue();
                     }
 
                 }
