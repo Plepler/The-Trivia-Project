@@ -33,7 +33,32 @@ namespace Client
 
         private void CloseProgram(object sender, RoutedEventArgs e)
         {
-            Close();
+            //Build signout request
+            byte[] request = new byte[5];
+            request[0] = (int)CODES.LOGOUT;
+            System.Buffer.BlockCopy(Serializer.itob(0), 0, request, 1, 4);
+            Communicator.SendMessage(request);
+
+            byte[] response = new byte[1024];
+            response = Communicator.recieveMessage();
+
+            if((int)response[0] == (int)CODES.LOGOUT)//Succesfully logged out
+            {
+                //change windows to welcoming page
+                Close();
+                Welcome welcome = new Welcome();
+                welcome.Show();
+            }
+            else//Show error pop up
+            {
+                //Change windows to error pop up
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(Helper.DisassembleResponse(response));
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+                error.Show();
+                Close();
+            }
+
         }
 
         private void CreateRoom(object sender, RoutedEventArgs e)

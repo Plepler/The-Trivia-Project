@@ -102,12 +102,11 @@ To all the function below:
 RequestResult MenuRequestHandler::signout()
 {
 	RequestResult reqResult;
-	SignupResponse signupRes{ 1 };
-	
+	LogoutResponse logoutRes{ 1 };
 	try
 	{
-		reqResult.response = JsonResponsePacketSerializer::serializeResponse(signupRes);
-		reqResult.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
+		reqResult.response = JsonResponsePacketSerializer::serializeResponse(logoutRes);
+		reqResult.newHandler = m_handlerFactory->createLoginHandler();
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
