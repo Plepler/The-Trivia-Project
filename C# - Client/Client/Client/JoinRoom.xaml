@@ -19,7 +19,7 @@
                 </ItemsControl.Background>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click" FontFamily="Showcard Gothic" Background="White" />
+                        <Button Click="JoinRoom_Click" FontFamily="Showcard Gothic" Background="White" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

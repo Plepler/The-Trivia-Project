@@ -46,7 +46,7 @@ namespace Client
 
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
-                    buttons.Add(new Button { ButtonContent = room, ButtonID = (room.id).ToString()});
+                    buttons.Add(new Button { Content = room });
                 }
             }
 
@@ -55,10 +55,8 @@ namespace Client
 
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
-            
             Button button = (Button)sender;
-            RoomData data = button.ButtonContent;
-            Room room = new Room(data);
+            Room room = new Room((RoomData)button.Content);
             room.Show();
             Close();
         }
@@ -67,9 +65,9 @@ namespace Client
         {
             foreach (Button button in buttons)//Iterate over all rooms
             {
-                if(button.ButtonContent.name == name)
+                if(((RoomData)button.Content).name == name)
                 {
-                    Room room = new Room(button.ButtonContent);
+                    Room room = new Room((RoomData)button.Content);
                 }
             }
         }
@@ -80,11 +78,5 @@ namespace Client
             menu.Show();
             Close();
         }
-    }
-
-    class Button
-    {
-        public RoomData ButtonContent { get; set; }
-        public string ButtonID { get; set; }
     }
 }
