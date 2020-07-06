@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Client
 {
@@ -62,11 +63,21 @@ namespace Client
         /// <param name="message"> The message that will be sent</param>
         public static void SendMessage(byte[] message)
         {
-            int byteSent = socket.Send(message);
-            if(byteSent < 3)
+            try
             {
-                throw new Exception("Communication error with the server, couldn't send data");
+                int byteSent = socket.Send(message);
+                if (byteSent < 3)
+                {
+                    throw new Exception("Communication error with the server, couldn't send data");
+                }
             }
+            catch(SocketException e)
+            {
+                Error error = new Error();
+                error.updateMessage("Socket exception: " + e.ToString());
+                System.Windows.Application.Current.Shutdown();
+            }
+            
             
         }
 
@@ -76,10 +87,19 @@ namespace Client
         /// <returns> byte buffer(array) of the message </returns>
         public static byte[] recieveMessage()
         {
-            byte[] message = new byte[1024];//Create buffer for message
-            int bytesRecieved = socket.Receive(message);
-            //Return only the used elements in the byte array
-            return message.Take(bytesRecieved).ToArray();
+            try
+            {
+                byte[] message = new byte[1024];//Create buffer for message
+                int bytesRecieved = socket.Receive(message);
+                //Return only the used elements in the byte array
+                return message.Take(bytesRecieved).ToArray();
+            }
+            catch (SocketException e)
+            {
+                Error error = new Error();
+                error.updateMessage("Socket exception: " + e.ToString());
+                return null;//Won't reach here since error closes the program
+            }
         }
     }
 }
