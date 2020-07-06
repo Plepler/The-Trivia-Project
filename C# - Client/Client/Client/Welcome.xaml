@@ -21,8 +21,8 @@
                 </LinearGradientBrush>
             </TextBlock.Foreground><Run FlowDirection="RightToLeft" Text="WELCOM"/><Run Text="E "/><Run FlowDirection="RightToLeft" Text=" TO OUR TRIVIA "/><LineBreak/><Run FlowDirection="RightToLeft" Text="PROJECT"/><Run Text="!!!"/><Run FlowDirection="RightToLeft" Text=" "/></TextBlock>
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="19,10,0,0" x:Name="TextBlockName"  VerticalAlignment="Top" FontSize="15" FontStretch="ExtraCondensed" Grid.Column="1" />
-        <Button x:Name="LoginButton_Copy" Content="Login" HorizontalAlignment="Left" Height="61" Margin="43.016,165.348,0,192.652" VerticalAlignment="Center" Width="546.505" Click="Login" FontFamily="Showcard Gothic" FontSize="36" Grid.Column="1"/>
-        <Button x:Name="RegistrationButton" Content="Register" HorizontalAlignment="Center" Height="61" Margin="39.199,256.443,59.161,101.557" Width="546.505" Click="Register" FontFamily="Showcard Gothic" FontSize="36" VerticalAlignment="Center" Grid.Column="1"/>
-        <Button x:Name="LoginButton_Copy1" Content="Exit" HorizontalAlignment="Center" Height="61" Margin="39.199,349.377,59.161,8.623" VerticalAlignment="Center" Width="546.505" Click="Exit_Click" FontFamily="Showcard Gothic" FontSize="36" Grid.Column="1"/>
+        <Button x:Name="LoginButton_Copy" Content="Login" HorizontalAlignment="Center" Height="50" Margin="41.175,178.443,57.32,190.557" VerticalAlignment="Center" Width="546.505" Click="Login" FontFamily="Showcard Gothic" FontSize="36" Grid.Column="1"/>
+        <Button x:Name="RegistrationButton" Content="Register" HorizontalAlignment="Center" Height="50" Margin="41.175,261.943,57.32,107.057" Width="546.505" Click="Register" FontFamily="Showcard Gothic" FontSize="36" VerticalAlignment="Center" Grid.Column="1"/>
+        <Button x:Name="LoginButton_Copy1" Content="Exit" HorizontalAlignment="Center" Height="50" Margin="41.175,340.877,57.32,28.123" VerticalAlignment="Center" Width="546.505" Click="Exit_Click" FontFamily="Showcard Gothic" FontSize="36" Grid.Column="1"/>
     </Grid>
 </Window>  
