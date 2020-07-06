@@ -33,7 +33,7 @@
                 </ListView.View>
             </ListView>
         </ScrollViewer>
-        <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="40.793" Margin="666.551,368.207,0,0" VerticalAlignment="Top" Width="115.449" FontSize="22" Click="CloseWindow" FontFamily="Showcard Gothic" Foreground="Black" Grid.RowSpan="2"/>
+        <Button x:Name="CloseButton" Content="Close" HorizontalAlignment="Left" Height="40.793" Margin="643.783,368.207,0,0" VerticalAlignment="Top" Width="115.449" FontSize="22" Click="CloseWindow" FontFamily="Showcard Gothic" Foreground="Black" Grid.RowSpan="2"/>
 
     </Grid>
 </Window>
