@@ -75,7 +75,7 @@ namespace Client
             
         }
 
-        private void WelcomeBack(object sender, RoutedEventArgs e)
+        private void WelcomeBack_Click(object sender, RoutedEventArgs e)
         {
             Welcome welcome = new Welcome();
             welcome.Show();

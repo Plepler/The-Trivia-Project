@@ -43,8 +43,10 @@ namespace Client
             passwordBox1.Password = "";
             passwordBoxConfirm.Password = "";
         }
-        private void button3_Click(object sender, RoutedEventArgs e)
+        private void WelcomeBack_Click(object sender, RoutedEventArgs e)
         {
+            Welcome welcome = new Welcome();
+            welcome.Show();
             Close();
         }
         private void Submit_Click(object sender, RoutedEventArgs e)

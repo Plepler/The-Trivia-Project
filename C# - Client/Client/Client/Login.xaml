@@ -45,6 +45,6 @@
         <PasswordBox Height="42" HorizontalAlignment="Left" Margin="338,206,0,0" Name="passwordBox1" VerticalAlignment="Top" Width="355" />
         <Button Content="Login" Height="39.5" HorizontalAlignment="Left" Margin="58,351.76,0,0" Name="button1" VerticalAlignment="Top" Width="250" Click="button1_Click" FontFamily="Showcard Gothic" FontSize="24" />
         <TextBlock Height="23" HorizontalAlignment="Left" x:Name ="errormessage" VerticalAlignment="Top" Width="247" Margin="118,253,0,0"  OpacityMask="Crimson" Foreground="#FFE5572C"  />
-        <Button Content="Go back" HorizontalAlignment="Left" Height="39.5" Margin="443,351.76,0,0" VerticalAlignment="Top" Width="250" Click="WelcomeBack" FontFamily="Showcard Gothic" FontSize="24"/>
+        <Button Content="Go back" HorizontalAlignment="Left" Height="39.5" Margin="443,351.76,0,0" VerticalAlignment="Top" Width="250" Click="WelcomeBack_Click" FontFamily="Showcard Gothic" FontSize="24"/>
     </Grid>
 </Window>

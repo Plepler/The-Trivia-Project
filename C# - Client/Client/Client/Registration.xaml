@@ -86,7 +86,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             <PasswordBox Height="35" HorizontalAlignment="Left" Margin="333,189.5,0,0" Name="passwordBoxConfirm" VerticalAlignment="Top" Width="282" />
             <Button Content="Submit" Height="46.469" HorizontalAlignment="Left" Margin="48.778,264.969,0,0" Name="Submit" VerticalAlignment="Top" Width="151" Click="Submit_Click" FontFamily="Showcard Gothic" />
             <Button Content="Reset" Height="46.469" HorizontalAlignment="Left" Margin="247,264.969,0,0" Name="button2" VerticalAlignment="Top" Width="151" Click="button2_Click" FontFamily="Showcard Gothic" />
-            <Button Content="Cancel" Height="46.469" HorizontalAlignment="Right" Margin="0,264.969,139.632,0" Name="button3" VerticalAlignment="Top" Width="151" Click="button3_Click" FontFamily="Showcard Gothic" />
+            <Button Content="Go Back!" Height="46.469" HorizontalAlignment="Right" Margin="0,264.969,139.632,0" Name="button3" VerticalAlignment="Top" Width="151" Click="WelcomeBack_Click" FontFamily="Showcard Gothic" />
         </Grid>
     </Grid>
 </Window>  
