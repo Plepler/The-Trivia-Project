@@ -86,11 +86,13 @@ namespace Client
             const int MAX_USERS = 10;
             const int MAX_QUESTIONS = 10;
             const int MAX_TIME = 100;
+            const int POSITIVE = 1;
+            const int EMPTY = 0;
 
-            if (textBoxName.Text.Length == 0 ||
-                textBoxUsers.Text.Length == 0 ||
-                textBoxQuestions.Text.Length == 0 ||
-                textBoxTimer.Text.Length == 0)
+            if (textBoxName.Text.Length == EMPTY ||
+                textBoxUsers.Text.Length == EMPTY ||
+                textBoxQuestions.Text.Length == EMPTY ||
+                textBoxTimer.Text.Length == EMPTY)
             {
                 errormessage.Text = "Please fill all boxes";
                 return false;
@@ -99,9 +101,9 @@ namespace Client
             int i;
             if (int.TryParse(textBoxUsers.Text, out i))
             {
-                if(i > MAX_USERS)
+                if(i > MAX_USERS || i < POSITIVE)
                 {
-                    errormessage.Text = "Maximum 10 users";
+                    errormessage.Text = "Amount of users should be between 1-10";
                     return false;
                 }
             }
@@ -113,9 +115,9 @@ namespace Client
 
             if (int.TryParse(textBoxQuestions.Text, out i))
             {
-                if (i > MAX_QUESTIONS)
+                if (i > MAX_QUESTIONS || i < POSITIVE)
                 {
-                    errormessage.Text = "Maximum 10 questions";
+                    errormessage.Text = "Amount of questions should be between 1-10";
                     return false;
                 }
             }
@@ -127,9 +129,9 @@ namespace Client
 
             if (int.TryParse(textBoxTimer.Text, out i))
             {
-                if (i > MAX_TIME)
+                if (i > MAX_TIME || i < POSITIVE)
                 {
-                    errormessage.Text = "Maximum 100 seconds";
+                    errormessage.Text = "Amount of secondes should be between 1-100";
                     return false;
                 }
             }

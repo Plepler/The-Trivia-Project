@@ -38,7 +38,9 @@ namespace Client
             if ((int)serializedResponse[0] == (int)CODES.ERROR)
             {
                 ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
-                //To Do: show error
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+                error.Show();
             }
             else if ((int)serializedResponse[0] == (int)CODES.GET_ROOM)
             {
