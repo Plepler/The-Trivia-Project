@@ -24,12 +24,12 @@ namespace Client
             InitializeComponent();
         }
 
-        /// <summary>
+        /// <summary> Show statistics of username
         /// username = <name>: personal
         /// username = ALL: all users
         /// username = LEADERS: Top 3
         /// </summary>
-        /// <param name="flag"></param>
+        /// <param name="flag"> flag tells us whos statistics to show </param>
         public void showStatistics(GetStatisticsResponse response, string username)
         {
             statistcis_list.Items.Clear();

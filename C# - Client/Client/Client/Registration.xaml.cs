@@ -51,6 +51,7 @@ namespace Client
         }
         private void Submit_Click(object sender, RoutedEventArgs e)
         {
+            //Check if fields are valid
             if (textBoxEmail.Text.Length == 0)
             {
                 errormessage.Text = "Enter an email.";

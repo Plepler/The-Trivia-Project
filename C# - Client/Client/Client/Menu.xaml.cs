@@ -77,6 +77,11 @@ namespace Client
             join.Show();
         }
 
+        //Statistics function, get all statistics
+        //then send with relevant parameter to ShowStatistics
+        //statistics - <username> (personal)
+        //Highscores - <LEADERS> (top 3 scores)
+        //leaderboards - <ALL> (all users)
         private void Statistics(object sender, RoutedEventArgs e)
         {
             GetStatisticsResponse stats = GetAllStatistics();
@@ -86,7 +91,6 @@ namespace Client
                 personalStats.showStatistics(stats, username);
             }
         }
-
         private void Leaderboard(object sender, RoutedEventArgs e)
         {
             GetStatisticsResponse stats = GetAllStatistics();
@@ -96,7 +100,6 @@ namespace Client
                 personalStats.showStatistics(stats, "ALL");
             }
         }
-
         private void Highscores(object sender, RoutedEventArgs e)
         {
             GetStatisticsResponse stats = GetAllStatistics();
