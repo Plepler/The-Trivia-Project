@@ -124,22 +124,6 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 
 	try
 	{
-		//We begin with a greeting ('hello')
-		buffer.clear();
-		send(clientSocket, GREETING, MIN_LENGTH, 0);
-
-		recieveData(clientSocket, buffer, MIN_LENGTH);
-
-		if (buffer[0] == GREETING[0] && buffer[1] == GREETING[1] && buffer[2] == GREETING[2] && buffer[3] == GREETING[3] && buffer[4] == GREETING[4])
-		{
-			std::cout << buffer[0] << buffer[1] << buffer[2] << buffer[3] << buffer[4] << std::endl;
-		}
-		else
-		{
-			throw std::exception("We begin with 'hello'");
-		}
-		
-	
 		//Main communication loop with the client
 		while (true)
 		{
@@ -152,23 +136,22 @@ void Communicator::handleNewClient(SOCKET clientSocket)
 			newReq.id = int(buffer[0]);//First byte is request id
 			//Deserialize the length of the data
 			length = JsonRequestPacketDeserializer::bytesToLength(std::vector<unsigned char>(buffer.begin() + 1, buffer.end()));
-			//Recieve data by the length
-			recieveData(clientSocket, newReq.buffer, length);
+			//Recieve data by the length (if there is any)
+			if (length > 0)
+			{
+				recieveData(clientSocket, newReq.buffer, length);
+			}
+			
 
 			//Calls a function to handle the request and return a respose
-			if (!(newReq.id == LOGIN && logged))
+			
+			if (m_clients[clientSocket] != nullptr)
 			{
-				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Handle request and get appropiate response
-			}
-			else
-			{
-				newReq.id = ERROR;
-				request_result = m_clients.at(clientSocket)->handleRequest(newReq);//Build error message
+				request_result = m_clients[clientSocket]->handleRequest(newReq);//Handle request and get appropiate response
+				delete m_clients[clientSocket];
+				m_clients[clientSocket] = request_result.newHandler;
 			}
 			
-			logged = isLogged(newReq.id, request_result.response[0]);
-			
-
 			//Send the response
 			sendData(clientSocket, request_result.response);
 		}
@@ -192,7 +175,7 @@ In: The data buffer + the socket
 void Communicator::sendData(SOCKET clientSocket, std::vector<unsigned char>& data)
 {
 	const char* temp = reinterpret_cast<const char *>(data.data());
-	if (send(clientSocket, temp, data.size(), 0) == SOCKET_ERROR)
+	if (send(clientSocket, temp, (int)data.size(), 0) == SOCKET_ERROR)
 	{
 		throw std::exception("Error while sending message to client, Socket error - " + WSAGetLastError());
 	}
@@ -215,8 +198,3 @@ void Communicator::recieveData(SOCKET clientSocket, std::vector<unsigned char>& 
 }
 
 
-
-bool Communicator::isLogged(int newReqID, int request_result_ID)
-{
-	return (newReqID == LOGIN && request_result_ID == LOGIN);
-}

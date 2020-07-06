@@ -40,11 +40,11 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Error
 	std::string tempStr;
 
 	buffer.push_back(ERROR);//add data type
-	data["message"] = response.data;
+	data["message"] = response.message;
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
 	buffer.insert(buffer.end(), temp.begin(), temp.end());
@@ -66,7 +66,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Login
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -89,7 +89,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Signu
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -112,7 +112,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Logou
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -137,7 +137,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRo
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -160,7 +160,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPl
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -183,7 +183,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(JoinR
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -206,7 +206,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Creat
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -230,7 +230,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetSt
 	tempStr = data.dump();
 
 	//add length of data
-	lengthToBytes(buffer, tempStr.size());
+	lengthToBytes(buffer, (int)tempStr.size());
 
 	//Copy string json into vector (temp) then append to buffer
 	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
@@ -247,8 +247,8 @@ In: buffer that will contain the number, the number
 */
 void JsonResponsePacketSerializer::lengthToBytes(std::vector<unsigned char>& buffer, int length)
 {
-	buffer.push_back(length >> LSH24 & HEX_BYTE);
-	buffer.push_back(length >> LSH16 & HEX_BYTE);
-	buffer.push_back(length >> LSH8 & HEX_BYTE);
 	buffer.push_back(length & HEX_BYTE);
+	buffer.push_back(length >> LSH8 & HEX_BYTE);
+	buffer.push_back(length >> LSH16 & HEX_BYTE);
+	buffer.push_back(length >> LSH24 & HEX_BYTE);
 }

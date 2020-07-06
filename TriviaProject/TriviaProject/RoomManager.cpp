@@ -1,5 +1,7 @@
 #include "RoomManager.h"
 
+std::map<unsigned int, Room*> RoomManager::m_rooms;
+
 //C'Tor, pass pointer to Database, don't create new one.
 RoomManager::RoomManager(IDataBase* db)
 {
@@ -17,20 +19,12 @@ In: all the neccessery parameters for creating a room:
 		questionCount - amount of question in the trivia.
 		answerTimeout - number of second to answer each question.
 */
-void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout)
+void RoomManager::createRoom(std::string roomName, unsigned int maxUsers, unsigned int questionCount, unsigned int answerTimeout, LoggedUser user)
 {
-	
-	unsigned int id = 0;
-	try 
-	{
-		id = (*(--m_rooms.end())).first + 1;//create new id to room
-	}
-	catch(std::exception e)
-	{
-		//First room id is 0
-	}
-	Room newRoom = Room(id, roomName, maxUsers, questionCount, answerTimeout);
-	m_rooms.insert(std::pair<unsigned int, Room*>(id, &newRoom));
+	Room* room = new Room(counter, roomName, maxUsers, questionCount, answerTimeout);
+	room->addUser(user);
+	m_rooms.insert(std::pair<unsigned int, Room*>(counter, room));
+	counter++;
 }
 
 

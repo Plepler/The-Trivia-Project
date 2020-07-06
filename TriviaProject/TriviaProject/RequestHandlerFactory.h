@@ -16,10 +16,10 @@ public:
 	RequestHandlerFactory(IDataBase* db);
 	~RequestHandlerFactory();
 
-	LoginRequestHandler createLoginHandler();
+	LoginRequestHandler* createLoginHandler();
 	LoginManager& getLoginManager();
 
-	MenuRequestHandler createMenuRequestHandler(LoggedUser usr);
+	MenuRequestHandler* createMenuRequestHandler(LoggedUser usr);
 	StatisticsManager& getStatisticsManager();
 	RoomManager& getRoomManager();
 
