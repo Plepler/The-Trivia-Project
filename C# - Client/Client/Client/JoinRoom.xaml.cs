@@ -67,6 +67,8 @@ namespace Client
         {
             Button button = (Button)sender;
             Room room = new Room((RoomData)button.Content);
+            room.addUserTorRoom();
+            room.refresh();
             room.Show();
             Close();
         }
@@ -78,6 +80,8 @@ namespace Client
                 if(((RoomData)button.Content).name == name)
                 {
                     Room room = new Room((RoomData)button.Content);
+                    room.isAdmin = true;
+                    room.refresh();
                 }
             }
         }

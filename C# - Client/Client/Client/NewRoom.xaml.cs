@@ -101,7 +101,7 @@ namespace Client
             {
                 if(i > MAX_USERS)
                 {
-                    errormessage.Text = "Room is full";
+                    errormessage.Text = "Maximum 10 users";
                     return false;
                 }
             }

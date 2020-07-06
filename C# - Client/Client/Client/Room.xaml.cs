@@ -23,7 +23,6 @@ namespace Client
         {
             InitializeComponent();
             this.data = data;
-            refresh();
         }
 
         public void refresh()
@@ -59,6 +58,13 @@ namespace Client
 
         private void exit_room_Click(object sender, RoutedEventArgs e)
         {
+            //In version v3.0.0 send leave room request for user
+            //and delete room request for admin
+            if (isAdmin)
+            {
+                
+            }
+
             Menu menu = new Menu();
             menu.Show();
             Close();
@@ -69,6 +75,30 @@ namespace Client
             refresh();
         }
 
+        public void addUserTorRoom()
+        {
+            byte[] request = Serializer.SerializeRequest(new JoinRoomRequest(data.id));
+            Communicator.SendMessage(request);
+
+            //Recieve message
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+            //Deserialize response according to CODE (first byte)
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            {
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+                error.Show();
+            }
+            else if ((int)serializedResponse[0] == (int)CODES.JOIN)
+            {
+                JoinRoomResponse joinRes = Deserializer.DeserializeJoinRoomResponse(result);
+            }
+        }
+
         private RoomData data;
+        public bool isAdmin { set; get; }
     }
 }

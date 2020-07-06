@@ -188,6 +188,7 @@ RequestResult MenuRequestHandler::joinRoom(JoinRoomRequest joinRoomReq)
 		joinRoomRes.status = 1;
 		m_handlerFactory->getRoomManager().getRoom(joinRoomReq.roomId).addUser(m_user);
 		reqResult.response = JsonResponsePacketSerializer::serializeResponse(joinRoomRes);
+		reqResult.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
 	}
 	catch (std::exception e)//If parameters failed the error will be serialized instead
 	{
