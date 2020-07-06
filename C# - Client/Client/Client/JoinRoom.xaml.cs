@@ -43,14 +43,24 @@ namespace Client
             else if ((int)serializedResponse[0] == (int)CODES.GET_ROOM)
             {
                 GetRoomsResponse getRoomsRes = Deserializer.DeserializeGetRoomResponse(result);
-
+                Button temp;
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
-                    buttons.Add(new Button { Content = room });
+                    temp = new Button { Content = room };
+                    temp.Click += (sender, e) =>
+                    {
+                        JoinRoom_Click(sender, e);
+                    };
+                    buttons.Add(temp);
                 }
             }
 
             ic.ItemsSource = buttons;
+        }
+
+        private void Temp_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
