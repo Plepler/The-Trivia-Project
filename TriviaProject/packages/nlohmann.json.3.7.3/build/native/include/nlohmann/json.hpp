@@ -1,3 +1,6 @@
+#pragma warning( disable : 26451 )
+#pragma warning( disable : 6011 )
+#pragma warning( disable : 26451 )
 /*
     __ _____ _____ _____
  __|  |   __|     |   | |  JSON for Modern C++
