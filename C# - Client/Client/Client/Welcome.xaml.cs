@@ -41,7 +41,7 @@ namespace Client
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }

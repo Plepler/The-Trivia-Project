@@ -3,18 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="JoinRoom" Height="450" Width="800" FontFamily="Showcard Gothic" FontSize="16" Background="{x:Null}">
     <Grid Margin="0,0,-8,2.383">
-        <ItemsControl x:Name="ic" Height="416.617" VerticalAlignment="Top" HorizontalAlignment="Left" Width="792">
-            <ItemsControl.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="#FF2F65DE" Offset="1"/>
-                </LinearGradientBrush>
-            </ItemsControl.Background>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click" FontFamily="Showcard Gothic" Background="White" />
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF2D65DE" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <ListBox HorizontalAlignment="Left" Height="293.5" VerticalAlignment="Top" Width="743.5" Margin="28.5,24,0,0">
+            <ItemsControl x:Name="ic" Height="283.5" VerticalAlignment="Top" HorizontalAlignment="Left" Width="730.5">
+                <ItemsControl.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Black" Offset="0"/>
+                        <GradientStop Color="#FF2F65DE" Offset="1"/>
+                    </LinearGradientBrush>
+                </ItemsControl.Background>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding ButtonContent}" Click="JoinRoom_Click" FontFamily="Showcard Gothic" Background="White" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ListBox>
+        <Button Content="go back!" HorizontalAlignment="Left" Height="52.617" Margin="624.5,354,0,0" VerticalAlignment="Top" Width="144" Click="GoBack_Click"/>
+
     </Grid>
 </Window>

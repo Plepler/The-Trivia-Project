@@ -41,7 +41,7 @@
                 </LinearGradientBrush>
             </Button.Foreground>
         </Button>
-        <Button x:Name="CloseButton" Content="LOGOUT" HorizontalAlignment="Left" Height="33.56" Margin="690.068,358.932,0,0" VerticalAlignment="Top" Width="79.322" FontSize="16" Click="CloseProgram" Background="#FFF7F7F7" BorderBrush="White" FontFamily="Showcard Gothic" Grid.ColumnSpan="2">
+        <Button x:Name="CloseButton" Content="LOGOUT" HorizontalAlignment="Left" Height="33.56" Margin="690.068,358.932,0,0" VerticalAlignment="Top" Width="79.322" FontSize="16" Click="LogOut_Click" Background="#FFF7F7F7" BorderBrush="White" FontFamily="Showcard Gothic" Grid.ColumnSpan="2">
             <Button.Foreground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black" Offset="0.067"/>

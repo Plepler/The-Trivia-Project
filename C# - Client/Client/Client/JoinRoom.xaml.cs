@@ -74,6 +74,12 @@ namespace Client
             }
         }
 
+        private void GoBack_Click(object sender, RoutedEventArgs e)
+        {
+            Menu menu = new Menu();
+            menu.Show();
+            Close();
+        }
     }
 
     class Button
