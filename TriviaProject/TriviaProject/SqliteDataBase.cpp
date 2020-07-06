@@ -62,6 +62,34 @@ void SqliteDataBase::clear()
 	int res = sqlite3_exec(this->dataBase, sql.c_str(), nullptr, nullptr, &sqlite3_errmsg);
 }
 
+/*
+the function return all the data of all the users in a vector of strings order by names. 
+*/
+std::vector<std::string> SqliteDataBase::GetStatistics()
+{
+	std::vector<std::string> stats;
+	//get all the names
+	selectBy("USERS", "", "USERNAME", this->dataBase);
+	//copy the data holder and clear it.
+	std::vector<std::string> names(dataHolder);
+	dataHolder.clear();
+	//add to the stats vector all the data about every user.
+	for (int i = 0; i < names.size(); i++)
+	{
+		stats.push_back(names[i]);
+		stats.push_back(std::to_string(this->getPlayerAvarageAnswerTime(names[i])));
+		stats.push_back(std::to_string(this->getNumOfCorrectAnswers(names[i])));
+		stats.push_back(std::to_string(this->getNumOfTotalAnswers(names[i])));
+		stats.push_back(std::to_string(this->getNumOfPlayerGames(names[i])));
+	}
+	return stats;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// the statistics functions get data from the database, about the user name, each function by it topic subject.
+//input: username: the username to get his data 
+//output: each data with his own type
+
 float SqliteDataBase::getPlayerAvarageAnswerTime(std::string username)
 {
 	float ans = 0;
@@ -97,10 +125,11 @@ int SqliteDataBase::getNumOfPlayerGames(std::string username)
 	dataHolder.clear();
 	return ans;
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////
  /*
  the function check if user exist in the database
  input: the name to check
- output: trur ot false.
+ output: true ot false.
  */
 bool SqliteDataBase::doseUserExist(std::string name)
 {
@@ -111,6 +140,9 @@ bool SqliteDataBase::doseUserExist(std::string name)
 	return ans;
 
 }
+/*
+the function check if password is match to a username and return bollean answer
+*/
 bool SqliteDataBase::doesPasswordMatch(std::string username, std::string password)
 {
 	bool ans = true;
@@ -119,16 +151,21 @@ bool SqliteDataBase::doesPasswordMatch(std::string username, std::string passwor
 	dataHolder.clear(); // clear the dataholder
 	return ans;
 }
-
+/*
+the function add user to the database and rest his statistics.
+*/
 void SqliteDataBase::addNewUser(std::string name, std::string password, std::string email)
 {
 	insertTo("USERS", "(USERNAME, PASSWORD, EMAIL)", "(\"" + name + "\", " + "\"" + password + "\", " + "\"" + email + "\")", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
+	//get all the user and insert empty statistics
 	selectBy("USERS","USERNAME " "= \""+ name +"\"", "USERNAME", this->dataBase);
 	insertTo("STATISTICS", "(UserName, AvarageAnswerTime, CorrectAnswers, Answers, Games, Score)", "(\"" + dataHolder[0] + "\"" + ",0,0,0,0,0)", this->dataBase);
 	dataHolder.clear(); // clear the dataholder
 }
-
+/*
+the function get certien amount of questions from the user
+*/
 std::list<Questions> SqliteDataBase::getQuestions(int amount)
 {
 	std::list<Questions> questions = std::list<Questions>();
@@ -142,18 +179,30 @@ std::list<Questions> SqliteDataBase::getQuestions(int amount)
 	return questions;
 }
 
+/*
+the function update the score od a user
+input: the username the time to answer and the time per question
+output: NONE
+*/
 void SqliteDataBase::updateScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
 {
-	int Score = calcScore(username, timeToAnswer, timePerQuestion);
+	int Score = calcScore(username, timeToAnswer, timePerQuestion); //calc the score
 	updateBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score" , std::to_string(Score), this->dataBase);
 }
-
+/*
+the function calc the score based on our algoritem.
+input: the username the time to answer and the time per question
+output: the finel score.
+*/
 int SqliteDataBase::calcScore(std::string username, unsigned int timeToAnswer, unsigned int timePerQuestion)
 {
+	//calc the score
 	int addedScore = std::ceil(SCORE_PER_ANS * (1 - (timeToAnswer / (float)timePerQuestion)));
+	//get the previos score
 	selectBy("STATISTICS", "USERNAME = \"" + username + "\"", "Score", this->dataBase);
 	int originScore = stoi(dataHolder[0]);
 	dataHolder.clear();
+	//return the sum of the previous score and the new score
 	return addedScore + originScore;
 }
 
@@ -186,7 +235,11 @@ output : NONE
 void SqliteDataBase::selectBy(std::string src, std::string byWhat, std::string what, sqlite3* db)
 {
 	char* sqlite3_errmsg = nullptr;
-	std::string SQL = "SELECT " + what + " FROM " + src + " WHERE " + byWhat + ";";
+	std::string SQL;
+	if (byWhat == "")
+		SQL = "SELECT " + what + " FROM " + src + ";";
+	else
+		SQL = "SELECT " + what + " FROM " + src + " WHERE " + byWhat + ";";
 	int res = sqlite3_exec(db, SQL.c_str(), callBack, nullptr, &sqlite3_errmsg);
 	if (sqlite3_errmsg != nullptr)
 	{
@@ -215,6 +268,16 @@ void SqliteDataBase::insertTo(std::string toWhere, std::string headers, std::str
 	}
 }
 
+/*
+the function send an update sql request based on the parameters that given
+input:
+src:
+bywhat: by what conditions to update
+whatculom: which culom to update
+newValue: the value to update to
+db: the database to update
+output: NONE	
+*/
 void SqliteDataBase::updateBy(std::string src, std::string byWhat, std::string whatCulomn, std::string newValue, sqlite3* db)
 {
 	char* sqlite3_errmsg = nullptr;

@@ -88,6 +88,7 @@ public:
 	virtual void close() override;
 	virtual void clear() override;
 
+	virtual std::vector<std::string> GetStatistics() override;
 	virtual float getPlayerAvarageAnswerTime(std::string username) override;
 	virtual int getNumOfCorrectAnswers(std::string username) override;
 	virtual int getNumOfTotalAnswers(std::string username) override;

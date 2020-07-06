@@ -19,13 +19,11 @@ This function calls all the statistics function from the database and creates th
 In: User
 Out: stats struct of the player
 */
-std::vector<std::string> StatisticsManager::getStatistics(std::string username)
+std::vector<std::string> StatisticsManager::getStatistics()
 {
 	std::vector<std::string> stats;
-	stats.push_back(std::to_string(m_database->getPlayerAvarageAnswerTime(username)));
-	stats.push_back(std::to_string(m_database->getNumOfCorrectAnswers(username)));
-	stats.push_back(std::to_string(m_database->getNumOfTotalAnswers(username)));
-	stats.push_back(std::to_string(m_database->getNumOfPlayerGames(username)));
+	stats = m_database->GetStatistics();
+	
 
 	return stats;
 }

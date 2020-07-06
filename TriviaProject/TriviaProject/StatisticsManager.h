@@ -7,7 +7,7 @@ class StatisticsManager
 public:
 	StatisticsManager(IDataBase* dataBase);
 	~StatisticsManager();
-	std::vector<std::string> getStatistics(std::string username);
+	std::vector<std::string> getStatistics();
 
 private:
 	IDataBase* m_database;

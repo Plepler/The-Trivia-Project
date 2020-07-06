@@ -25,6 +25,7 @@ public:
 
 
 	//statistics
+	virtual std::vector<std::string> GetStatistics() = 0;
 	virtual float getPlayerAvarageAnswerTime(std::string) = 0;
 	virtual int getNumOfCorrectAnswers(std::string) = 0;
 	virtual int getNumOfTotalAnswers(std::string) = 0;
