@@ -4,6 +4,8 @@
 
 class RequestHandlerFactory;
 class LoginRequestHandler;
+class RoomAdminRequestHandler;
+class RoomMemberRequestHandler;
 
 class MenuRequestHandler : public IRequestHandler
 {

@@ -7,6 +7,8 @@
 
 class RequestHandlerFactory;
 class MenuRequestHandler;
+class RoomAdminRequestHandler;
+class RoomMemberRequestHandler;
 
 
 class LoginRequestHandler : public IRequestHandler
