@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 /// 
 /// </summary>
 
-enum CODES { ERROR = 0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYER, STATS, JOIN, CREATE };
+enum CODES { ERROR = 0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYER, STATS, JOIN, CREATE, CLOSE, START, STATE, LEAVE };
 
 public class SignupRequest
 {
@@ -171,6 +171,7 @@ namespace Client
 
             return result;
         }
+       
         public static byte[] SerializeRoomsRequest()
         {
             //Serialize
@@ -178,6 +179,53 @@ namespace Client
             byte[] result = new byte[5];
             //Add code, length and serialized request
             result[0] = (int)CODES.GET_ROOM;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+
+            return result;
+        }
+        public static byte[] SerializeCloseRoomResponse()
+        {
+            //Serialize
+            int requestSize = 0;
+            byte[] result = new byte[5];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.CLOSE;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+
+            return result;
+        }
+
+        public static byte[] SerializeStartGameResponse()
+        {
+            //Serialize
+            int requestSize = 0;
+            byte[] result = new byte[5];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.START;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+
+            return result;
+        }
+       
+        public static byte[] SerializeGetRoomStateResponse()
+        {
+            //Serialize
+            int requestSize = 0;
+            byte[] result = new byte[5];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.STATE;//Add code
+            System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
+
+            return result;
+        }
+        
+        public static byte[] SerializeLeaveRoomRequest()
+        {
+            //Serialize
+            int requestSize = 0;
+            byte[] result = new byte[5];
+            //Add code, length and serialized request
+            result[0] = (int)CODES.LEAVE;//Add code
             System.Buffer.BlockCopy(itob(requestSize), 0, result, 1, 4);//Copy serialized length
 
             return result;

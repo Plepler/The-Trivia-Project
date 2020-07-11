@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media.Animation;
 
 public class RoomData
 {
@@ -111,8 +113,48 @@ public class JoinRoomResponse
 public class CreateRoomResponse
 {
 	public uint status;
-
     public CreateRoomResponse(uint status)
+    {
+        this.status = status;
+    }
+}
+
+public class CloseRoomResponse
+{
+    public uint status;
+    public CloseRoomResponse(uint status)
+    {
+        this.status = status;
+    }
+}
+public class StartGameResponse
+{
+    public uint status;
+    public StartGameResponse(uint status)
+    {
+        this.status = status;
+    }
+}
+public class GetRoomStateResponse
+{
+    public uint status;
+    public bool hasGameBegun;
+    public Queue<string> players;
+    public uint questionsCount;
+    public uint questionTimeOut;
+    public GetRoomStateResponse(uint status, bool hasGameBegun, Queue<string> players, uint questionsCount, uint questionTimeOut)
+    {
+        this.players = players;
+        this.questionsCount = questionsCount;
+        this.questionTimeOut = questionTimeOut;
+        this.status = status;
+        this.hasGameBegun = hasGameBegun;
+    }
+}
+public class LeaveRoomResponse
+{
+    public uint status;
+    public LeaveRoomResponse(uint status)
     {
         this.status = status;
     }
@@ -165,6 +207,22 @@ namespace Client
         public static GetStatisticsResponse DeserializeStatisticsResponse(byte[] buffer)
         {
             return JsonConvert.DeserializeObject<GetStatisticsResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
+        }
+        public static CloseRoomResponse DeserializeCloseRoomResponse(byte[] buffer)
+        {
+            return JsonConvert.DeserializeObject<CloseRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
+        }
+        public static StartGameResponse DeserializeStartGameResponse(byte[] buffer)
+        {
+            return JsonConvert.DeserializeObject<StartGameResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
+        }
+        public static GetRoomStateResponse DeserializeGetRoomStateResponse(byte[] buffer)
+        {
+            return JsonConvert.DeserializeObject<GetRoomStateResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
+        }
+        public static LeaveRoomResponse DeserializeLeaveRoomResponse(byte[] buffer)
+        {
+            return JsonConvert.DeserializeObject<LeaveRoomResponse>(Encoding.UTF8.GetString(buffer, 0, buffer.Length));
         }
 
         //4 bytes into int
