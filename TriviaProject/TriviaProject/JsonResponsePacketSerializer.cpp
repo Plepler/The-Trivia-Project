@@ -240,6 +240,102 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetSt
 
 
 
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse response)
+{
+	json data;
+	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	//add data type
+	buffer.push_back(CLOSE);
+	data["status"] = response.status;
+	tempStr = data.dump();
+
+	//add length of data
+	lengthToBytes(buffer, (int)tempStr.size());
+
+	//Copy string json into vector (temp) then append to buffer
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
+	return buffer;
+}
+
+
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(StartgameResponse response)
+{
+	json data;
+	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	//add data type
+	buffer.push_back(START);
+	data["status"] = response.status;
+	tempStr = data.dump();
+
+	//add length of data
+	lengthToBytes(buffer, (int)tempStr.size());
+
+	//Copy string json into vector (temp) then append to buffer
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
+	return buffer;
+}
+
+
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse response)
+{
+	json data;
+	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	//add data type
+	buffer.push_back(STATE);
+	data["status"] = response.status;
+	data["HasGameBegun"] = response.HasGameBegun;
+	data["players"] = response.players;
+	data["questionCount"] = response.questionCount;
+	data["answerTimeout"] = response.answerTimeout;
+	tempStr = data.dump();
+
+	//add length of data
+	lengthToBytes(buffer, (int)tempStr.size());
+
+	//Copy string json into vector (temp) then append to buffer
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
+	return buffer;
+}
+
+
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LeaveRoomResponse response)
+{
+	json data;
+	std::vector<unsigned char> buffer;
+	std::vector<unsigned char> temp;
+	std::string tempStr;
+
+	//add data type
+	buffer.push_back(LEAVE);
+	data["status"] = response.status;
+	tempStr = data.dump();
+
+	//add length of data
+	lengthToBytes(buffer, (int)tempStr.size());
+
+	//Copy string json into vector (temp) then append to buffer
+	temp.insert(temp.begin(), tempStr.begin(), tempStr.end());
+	buffer.insert(buffer.end(), temp.begin(), temp.end());
+	return buffer;
+}
+
+
+
 
 /*
 This funtion turn a number into a 4 bytes vector
