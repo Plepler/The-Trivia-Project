@@ -21,7 +21,6 @@ struct LoginRequest
 
 }typedef LoginRequest;
 
-
 struct SignUpRequest
 {
 	std::string username;
@@ -36,13 +35,11 @@ struct GetPlayersInRoomRequest
 
 }typedef GetPlayersInRoomRequest;
 
-
 struct JoinRoomRequest
 {
 	unsigned int roomId;
 
 }typedef JoinRoomRequest;
-
 
 struct CreateRoomRequest
 {

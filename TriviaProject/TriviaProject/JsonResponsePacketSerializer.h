@@ -13,7 +13,7 @@
 #define LSH8 8
 #define HEX_BYTE 0xFF
 
-enum CODES { ERROR=0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYER, STATS, JOIN, CREATE };
+enum CODES { ERROR=0, LOGIN = 100, SIGNUP, LOGOUT, OK = 200, GET_ROOM, GET_PLAYER, STATS, JOIN, CREATE, CLOSE, START, STATE, LEAVE};
 
 //Response structs
 
@@ -76,6 +76,34 @@ struct CreateRoomResponse
 
 }typedef CreateRoomResponse;
 
+//v3.0.0
+struct CloseRoomResponse
+{
+	unsigned int status;
+
+}typedef CloseRoomResponse;
+
+struct StartgameResponse
+{
+	unsigned int status;
+
+}typedef StartgameResponse;
+
+struct GetRoomStateResponse
+{
+	unsigned int status;
+	bool HasGameBegun;
+	std::vector<std::string> players;
+	unsigned int questionCount;
+	unsigned int answerTimeout;
+
+}typedef GetRoomStateResponse;
+
+struct LeaveRoomResponse
+{
+	unsigned int status;
+
+}typedef LeaveRoomResponse;
 
 class JsonResponsePacketSerializer
 {
@@ -87,7 +115,7 @@ public:
 	static std::vector<unsigned char> serializeResponse(LoginResponse response);
 	static std::vector<unsigned char> serializeResponse(SignupResponse response);
 
-	//Room response serialization
+	//v2.0.0 Room response serialization
 	static std::vector<unsigned char> serializeResponse(LogoutResponse response);
 	static std::vector<unsigned char> serializeResponse(GetRoomsResponse response);
 	static std::vector<unsigned char> serializeResponse(GetPlayersInRoomResponse response);
@@ -95,6 +123,11 @@ public:
 	static std::vector<unsigned char> serializeResponse(CreateRoomResponse response);
 	static std::vector<unsigned char> serializeResponse(GetStatisticsResponse response);
 
+	//v3.0.0 room response serialization
+	static std::vector<unsigned char> serializeResponse(CloseRoomResponse response);
+	static std::vector<unsigned char> serializeResponse(StartgameResponse response);
+	static std::vector<unsigned char> serializeResponse(GetRoomStateResponse response);
+	static std::vector<unsigned char> serializeResponse(LeaveRoomResponse response);
 
 private:
 	static void lengthToBytes(std::vector<unsigned char>& buffer, int length);
