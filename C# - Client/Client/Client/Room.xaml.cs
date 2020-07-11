@@ -22,6 +22,10 @@ namespace Client
         public Room(RoomData data)
         {
             InitializeComponent();
+            if (!isAdmin)
+            {
+                start.Visibility = Visibility.Hidden;
+            }
             this.data = data;
         }
 
@@ -60,16 +64,37 @@ namespace Client
         {
             //In version v3.0.0 send leave room request for user
             //and delete room request for admin
-            if (isAdmin)
+            byte[] request = GetRequest(isAdmin);
+            Communicator.SendMessage(request);
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
             {
-                
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+                error.Show();
             }
-
-            Menu menu = new Menu();
-            menu.Show();
+            else
+            {
+                Menu menu = new Menu();
+                menu.Show();
+            }
             Close();
         }
-
+        private byte[] GetRequest(bool isAdmin)
+        {
+            byte[] request;
+            if (isAdmin)
+            {
+                request = Serializer.SerializeCloseRoomResponse();
+            }
+            else
+            {
+                request = Serializer.SerializeLeaveRoomRequest();
+            }
+            return request;
+        }
         private void refresh(object sender, RoutedEventArgs e)
         {
             refresh();
@@ -100,5 +125,10 @@ namespace Client
 
         private RoomData data;
         public bool isAdmin { set; get; }
+
+        private void Start_click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
