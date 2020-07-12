@@ -27,8 +27,8 @@ public:
 	StatisticsManager& getStatisticsManager();
 	RoomManager& getRoomManager();
 
-	RoomAdminRequestHandler createRoomAdminRequestHandler();
-	RoomMemberRequestHandler createRoomMemberRequestHandler();
+	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room* room, LoggedUser* loggedUser);
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room* room, LoggedUser* loggedUser);
 
 
 private:

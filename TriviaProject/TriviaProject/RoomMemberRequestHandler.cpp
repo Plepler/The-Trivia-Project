@@ -1,5 +1,12 @@
 #include "RoomMemberRequestHandler.h"
 
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room* room, LoggedUser* loggedUser, RequestHandlerFactory* hanlderFactory)
+{
+	m_room = room;
+	m_user = loggedUser;
+	m_handlerFactory = hanlderFactory;
+}
+
 bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo request)
 {
     bool flag = false;

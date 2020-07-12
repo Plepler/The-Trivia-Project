@@ -19,6 +19,9 @@ namespace Client
     /// </summary>
     public partial class Room : Window
     {
+        private RoomData data;
+        private bool isAdmin { set; get; }
+
         public Room(RoomData data)
         {
             InitializeComponent();
@@ -57,6 +60,7 @@ namespace Client
                     players_list.Items.Add(player);
                 }
             }
+            
             Show();
         }
 
@@ -64,7 +68,7 @@ namespace Client
         {
             //In version v3.0.0 send leave room request for user
             //and delete room request for admin
-            byte[] request = GetRequest(isAdmin);
+            byte[] request = GetExitResponse(isAdmin);
             Communicator.SendMessage(request);
             byte[] serializedResponse = Communicator.recieveMessage();
             byte[] result = Helper.DisassembleResponse(serializedResponse);
@@ -82,18 +86,19 @@ namespace Client
             }
             Close();
         }
-        private byte[] GetRequest(bool isAdmin)
+
+        private byte[] GetExitResponse(bool isAdmin)
         {
-            byte[] request;
+            byte[] response;
             if (isAdmin)
             {
-                request = Serializer.SerializeCloseRoomResponse();
+                response = Serializer.SerializeCloseRoomRequest();
             }
             else
             {
-                request = Serializer.SerializeLeaveRoomRequest();
+                response = Serializer.SerializeLeaveRoomRequest();
             }
-            return request;
+            return response;
         }
         private void refresh(object sender, RoutedEventArgs e)
         {
@@ -122,9 +127,6 @@ namespace Client
                 JoinRoomResponse joinRes = Deserializer.DeserializeJoinRoomResponse(result);
             }
         }
-
-        private RoomData data;
-        public bool isAdmin { set; get; }
 
         private void Start_click(object sender, RoutedEventArgs e)
         {

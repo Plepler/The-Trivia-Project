@@ -183,7 +183,7 @@ namespace Client
 
             return result;
         }
-        public static byte[] SerializeCloseRoomResponse()
+        public static byte[] SerializeCloseRoomRequest()
         {
             //Serialize
             int requestSize = 0;
@@ -195,7 +195,7 @@ namespace Client
             return result;
         }
 
-        public static byte[] SerializeStartGameResponse()
+        public static byte[] SerializeStartGameRequest()
         {
             //Serialize
             int requestSize = 0;
@@ -207,7 +207,7 @@ namespace Client
             return result;
         }
        
-        public static byte[] SerializeGetRoomStateResponse()
+        public static byte[] SerializeGetRoomStateRequest()
         {
             //Serialize
             int requestSize = 0;
