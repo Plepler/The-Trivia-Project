@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,57 +21,70 @@ namespace Client
     public partial class Room : Window
     {
         private RoomData data;
-        private bool isAdmin { set; get; }
-
+        private bool IsOpen;
         public Room(RoomData data)
         {
             InitializeComponent();
+
             if (!isAdmin)
             {
                 start.Visibility = Visibility.Hidden;
             }
             this.data = data;
+            this.IsOpen = true;
+            Thread t = new Thread(refresh);
+            t.Start();
         }
 
         public void refresh()
         {
-            byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
-            Communicator.SendMessage(request);
-
-            //Recieve message
-            byte[] serializedResponse = Communicator.recieveMessage();
-            byte[] result = Helper.DisassembleResponse(serializedResponse);
-
-
-            //Deserialize response according to CODE (first byte)
-            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            while (IsOpen)
             {
-                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
 
-            }
-            else if ((int)serializedResponse[0] == (int)CODES.GET_PLAYER)
-            {
-                GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
-                Queue<string> players = playersRes.players;
-                admin.Text = "ADMIN: " + players.Peek();
-                room_name.Text = "ROOM NAME: " + data.name;
-                players_list.Items.Clear();
-                foreach (var player in players)
+                //send and recive message
+                Helper.communicatorMutex.WaitOne();
+                Communicator.SendMessage(request);
+                byte[] serializedResponse = Communicator.recieveMessage();
+                Helper.communicatorMutex.ReleaseMutex();
+                
+                byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+
+                //Deserialize response according to CODE (first byte)
+                if ((int)serializedResponse[0] == (int)CODES.ERROR)
                 {
-                    players_list.Items.Add(player);
+                    ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+
                 }
+                else if ((int)serializedResponse[0] == (int)CODES.GET_PLAYER)
+                {
+                    GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
+                    Queue<string> players = playersRes.players;
+                    admin.Text = "ADMIN: " + players.Peek();
+                    room_name.Text = "ROOM NAME: " + data.name;
+                    players_list.Items.Clear();
+                    foreach (var player in players)
+                    {
+                        players_list.Items.Add(player);
+                    }
+                }
+                Show();
+                Thread.Sleep(3000);
             }
-            
-            Show();
         }
 
         private void exit_room_Click(object sender, RoutedEventArgs e)
         {
             //In version v3.0.0 send leave room request for user
             //and delete room request for admin
-            byte[] request = GetExitResponse(isAdmin);
+            byte[] request = GetRequest(isAdmin);
+            
+            Helper.communicatorMutex.WaitOne();
             Communicator.SendMessage(request);
             byte[] serializedResponse = Communicator.recieveMessage();
+            Helper.communicatorMutex.ReleaseMutex();
+
             byte[] result = Helper.DisassembleResponse(serializedResponse);
             if ((int)serializedResponse[0] == (int)CODES.ERROR)
             {
@@ -84,34 +98,30 @@ namespace Client
                 Menu menu = new Menu();
                 menu.Show();
             }
+            this.IsOpen = false;
             Close();
         }
-
-        private byte[] GetExitResponse(bool isAdmin)
+        private byte[] GetRequest(bool isAdmin)
         {
-            byte[] response;
+            byte[] request;
             if (isAdmin)
             {
-                response = Serializer.SerializeCloseRoomRequest();
+                request = Serializer.SerializeCloseRoomResponse();
             }
             else
             {
-                response = Serializer.SerializeLeaveRoomRequest();
+                request = Serializer.SerializeLeaveRoomRequest();
             }
-            return response;
-        }
-        private void refresh(object sender, RoutedEventArgs e)
-        {
-            refresh();
+            return request;
         }
 
         public void addUserTorRoom()
         {
             byte[] request = Serializer.SerializeRequest(new JoinRoomRequest(data.id));
+            Helper.communicatorMutex.WaitOne();
             Communicator.SendMessage(request);
-
-            //Recieve message
             byte[] serializedResponse = Communicator.recieveMessage();
+            Helper.communicatorMutex.ReleaseMutex();
             byte[] result = Helper.DisassembleResponse(serializedResponse);
 
             //Deserialize response according to CODE (first byte)
@@ -127,6 +137,7 @@ namespace Client
                 JoinRoomResponse joinRes = Deserializer.DeserializeJoinRoomResponse(result);
             }
         }
+        public bool isAdmin { set; get; }
 
         private void Start_click(object sender, RoutedEventArgs e)
         {

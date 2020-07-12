@@ -60,17 +60,11 @@ namespace Client
             ic.ItemsSource = buttons;
         }
 
-        private void Temp_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             Room room = new Room((RoomData)button.Content);
             room.addUserTorRoom();
-            room.refresh();
             room.Show();
             Close();
         }

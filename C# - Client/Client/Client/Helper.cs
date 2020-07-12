@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Client
 {
-    public static class Helper
+    public class Helper
     {
+        public static Mutex communicatorMutex = new Mutex();
         /// <summary>
         /// 
         /// This function takes the serialized response from
