@@ -106,7 +106,7 @@ namespace Client
             byte[] request;
             if (isAdmin)
             {
-                request = Serializer.SerializeCloseRoomResponse();
+                request = Serializer.SerializeCloseRoomRequest();
             }
             else
             {
