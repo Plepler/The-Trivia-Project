@@ -68,9 +68,10 @@ namespace Client
                 }
                 else if ((int)serializedResponse[0] == (int)CODES.CREATE)
                 {
+                    //To Do: dont use joinRoom class
                     CreateRoomResponse createRoomRes = Deserializer.DeserializeCreateRoomResponse(result);
-                    JoinRoom joinRoom = new JoinRoom();
-                    joinRoom.AutomaticJoin(name);
+                    //Join this room
+                    joinNewRoom(name);
                     Close();
                 }
 
@@ -98,7 +99,7 @@ namespace Client
                 return false;
             }
 
-            int i;
+            int i = 0;
             if (int.TryParse(textBoxUsers.Text, out i))
             {
                 if(i > MAX_USERS || i < POSITIVE)
@@ -144,6 +145,26 @@ namespace Client
             return true;
         }
 
+        //This function join the newly created room
+        private void joinNewRoom(string name)
+        {
+            GetRoomsResponse roomsResponse = Helper.GetRooms();
+            if(roomsResponse != null)
+            {
+                foreach (RoomData room in roomsResponse.rooms)
+                {
+                    if(room.name == name)
+                    {
+                        Room myNewRoom = new Room(room, true);
+                        break;//Stop iterating over rooms once the room has been found
+                    }
+                }
+            }
+            else//error was returned
+            {
+                Close();
+            }
+        }
 
     }
 }

@@ -21,24 +21,52 @@ namespace Client
     public partial class Room : Window
     {
         private RoomData data;
-        private bool IsOpen;
-        public Room(RoomData data)
+        private bool isOpen;
+        private bool isAdmin;
+
+        public delegate void UpdateTextCallback(string message);
+        
+        private void UpdateAdminText(string message)
+        {
+            admin.Text = "ADMIN: " + message;
+        }
+        private void UpdateRoomNameText(string message)
+        {
+            room_name.Text = "ROOM NAME: " + message;
+        }
+
+        public delegate void updateListCallback(Queue<string> players);
+        private void UpdatePLayersListText(Queue<string> players)
+        {
+            players_list.Items.Clear();
+            foreach (var player in players)
+            {
+                players_list.Items.Add(player);
+            }
+        }
+
+        public Room(RoomData data, bool isAdmin)
         {
             InitializeComponent();
-
+            this.isAdmin = isAdmin;
             if (!isAdmin)
             {
                 start.Visibility = Visibility.Hidden;
             }
             this.data = data;
-            this.IsOpen = true;
-            Thread t = new Thread(refresh);
+            //If user is admin he was already added when creating the room
+            if (!isAdmin) { addUserToRoom(); }
+            Show();
+            isOpen = true;
+            Thread t = new Thread(Refresh);
             t.Start();
         }
 
-        public void refresh()
+        public void Refresh()
         {
-            while (IsOpen)
+            const int waitTime = 3000;//(Miliseconds)
+
+            while (isOpen)
             {
                 byte[] request = Serializer.SerializeRequest(new GetPlayersInRoomRequest(data.id));
 
@@ -61,16 +89,14 @@ namespace Client
                 {
                     GetPlayersInRoomResponse playersRes = Deserializer.DeserializeGetPlayersResponse(result);
                     Queue<string> players = playersRes.players;
-                    admin.Text = "ADMIN: " + players.Peek();
-                    room_name.Text = "ROOM NAME: " + data.name;
-                    players_list.Items.Clear();
-                    foreach (var player in players)
-                    {
-                        players_list.Items.Add(player);
-                    }
+
+                    //Update text blocks and list thorugh the thread
+                    admin.Dispatcher.Invoke(new UpdateTextCallback(UpdateAdminText), new Object[] {players.Peek() });
+                    room_name.Dispatcher.Invoke(new UpdateTextCallback(UpdateRoomNameText), new Object[] { data.name });
+                    players_list.Dispatcher.Invoke(new updateListCallback(UpdatePLayersListText), new Object[] { players });
+
                 }
-                Show();
-                Thread.Sleep(3000);
+                Thread.Sleep(waitTime);
             }
         }
 
@@ -80,13 +106,14 @@ namespace Client
             //and delete room request for admin
             byte[] request = GetRequest(isAdmin);
             
-            Helper.communicatorMutex.WaitOne();
+            Helper.communicatorMutex.WaitOne();//Socket mutex on
             Communicator.SendMessage(request);
             byte[] serializedResponse = Communicator.recieveMessage();
-            Helper.communicatorMutex.ReleaseMutex();
+            Helper.communicatorMutex.ReleaseMutex();//Socket mutex off
 
+            //Get the response itself (without code and length)
             byte[] result = Helper.DisassembleResponse(serializedResponse);
-            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            if (serializedResponse[0] == (int)CODES.ERROR)
             {
                 ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
                 Error error = new Error();
@@ -98,7 +125,7 @@ namespace Client
                 Menu menu = new Menu();
                 menu.Show();
             }
-            this.IsOpen = false;
+            isOpen = false;
             Close();
         }
         private byte[] GetRequest(bool isAdmin)
@@ -115,7 +142,10 @@ namespace Client
             return request;
         }
 
-        public void addUserTorRoom()
+        /// <summary>
+        /// This function adds the current user to the room
+        /// </summary>
+        public void addUserToRoom()
         {
             byte[] request = Serializer.SerializeRequest(new JoinRoomRequest(data.id));
             Helper.communicatorMutex.WaitOne();
@@ -137,11 +167,11 @@ namespace Client
                 JoinRoomResponse joinRes = Deserializer.DeserializeJoinRoomResponse(result);
             }
         }
-        public bool isAdmin { set; get; }
+
 
         private void Start_click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

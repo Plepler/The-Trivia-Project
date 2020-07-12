@@ -20,31 +20,17 @@ namespace Client
     public partial class JoinRoom : Window
     {
         private List<Button> buttons;
+
         public JoinRoom()
         {
             InitializeComponent();
 
             buttons = new List<Button>();
-            // build register message and send it
-            byte[] request = Serializer.SerializeRoomsRequest();
-            Communicator.SendMessage(request);
 
-            //Recieve message
-            byte[] serializedResponse = Communicator.recieveMessage();
-            byte[] result = Helper.DisassembleResponse(serializedResponse);
-
-
-            //Deserialize response according to CODE (first byte)
-            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            GetRoomsResponse getRoomsRes = Helper.GetRooms();
+            if (getRoomsRes != null)
             {
-                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
-                Error error = new Error();
-                error.updateMessage(errRes.message);
-                error.Show();
-            }
-            else if ((int)serializedResponse[0] == (int)CODES.GET_ROOM)
-            {
-                GetRoomsResponse getRoomsRes = Deserializer.DeserializeGetRoomResponse(result);
+                //Add button for each room
                 Button temp;
                 foreach (RoomData room in getRoomsRes.rooms)//Iterate over all rooms
                 {
@@ -56,15 +42,18 @@ namespace Client
                     buttons.Add(temp);
                 }
             }
-
+            else
+            {
+                Close();
+            }
+            
             ic.ItemsSource = buttons;
         }
 
         public void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Room room = new Room((RoomData)button.Content);
-            room.addUserTorRoom();
+            Room room = new Room((RoomData)button.Content, false);
             room.Show();
             Close();
         }
@@ -75,9 +64,7 @@ namespace Client
             {
                 if(((RoomData)button.Content).name == name)
                 {
-                    Room room = new Room((RoomData)button.Content);
-                    room.isAdmin = true;
-                    room.refresh();
+                    Room room = new Room((RoomData)button.Content, true);
                 }
             }
         }

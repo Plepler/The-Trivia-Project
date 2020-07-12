@@ -37,5 +37,27 @@ namespace Client
             return null;
         }
 
+        public static GetRoomsResponse GetRooms()
+        {
+            byte[] request = Serializer.SerializeRoomsRequest();
+            Communicator.SendMessage(request);
+
+            //Recieve message
+            byte[] serializedResponse = Communicator.recieveMessage();
+            byte[] result = Helper.DisassembleResponse(serializedResponse);
+
+            if ((int)serializedResponse[0] == (int)CODES.ERROR)
+            {
+                ErrorResponse errRes = Deserializer.DeserializeErrorResponse(result);
+                Error error = new Error();
+                error.updateMessage(errRes.message);
+                error.Show();
+                return null;
+            }
+            else
+            {
+                return Deserializer.DeserializeGetRoomResponse(result);
+            }
+        }
     }
 }
