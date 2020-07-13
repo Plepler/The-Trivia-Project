@@ -49,10 +49,44 @@ RequestResult RoomMemberRequestHandler::handleRequest(RequestInfo request)
 
 RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo request)
 {
-	return RequestResult();
+	RequestResult result;
+	LeaveRoomResponse leaveRes{ 1 };
+	try
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(leaveRes);
+		result.newHandler = m_handlerFactory->createMenuRequestHandler(*m_user);
+	}
+	catch (std::exception e)//If serialization failed the error will be serialized instead
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return result;
 }
 
 RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
 {
-	return RequestResult();
+	RequestResult result;
+	
+	std::vector<std::string> players;
+
+	//Create vector of usernames
+	for (LoggedUser user : m_room->getAllUsers())
+	{
+		players.push_back(user.getUsername());
+	}
+
+	try
+	{
+		//build response
+		GetRoomStateResponse stateRes{ 1, m_room->getRoomData().isActive, players , m_room->getRoomData().numOfQuestions, m_room->getRoomData().timePerQuestion};
+		result.response = JsonResponsePacketSerializer::serializeResponse(stateRes);
+		result.newHandler = m_handlerFactory->createMenuRequestHandler(*m_user);
+	}
+	catch (std::exception e)//If serialization failed the error will be serialized instead
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return result;
 }
