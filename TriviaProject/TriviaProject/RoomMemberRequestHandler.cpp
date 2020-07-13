@@ -81,7 +81,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo request)
 		//build response
 		GetRoomStateResponse stateRes{ 1, m_room->getRoomData().isActive, players , m_room->getRoomData().numOfQuestions, m_room->getRoomData().timePerQuestion};
 		result.response = JsonResponsePacketSerializer::serializeResponse(stateRes);
-		result.newHandler = m_handlerFactory->createMenuRequestHandler(*m_user);
+		result.newHandler = m_handlerFactory->createRoomMemberRequestHandler(m_room, m_user);
 	}
 	catch (std::exception e)//If serialization failed the error will be serialized instead
 	{
