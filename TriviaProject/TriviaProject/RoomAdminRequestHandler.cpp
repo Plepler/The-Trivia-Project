@@ -53,15 +53,65 @@ RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo request)
 
 RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo request)
 {
-    return RequestResult();
+	RequestResult result;
+
+	try
+	{
+		//build response
+		CloseRoomResponse stateRes{ 1 };
+		result.response = JsonResponsePacketSerializer::serializeResponse(stateRes);
+		result.newHandler = m_handlerFactory->createMenuRequestHandler(*m_user);
+	}
+	catch (std::exception e)//If serialization failed the error will be serialized instead
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return result;
 }
 
 RequestResult RoomAdminRequestHandler::startGame(RequestInfo request)
 {
-    return RequestResult();
+	RequestResult result;
+
+	try
+	{
+		//build response
+		StartgameResponse stateRes{ 1 };
+		result.response = JsonResponsePacketSerializer::serializeResponse(stateRes);
+		result.newHandler = m_handlerFactory->createRoomAdminRequestHandler(m_room, m_user);
+	}
+	catch (std::exception e)//If serialization failed the error will be serialized instead
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return result;
 }
 
 RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo request)
 {
-    return RequestResult();
+	RequestResult result;
+
+	std::vector<std::string> players;
+
+	//Create vector of usernames
+	for (LoggedUser user : m_room->getAllUsers())
+	{
+		players.push_back(user.getUsername());
+	}
+
+	try
+	{
+		//build response
+		GetRoomStateResponse stateRes{ 1, m_room->getRoomData().isActive, players , m_room->getRoomData().numOfQuestions, m_room->getRoomData().timePerQuestion };
+		result.response = JsonResponsePacketSerializer::serializeResponse(stateRes);
+		result.newHandler = m_handlerFactory->createRoomAdminRequestHandler(m_room, m_user);
+	}
+	catch (std::exception e)//If serialization failed the error will be serialized instead
+	{
+		result.response = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{ e.what() });
+	}
+
+	return result;
 }
